@@ -1,0 +1,54 @@
+// @charset "UTF-8";
+// Fonts
+// @import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url('https://fonts.googleapis.com/css2?family=Arimo&family=Barlow:wght@200;300;400&family=Berkshire+Swash&family=Karla:wght@200;300;400;600&family=Mulish:wght@300;400;600&family=Noto+Sans+TC:wght@100;400&family=Open+Sans:ital,wght@0,300;0,400;1,600&family=Oxygen:wght@300;400&family=PT+Sans&family=Titillium+Web:wght@200;300;400&display=swap');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+
+// font-family: 'Arimo', sans-serif;
+
+// font-family: 'Barlow', sans-serif;
+
+// font-family: 'Berkshire Swash', cursive;
+
+// font-family: 'Karla', sans-serif;
+
+// font-family: 'Mulish', sans-serif;
+
+// font-family: 'Noto Sans TC', sans-serif;
+
+// font-family: 'Open Sans', sans-serif;
+
+// font-family: 'Oxygen', sans-serif;
+
+// font-family: 'PT Sans', sans-serif;
+
+// font-family: 'Titillium Web', sans-serif;
+
+// custom css
+.v-application{
+    background-color: #f9f9f9 !important;
+    // font-size: 5.5rem !important;
+    font-family: 'Titillium Web', sans-serif !important;
+    color: #484848;
+}
+.sub_title{
+    font-size: 1.2rem;
+    color: #414141;
+}
+.body_text{
+    font-size: 1rem;
+    color: #484848;
+}
+a, .v-btn{
+    text-decoration: none !important;
+}
+
+
+
+

@@ -9,6 +9,8 @@ class Team extends Model
 {
     protected $guards = [];
 
+    protected $with = ['league', 'country'];
+
 
     protected static function boot(){
         parent::boot();
@@ -27,5 +29,9 @@ class Team extends Model
 
     public function league(){
         return $this->belongsTo('App\League');
+    }
+
+    public function country(){
+        return $this->belongsTo('App\Country');
     }
 }

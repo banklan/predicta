@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use App\ExpertPrediction;
 
 class ExpertPredictionSummary extends Model
 {
@@ -13,7 +14,7 @@ class ExpertPredictionSummary extends Model
 
     protected $with = ['expert'];
 
-    protected $appends = ['status'];
+    protected $appends = ['status', 'progress', 'is_opened', 'published'];
 
     protected static function boot(){
         parent::boot();
@@ -35,14 +36,48 @@ class ExpertPredictionSummary extends Model
         }
     }
 
-    // public function getEvResultAttribute($value){
-    //     $rez = $this->result;
-    //     if($rez == 'O'){
-    //         return 'Open';
-    //     }elseif($rez == 'L'){
-    //         return 'Lost';
-    //     }else{
-    //         return 'Won';
-    //     }
-    // }
+    public function getProgressAttribute(){
+        $code = $this->forecast_id;
+        $predictions = ExpertPrediction::where('prediction_code', $code)->get();
+        $won = array();
+        $lost = [];
+        //status = 0 means not played, 1 means lost and 2 means won
+        foreach($predictions as $pred){
+            if($pred->status === 2){
+                $won[] = $pred;
+            }else if($pred->status === 1){
+                $lost[] = $pred;
+            }
+        };
+
+        if($predictions->count() === count($won)){
+            return '1'; //won
+        }else if(count($lost) > 0){
+            return '0'; //lost
+        }else{
+            return '2'; //still running
+        }
+    }
+
+    public function getIsOpenedAttribute(){
+        $code = $this->forecast_id;
+        $predictions = ExpertPrediction::where('prediction_code', $code)->get();
+        $started = [];
+        foreach($predictions as $item){
+            if($item->is_open == false){
+                $started[] = $item;
+            }
+        }
+        if(count($started) > 0){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    public function getPublishedAttribute($value)
+    {
+        $date = $this->created_at->format('d/m/y');
+        return $date;
+    }
 }

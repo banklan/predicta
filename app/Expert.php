@@ -13,7 +13,7 @@ class Expert extends Authenticatable implements JWTSubject
     use Notifiable;
 
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'phone', 'status', 'bank', 'account_no', 'account_type', 'password'
+        'first_name', 'last_name', 'username', 'email', 'phone', 'status', 'picture', 'bank_id', 'account_type', 'account_no', 'account_name'
     ];
 
     protected $appends = ['fullname', 'expert_status', 'created'];
@@ -25,7 +25,7 @@ class Expert extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'email_verified_at'
+        'password', 'remember_token', 'email_verified_at',
     ];
 
     /**
@@ -40,6 +40,8 @@ class Expert extends Authenticatable implements JWTSubject
     protected $date = [
         'updated_at'
     ];
+
+    protected $with = ['bank'];
 
 
     public function getJWTIdentifier()
@@ -88,4 +90,13 @@ class Expert extends Authenticatable implements JWTSubject
     public function prediction_summary(){
         return $this->hasMany('App\ExpertPredictionSummary');
     }
+
+    public function expert_prediction(){
+        return $this->hasMany('App\ExpertPrediction');
+    }
+
+    public function bank(){
+        return $this->belongsTo('App\Bank');
+    }
+
 }

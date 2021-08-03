@@ -100,6 +100,10 @@
             Game date and time cannot be empty.
             <v-btn text color="white--text" @click="dateTimeError = false">Close</v-btn>
         </v-snackbar>
+        <v-snackbar v-model="setForecastOdd" :timeout="6000" top color="red darken-1 white--text">
+            You must choose an odd category first to be able to forecast.
+            <v-btn text color="white--text" @click="setForecastOdd = false">Close</v-btn>
+        </v-snackbar>
     </div>
 </template>
 
@@ -134,7 +138,8 @@ export default {
             saveError: false,
             saveSuccess: false,
             oddError: false,
-            dateTimeError: false
+            dateTimeError: false,
+            setForecastOdd: false
         }
     },
     computed: {
@@ -188,28 +193,32 @@ export default {
         savePredictions(){
             this.$validator.validateAll().then((isValid) => {
                 if (isValid) {
-                    if(this.pick.odd > 1){
-                        if(this.pick.date !== null && this.pick.time !== null){
-                            if(this.listed){
-                                this.pick.country = this.pickedCountry.abbrv
-                                this.pick.league = this.pickedLeague.abbrv
-                            }
-                            this.pick.odd = parseFloat(this.pick.odd)
-                            if(this.foreCastOdd == 3 && this.forecasts.length < 6 || this.foreCastOdd == 5 && this.forecasts.length < 7 || this.foreCastOdd == 10 && this.forecasts.length < 7){
-                                this.$store.commit('addTipsToForecast', this.pick)
-                                this.clearPrediction()
-                                this.saveSuccess = true
-                                this.$validator.pause()
-                                this.$validator.fields.items.forEach(field => field.reset())
-                                this.$validator.errors.clear()
+                    if(this.foreCastOdd){
+                        if(this.pick.odd > 1){
+                            if(this.pick.date !== null && this.pick.time !== null){
+                                if(this.listed){
+                                    this.pick.country = this.pickedCountry.abbrv
+                                    this.pick.league = this.pickedLeague.abbrv
+                                }
+                                this.pick.odd = parseFloat(this.pick.odd)
+                                if(this.foreCastOdd == 3 && this.forecasts.length < 6 || this.foreCastOdd == 5 && this.forecasts.length < 7 || this.foreCastOdd == 10 && this.forecasts.length < 7){
+                                    this.$store.commit('addTipsToForecast', this.pick)
+                                    this.clearPrediction()
+                                    this.saveSuccess = true
+                                    this.$validator.pause()
+                                    this.$validator.fields.items.forEach(field => field.reset())
+                                    this.$validator.errors.clear()
+                                }else{
+                                    this.saveError = true
+                                }
                             }else{
-                                this.saveError = true
+                                this.dateTimeError = true
                             }
                         }else{
-                            this.dateTimeError = true
+                            this.oddError = true
                         }
                     }else{
-                        this.oddError = true
+                        this.setForecastOdd = true
                     }
                 }
             })

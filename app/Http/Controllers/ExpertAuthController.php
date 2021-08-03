@@ -61,7 +61,8 @@ class ExpertAuthController extends Controller
         $this->validate($request, [
             'expert.first_name' => 'required|min:3|max:30',
             'expert.last_name' => 'required|min:3|max:30',
-            'expert.email' => 'required|email|unique:users,email',
+            'expert.username' => 'required|min:3|max:30|unique:experts,username',
+            'expert.email' => 'required|email|unique:experts,email',
             'expert.phone' => 'required|max:14',
             'expert.password' => 'required|min:5|max:30|confirmed',
             'expert.password_confirmation' => 'required'
@@ -74,6 +75,7 @@ class ExpertAuthController extends Controller
         $expert->expert_id = $id;
         $expert->first_name = $request->expert['first_name'];
         $expert->last_name = $request->expert['last_name'];
+        $expert->username = $request->expert['username'];
         $expert->email = $request->expert['email'];
         $expert->phone = $request->expert['phone'];
         $expert->status = 0;

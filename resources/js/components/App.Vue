@@ -7,7 +7,7 @@
                     <AdminNavDrawer />
                 </v-col>
                 <v-col cols="8" md="9">
-                    <v-row justify="center" class="mr-n10">
+                    <v-row justify="start" class="">
                         <v-col cols="12">
                             <router-view></router-view>
                         </v-col>

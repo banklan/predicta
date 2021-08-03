@@ -11,4 +11,8 @@ class InternationalCompetition extends Model
     public function setCompetitionAttribute($value){
         $this->attributes['competition'] = ucwords($value);
     }
+
+    public function national_team(){
+        return $this->hasMany('App\NationalTeam');
+    }
 }

@@ -21,7 +21,8 @@ import Routes from './routes';
 import { store } from './store';
 import App from './components/App'
 import Moment from 'vue-moment'
-// import './../style/style.css'
+import './filters'
+
 
 Vue.use(VueRouter)
 // Vue.use(axios)
@@ -37,7 +38,6 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
     const requireAdminsAuth = to.matched.some(rec => rec.meta.requireAdminsAuth);
     const authAdmin = store.state.authAdmin
-    console.log(authAdmin)
     if (requireAdminsAuth && authAdmin == null) {
         next('/admin/login')
     }else if(to.path == '/admin/login' && authAdmin){
@@ -83,6 +83,9 @@ Vue.component('expert-navbar', require('./components/includes/ExpertNavbar.vue')
 Vue.component('expert-top-panel', require('./components/children/ExpertTopPanel.vue').default);
 Vue.component('club-competition-forecast', require('./components/children/ClubCompetitionForecast.vue').default);
 Vue.component('intnl-competition-forecast', require('./components/children/IntnlCompetitionForecast.vue').default);
+Vue.component('expert-other-routes', require('./components/children/ExpertOtherRoutes.vue').default);
+Vue.component('expert-brief-performance', require('./components/children/ExpertBriefPerformamnce.vue').default);
+Vue.component('admin-top-panel', require('./components/children/AdminTopPanel.vue').default);
 
 const app = new Vue({
     el: '#app',

@@ -11,15 +11,15 @@
                             <tbody>
                                 <tr>
                                     <th>Total Forecasts:</th>
-                                    <td>100</td>
+                                    <td>{{ total }}</td>
                                 </tr>
                                 <tr>
                                     <th>Correct Forecasts:</th>
-                                    <td>68</td>
+                                    <td>{{ total_won }}</td>
                                 </tr>
                                 <tr>
                                     <th>Winning Rate(%)</th>
-                                    <td>68</td>
+                                    <td>{{ perc_won }}</td>
                                 </tr>
                                 <tr>
                                     <th>Total Subscriptions:</th>
@@ -29,7 +29,7 @@
                         </table>
                     </v-card-text>
                     <v-card-actions class="justify-center pb-6 mt-n4">
-                        <v-btn outlined color="white">My Forecasts</v-btn>
+                        <v-btn outlined color="white" :to="{name: 'MyForecasts'}">My Forecasts</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-col>
@@ -42,11 +42,15 @@
                             <tbody>
                                 <tr>
                                     <th>Total Forecasts:</th>
-                                    <td>3</td>
+                                    <td>{{ total }}</td>
                                 </tr>
                                 <tr>
-                                    <th>Won</th>
-                                    <td>2</td>
+                                    <th>Total Won</th>
+                                    <td>{{ total_won }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Running</th>
+                                    <td>{{ running }}</td>
                                 </tr>
                                 <tr>
                                     <th>Earnings</th>
@@ -70,7 +74,10 @@
 export default {
     data() {
         return {
-
+            total: null,
+            total_won: null,
+            running: null,
+            perc_won: null
         }
     },
     computed: {
@@ -79,7 +86,34 @@ export default {
         },
         authExpert(){
             return this.$store.getters.authExpert
+        },
+        expertHeader(){
+            let headers = {
+                headers: {
+                    "Authorization": `Bearer ${this.authExpert.token}`
+                }
+            }
+            return headers
+        },
+    },
+    methods: {
+        getForecastSummary(){
+            axios.get(this.api + '/auth-expert/get_forecast_summary', this.expertHeader)
+            .then((res) => {
+                this.total = res.data.length
+                let running = res.data.filter((item) => item.is_opened === true)
+                this.running = running.length
+                let won = res.data.filter((item)=> item.progress === '1')
+                let total_won = won.length
+                this.total_won = total_won
+                let perc = (total_won * 100) / this.total
+                this.perc_won = Math.round(perc)
+                console.log(res.data)
+            })
         }
+    },
+    created(){
+        this.getForecastSummary()
     }
 }
 </script>

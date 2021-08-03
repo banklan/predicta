@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\OddType;
 use Illuminate\Http\Request;
 use App\Tip;
+use App\Bookmaker;
 
 class TipController extends Controller
 {
@@ -18,5 +19,11 @@ class TipController extends Controller
         $odds = OddType::all();
 
         return response()->json($odds, 200);
+    }
+
+    public function getAllBookmakers(){
+        $bms = Bookmaker::all();
+
+        return response()->json($bms, 200);
     }
 }

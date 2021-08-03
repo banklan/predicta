@@ -49,6 +49,17 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <template v-if="!showBookmakers">
+                            <v-btn text color="secondary darken-3" @click="showBookmakers = true">Add Bookmaker's Codes</v-btn>
+                        </template>
+                        <template v-else>
+                            <div class="pt-5 mb-3">
+                                <div class="sub_title text-center">Bookmaker's codes</div>
+                                <v-text-field label="Bet9ja" v-model="bm_codes.bet9ja"></v-text-field>
+                                <v-text-field label="BetKing" v-model="bm_codes.betking"></v-text-field>
+                                <v-text-field label="Merrybet" v-model="bm_codes.merrybet"></v-text-field>
+                            </div>
+                        </template>
                     </v-card-text>
                     <v-card-actions v-if="forecasts.length > 0" class="justify-center pb-8">
                         <v-btn large width="60%" dark color="primary darken-2" elevation="12" :loading="isSaving" @click="submitPrediction">Submit Prediction</v-btn>
@@ -78,6 +89,10 @@
             There was an error while trying to submit your predictions. Please check and try again.
             <v-btn text color="white--text" @click="saveFail = false">Close</v-btn>
         </v-snackbar>
+        <v-snackbar v-model="cantSubmitForecast" :timeout="6000" top color="red darken-1 white--text">
+            There was an error while trying to submit your predictions. Your accumulator odds must be equal or greater than the odd category you choose.
+            <v-btn text color="white--text" @click="cantSubmitForecast = false">Close</v-btn>
+        </v-snackbar>
     </v-container>
 </template>
 
@@ -97,7 +112,15 @@ export default {
             },
             isSaving: false,
             saveSuccess: false,
-            saveFail: false
+            saveFail: false,
+            cantSubmitForecast: false,
+            showBookmakers: false,
+            bookmakers: [],
+            bm_codes: {
+                bet9ja: '',
+                betking: '',
+                merrybet: ''
+            }
         }
     },
     computed: {
@@ -139,28 +162,42 @@ export default {
             this.$store.commit('removeTip', index)
         },
         submitPrediction(){
-            this.isSaving = true
-            let predictions = JSON.parse(localStorage.getItem('forecast'))
-            // console.log(predictions)
-            axios.post(this.api + '/auth-expert/submit_expert_prediction', {
-                predictions: predictions
-            }, this.expertHeader)
-            .then((res) =>{
-                this.isSaving = false
-                console.log(res.data)
-                this.$store.commit('newForecastCreated')
-                this.$store.commit('clearForecast')
-                this.$router.push({name: 'MyForecasts'})
-            }).catch((err) =>{
-                this.isSaving = false
-                if(err.response.status === 401){
-                    this.$router.push('/')
-                }
+            if(this.totalOdds >= this.foreCastOdd){
+                this.isSaving = true
+                let predictions = JSON.parse(localStorage.getItem('forecast'))
+                console.log(this.bm_codes)
+                axios.post(this.api + '/auth-expert/submit_expert_prediction', {
+                    predictions: predictions,
+                    forecastOdd: parseFloat(this.foreCastOdd),
+                    totalOdds: parseFloat(this.totalOdds),
+                    codes: this.bm_codes
+                }, this.expertHeader)
+                .then((res) =>{
+                    this.isSaving = false
+                    console.log(res.data)
+                    this.$store.commit('newForecastCreated')
+                    this.$store.commit('clearForecast')
+                    this.$router.push({name: 'MyForecasts'})
+                }).catch((err) =>{
+                    this.isSaving = false
+                    if(err.response.status === 401){
+                        this.$router.push('/')
+                    }
+                })
+            }else{
+                this.cantSubmitForecast = true
+            }
+        },
+        getBookmakers(){
+            axios.get(this.api + '/get_all_bookmakers')
+            .then((res) => {
+                this.bookmakers = res.data
             })
         }
     },
     created(){
         this.getOddTypes()
+        this.getBookmakers()
     }
 }
 </script>

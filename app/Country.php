@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class Country extends Model
 {
-    protected $guards = [];
-
+    protected $fillable = ['country', 'abbrv', 'flag'];
 
     protected static function boot(){
         parent::boot();

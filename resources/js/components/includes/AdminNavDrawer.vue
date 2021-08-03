@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer dense hide-overlay value="true" permanent :mini-variant.sync="mini" class="primary darken-4">
+    <v-navigation-drawer dense hide-overlay value="true" permanent class="primary darken-4">
         <v-list dark>
             <v-list-item-group>
                 <v-list-item class="justify-center py-2">Welcome {{ authAdmin && authAdmin.first_name }}</v-list-item>
@@ -39,7 +39,9 @@ export default {
                 {title: "Admins", path: "/admin/super-users", icon:"mdi-account-circle"},
                 {title: "Experts", path: "/admin/experts", icon:"mdi-account"},
                 {title: "users", path: "/admin/users", icon: "mdi-account"},
+                {title: "Forecasts", path: "/admin/forecasts-by-experts", icon: "mdi-account"},
                 {title: "Countries", path: "/admin/countries", icon: "navigation"},
+                {title: "Banks", path: "/admin/banks", icon: "navigation"},
                 {title: "Leagues", path: "/admin/leagues", icon: "comments"},
                 {title: "Teams", path: "/admin/teams", icon: "storage"},
                 {title: "Bookmakers", path: "/admin/bookmakers", icon: "navigation"},

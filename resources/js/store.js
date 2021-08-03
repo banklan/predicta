@@ -43,7 +43,12 @@ export const store = new Vuex.Store({
         foreCastOdd: foreCastOdd,
         forecast: forecast,
         totalOdds: totalOdds,
-        newForecastCreated: false
+        newForecastCreated: false,
+        expertProfileUpdated: false,
+        newExpertCreated: false,
+        adminUpdatedExpert: false,
+        expertUserDeleted: false,
+        newCountryAdded: false
     },
     getters: {
         isBusy(state)
@@ -97,6 +102,26 @@ export const store = new Vuex.Store({
         newForecast(state)
         {
             return state.newForecastCreated
+        },
+        expertProfileUpdated(state)
+        {
+            return state.expertProfileUpdated
+        },
+        newExpertCreated(state)
+        {
+            return state.newExpertCreated
+        },
+        adminUpdatedExpert(state)
+        {
+            return state.adminUpdatedExpert
+        },
+        expertUserDeleted(state)
+        {
+            return state.expertUserDeleted
+        },
+        newCountryAdded(state)
+        {
+            return state.newCountryAdded
         }
     },
     actions: {},
@@ -136,6 +161,10 @@ export const store = new Vuex.Store({
             state.adminUpdatedSuperUser = false
             state.adminUserDeleted = false
             state.newAdminCreated = false
+            state.newExpertCreated = false
+            state.adminUpdatedExpert = false
+            state.expertUserDeleted = false,
+            state.newCountryAdded = false
         },
         adminUserDeleted(state)
         {
@@ -219,6 +248,41 @@ export const store = new Vuex.Store({
         newForecastCreated(state)
         {
             state.newForecastCreated = true
+        },
+        updatedExpertProfile(state, payload)
+        {
+            state.authExpert.first_name = payload.first_name
+            state.authExpert.last_name = payload.last_name
+            state.authExpert.phone = payload.phone
+            state.authExpert.fullname = payload.first_name + ' '+ payload.last_name
+            window.localStorage.setItem('authExpert', JSON.stringify(state.authExpert))
+            state.expertProfileUpdated = true
+        },
+        expertprofilePicUpdated(state, payload)
+        {
+            state.authExpert = Object.assign({}, payload.user, {token: payload.token})
+            window.localStorage.setItem('authExpert', JSON.stringify(state.authExpert))
+            state.expertProfileUpdated = true
+        },
+        resetExpertFlashMsgs(state, payload)
+        {
+            state.newForecastCreated = false
+        },
+        newExpertCreated(state, payload)
+        {
+            state.newExpertCreated = true
+        },
+        adminUpdatedExpert(state, payload)
+        {
+            state.adminUpdatedExpert = true
+        },
+        expertUserDeleted(state)
+        {
+            state.expertUserDeleted = true
+        },
+        newCountryAdded(state)
+        {
+            state.newCountryAdded = true
         }
     },
 })

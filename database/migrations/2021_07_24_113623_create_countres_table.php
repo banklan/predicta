@@ -17,7 +17,7 @@ class CreateCountresTable extends Migration
             $table->bigIncrements('id');
             $table->string('country');
             $table->string('abbrv');
-            $table->string('flag');
+            $table->string('flag')->nullable();
             $table->timestamps();
         });
     }

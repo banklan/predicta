@@ -68,10 +68,12 @@ export default {
     methods: {
         logout(){
             if(this.expertIsLoggedIn){
-                axios.post(this.api + `/auth-expert/logout`, {}, this.expertHeaders).then(() =>{
-                    this.$store.commit('logOutExpert')
-                    this.$router.push('/')
-                })
+                this.$store.commit('logOutExpert')
+                this.$router.push('/')
+                // axios.post(this.api + `/auth-expert/logout`, {}, this.expertHeaders).then(() =>{
+                //     this.$store.commit('logOutExpert')
+                //     this.$router.push('/')
+                // })
             }
         }
     },

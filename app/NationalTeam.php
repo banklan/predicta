@@ -24,4 +24,8 @@ class NationalTeam extends Model
     public function setAbbrvAttribute($value){
         $this->attributes['abbrv'] = ucwords($value);
     }
+
+    public function international_competition(){
+        return $this->belongsTo('App\InternationalCompetition');
+    }
 }

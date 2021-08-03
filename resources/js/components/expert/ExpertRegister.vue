@@ -16,6 +16,7 @@
                         <v-card-text class="body-1 mt-4">
                             <v-text-field label="First Name" v-model="expert.first_name" required placeholder="First Name/Given name" v-validate="'required|min:3|max:30'" :error-messages="errors.collect('first_name')" name="first_name"></v-text-field>
                             <v-text-field label="Last Name" v-model="expert.last_name" required placeholder="Surname/Family Name" v-validate="'required|min:3|max:30'" :error-messages="errors.collect('last_name')" name="last_name"></v-text-field>
+                            <v-text-field label="Username" v-model="expert.username" required placeholder="Username" v-validate="'required|min:3|max:30'" :error-messages="errors.collect('username')" name="username"></v-text-field>
                             <v-text-field label="Email" type="text" v-model="expert.email" required v-validate="'required|email'" :error-messages="errors.collect('email')" name="email"></v-text-field>
                             <v-text-field label="Phone No" type="text" v-model="expert.phone" required v-validate="'required|numeric|max:16'" :error-messages="errors.collect('phone')" name="phone"></v-text-field>
                             <!-- <v-divider></v-divider> -->
@@ -53,6 +54,7 @@ export default {
             expert: {
                 first_name: '',
                 last_name: '',
+                username: '',
                 email: '',
                 password: '',
                 password_confirmation: '',

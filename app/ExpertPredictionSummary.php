@@ -8,7 +8,7 @@ use App\ExpertPrediction;
 
 class ExpertPredictionSummary extends Model
 {
-    protected $guards = [];
+    protected $fillable = ['expert_id', 'forecast_id', 'event_count', 'prog_status', 'forecast_odd'. 'total_odds', 'bet9ja', 'betking', 'merrybet'];
 
     protected $table = 'forecast_summary';
 
@@ -80,4 +80,19 @@ class ExpertPredictionSummary extends Model
         $date = $this->created_at->format('d/m/y');
         return $date;
     }
+
+    // public function getEventOpenedAttribute(){
+    //     $events = ExpertPrediction::where('prediction_code', $this->forecast_id)->get();
+    //     $started = [];
+    //     foreach($events as $event){
+    //         if($event->is_open == 0){
+    //             $started[] = $event;
+    //         }
+    //     }
+    //     if(count($started) > 0){
+    //         return true;
+    //     }else{
+    //         return false;
+    //     }
+    // }
 }

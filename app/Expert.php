@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
@@ -16,7 +17,7 @@ class Expert extends Authenticatable implements JWTSubject
         'first_name', 'last_name', 'username', 'email', 'phone', 'status', 'picture', 'bank_id', 'account_type', 'account_no', 'account_name'
     ];
 
-    protected $appends = ['fullname', 'expert_status', 'created'];
+    protected $appends = ['fullname', 'expert_status', 'created', 'winning_rate', 'event_count', 'open_events_count'];
 
 
     /**
@@ -99,4 +100,54 @@ class Expert extends Authenticatable implements JWTSubject
         return $this->belongsTo('App\Bank');
     }
 
+    public function getWinningRateAttribute(){
+        $period = Carbon::today()->subDays(90);
+        $forecasts = ExpertPredictionSummary::where('expert_id', $this->id)->where('created_at', '>=', $period)->where('prog_status','!=', 0)->get();
+        $win = [];
+        foreach($forecasts as $fc){
+            if($fc->prog_status == 2){
+                $win[] = $fc;
+            }
+        }
+        if(count($win) > 0){
+            $win_rate = round((count($win) * 100 )/ $forecasts->count(), 2);
+        }else{
+            $win_rate = 0;
+        }
+        return $win_rate;
+    }
+
+    public function getEventCountAttribute(){
+        $events = ExpertPredictionSummary::where('expert_id', $this->id)->count();
+        return $events;
+    }
+
+    public function getOpenEventsCountAttribute(){
+        $events = ExpertPredictionSummary::where('expert_id', $this->id)->where('prog_status', 0)->count();
+
+        return $events;
+    }
+
+    public function getOpenEventsAttribute(){
+        $events = ExpertPredictionSummary::where('expert_id', $this->id)->get();
+
+        foreach($events as $event){
+            $preds = ExpertPrediction::where('prediction_code', $event->forecast->id)->get();
+            $started = [];
+            foreach($preds as $pred){
+                if($pred->is_open == false){
+                    $started[] =  $pred;
+                }
+            }
+            if(count($started) > 0){
+
+            }
+        }
+        $events = ExpertPrediction::where('prediction_code', $event->forecast->id)->get();
+        return $events;
+    }
+
+    public function subscription(){
+        return $this->hasMany('App\Subscription');
+    }
 }

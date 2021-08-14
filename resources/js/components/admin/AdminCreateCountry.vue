@@ -34,12 +34,8 @@
                 </v-card>
             </v-col>
         </v-row>
-        <!-- <v-snackbar v-model="emptyFields" :timeout="6000" top color="red darken-1 white--text">
-            Both the country name and abbreviation fields must be filled.
-            <v-btn text color="white--text" @click="emptyFields = false">Close</v-btn>
-        </v-snackbar> -->
         <v-snackbar v-model="createFailed" :timeout="6000" top color="red darken-1 white--text">
-            An error occured while trying to create the new country. Please try again.
+            An error occured while trying to add the new country. Please ensure the country doesn't already exist and try again.
             <v-btn text color="white--text" @click="createFailed = false">Close</v-btn>
         </v-snackbar>
     </v-container>
@@ -103,7 +99,6 @@ export default {
                     }).catch((err)=>{
                         this.isLoading = false
                         this.createFailed = true
-                        console.log(err)
                     })
                 }
              })

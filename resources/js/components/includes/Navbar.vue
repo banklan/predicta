@@ -3,11 +3,11 @@
         <template v-if="expertIsLoggedIn">
             <expert-navbar></expert-navbar>
         </template>
+        <template v-if="userIsLoggedIn">
+            <auth-navbar />
+        </template>
         <template v-else>
             <v-app-bar flat light color="primary">
-                <!-- <span v-if="authExpert" class="hidden-md-and-up">
-                    <v-app-bar-nav-icon class="secondary--text hidden-md-and-up" @click="expertDrawer = true"></v-app-bar-nav-icon>
-                </span> -->
                 <v-toolbar-title class="ml-5 my-2 white--text">
                     <router-link to="/" style="cursor:pointer" exact>
                         <span class="font-weight-thin headline headline secondary--text">Surepredict</span>
@@ -26,7 +26,6 @@
                         <v-btn class="primary" text v-for="menu in menus" :key="menu.title">
                             <router-link class="primary white--text" :to="menu.path">{{ menu.title }}</router-link>
                         </v-btn>
-                        <!-- <v-btn rounded small light color="secondary">Register</v-btn> -->
                     </template>
                 </v-toolbar-items>
             </v-app-bar>
@@ -38,11 +37,6 @@
                 </v-toolbar-title>
                 <v-divider></v-divider>
                 <v-list class="ml-4">
-                    <!-- <v-list-item dark class="white--text" v-for="item in menuItems" :key="item.title" link :to="item.path">
-                        <v-list-item-content>
-                            <v-list-item-title>{{ item.title }}</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item> -->
                     <template v-if="expertIsLoggedIn">
                         <v-list-item dark class="white--text" v-for="item in expertAuthMenuItems" :key="item.title" link :to="item.path">
                             <v-list-item-content>
@@ -92,8 +86,8 @@ export default {
         }
     },
     computed: {
-        isLoggedIn(){
-            return this.$store.getters.authStatus
+        userIsLoggedIn(){
+            return this.$store.getters.userIsLoggedIn
         },
         api(){
             return this.$store.getters.api

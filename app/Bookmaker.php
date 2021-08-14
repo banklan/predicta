@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class Bookmaker extends Model
 {
-    protected $guards = [];
+    protected $fillable = ['name', 'logo'];
 
     protected static function boot(){
         parent::boot();
@@ -15,4 +15,9 @@ class Bookmaker extends Model
             $builder->orderBy('name', 'asc');
         });
     }
+
+    public function setNameAttribute($value){
+        $this->attributes['name'] = ucfirst($value);
+    }
+
 }

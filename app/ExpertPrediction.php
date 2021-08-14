@@ -49,8 +49,8 @@ class ExpertPrediction extends Model
 
     public function getTimeAttribute($value)
     {
-        $date = $this->created_at->format('h:i');
-        return $date;
+        $time = $this->created_at->format('h:i');
+        return $time;
     }
 
     public function expert(){

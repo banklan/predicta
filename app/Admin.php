@@ -98,4 +98,8 @@ class Admin extends Authenticatable implements JWTSubject
         $date = $this->created_at->format('F jS, Y');
         return $date;
     }
+
+    public function daily_tips_summary(){
+        return $this->hasMany('App\DailyTipsSummary');
+    }
 }

@@ -11,7 +11,7 @@
                             <template v-if="forecasts.length > 0">
                                 <table class="table table-condensed tabe-hover table-striped table-bordered">
                                     <thead>
-                                        <tr class="primary white--text text-center">
+                                        <tr class="primary white--text text-center caption">
                                             <th>Date</th>
                                             <th>Pred ID</th>
                                             <th>No of Games</th>
@@ -141,7 +141,7 @@ export default {
         getForecastSummary(){
             axios.get(this.api + '/auth-expert/get_forecast_summary', this.expertHeader)
             .then((res) => {
-                let running = res.data.filter((item) => item.is_opened === true)
+                let running = res.data.filter((item) => item.progress_status === 0)
                 this.running = running.length
                 let won = res.data.filter((item)=> item.progress === '1')
                 let perc = (won.length * 100) / this.total

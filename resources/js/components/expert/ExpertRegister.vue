@@ -12,7 +12,7 @@
             <template v-if="!expertCreated">
                 <v-col cols="12" md="5">
                     <v-card light raised elevation="12" min-height="300" class="mx-auto my-10">
-                        <v-card-title class="primary white--text justify-center headline font-weight-regular">Register Expert</v-card-title>
+                        <v-card-title class="primary white--text justify-center headline font-weight-regular">Register User</v-card-title>
                         <v-card-text class="body-1 mt-4">
                             <v-text-field label="First Name" v-model="expert.first_name" required placeholder="First Name/Given name" v-validate="'required|min:3|max:30'" :error-messages="errors.collect('first_name')" name="first_name"></v-text-field>
                             <v-text-field label="Last Name" v-model="expert.last_name" required placeholder="Surname/Family Name" v-validate="'required|min:3|max:30'" :error-messages="errors.collect('last_name')" name="last_name"></v-text-field>

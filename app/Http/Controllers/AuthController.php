@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\UserWelcomeEmail;
+use App\UserEmailConfirmation;
+use App\User;
 
 class AuthController extends Controller
 {
@@ -23,10 +27,22 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
 
         if (! $token = auth('api')->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Unauthorized'], 441);
         }
 
-        return $this->respondWithToken($token);
+        if(auth('api')->user()->status == 0){
+            return response()->json(['error' => 'Unauthorized'], 551);
+        }
+
+        $user = auth('api')->user();
+        if($user->status == 1){
+            $user->update([
+                $user->is_loggedin = true
+            ]);
+            return $this->respondWithToken($token);
+        }
+
+        // return $this->respondWithToken($token);
     }
 
     /**
@@ -46,6 +62,11 @@ class AuthController extends Controller
      */
     public function logout()
     {
+        $user = auth('api')->user();
+        $user->update([
+            $user->is_loggedin = false
+        ]);
+
         auth('api')->logout();
 
         return response()->json(['message' => 'Successfully logged out']);
@@ -71,15 +92,56 @@ class AuthController extends Controller
     protected function respondWithToken($token)
     {
         $user = auth('api')->user()->id;
+        // $subscriptions = Subscription::where('user_id', $user)->get();
+
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
             'user' => $this->guard()->user(),
+            // 'subscriptions' => $subscriptions,
             'expires_in' => auth()->factory()->getTTL() * 60
         ]);
     }
 
     public function guard(){
         return Auth::Guard('api');
+    }
+
+    public function AuthUser()
+    {
+        return response()->json(auth('api')->user());
+    }
+
+    public function register(Request $request){
+        $this->validate($request, [
+            'user.first_name' => 'required|min:3|max:30',
+            'user.last_name' => 'required|min:3|max:30',
+            'user.email' => 'required|email|unique:users,email',
+            'user.phone' => 'required|max:14',
+            'user.password' => 'required|min:5|max:30|confirmed',
+            'user.password_confirmation' => 'required'
+        ]);
+
+        $user = new User;
+        $user->first_name = $request->user['first_name'];
+        $user->last_name = $request->user['last_name'];
+        $user->email = $request->user['email'];
+        $user->phone = $request->user['phone'];
+        $user->status = 0;
+        $user->password = Hash::make($request->user['password']);
+        $user->save();
+
+        $user->fresh();
+
+        if($user){
+            $conf = new UserEmailConfirmation;
+            $conf->user_id = $user->id;
+            $conf->token = bin2hex(random_bytes(80));
+            $conf->save();
+
+            // send welcome email
+            Mail::to($user->email)->send(new UserWelcomeEmail($user, $conf));
+        }
+            return response()->json($user);
     }
 }

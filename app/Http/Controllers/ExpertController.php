@@ -46,10 +46,10 @@ class ExpertController extends Controller
         $data = ['data' => $request->predictions];
         $validator = Validator::make($data, [
             'data.*.country' => 'min:3|max:20',
-            'data.*.league' => 'required|min:3|max:12',
+            'data.*.league' => 'required|min:3|max:20',
             'data.*.odd' => 'required|numeric|between:1,100',
-            'data.*.teamA' => 'required|min:3|max:12',
-            'data.*.teamB' => 'required|min:3|max:12',
+            'data.*.teamA' => 'required|min:3|max:20',
+            'data.*.teamB' => 'required|min:3|max:20',
             'data.*.tip' => 'required|max:10',
         ]);
         if($validator->fails()){

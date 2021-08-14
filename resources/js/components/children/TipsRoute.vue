@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <v-row class="justify-md-start mb-5">
+        <v-row class="justify-md-start mb-2">
             <v-col cols="12" md="2">
                 <v-btn text block dark color="primary darken-2" :to="{name: 'TodaysTips'}">Today's Tips</v-btn>
             </v-col>

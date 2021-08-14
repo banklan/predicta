@@ -12,7 +12,7 @@
             <v-col cols="12" md="6">
                 <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
                 <v-card v-else light raised elevation="10" min-height="200">
-                    <v-card-title class="justify-center sub_title primary darken-2 white--text">Forecast {{ forecast_id }} Events </v-card-title>
+                    <v-card-title class="justify-center sub_title primary darken-2 white--text">Forecast {{ forecast_id }} </v-card-title>
                     <v-card-text>
                         <template v-if="forecast.length > 0">
                             <v-card raised min-height="100" v-for="(fc, index) in forecast" :key="fc.id" :class="index == 0 ? '' : 'mt-10'">
@@ -182,7 +182,6 @@ export default {
                 let event = this.forecast.filter((item)=>item.id == fc.id)
                 fc.status = res.data.status
                 this.newStatus = null
-                // console.log(res.data)
             })
         },
         getForecastSummary(){

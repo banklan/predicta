@@ -27,6 +27,17 @@ const forecast = tips ? JSON.parse(tips) : []
 const total_odds = window.localStorage.getItem('totalOdds')
 const totalOdds = total_odds ? total_odds : 0
 
+const dt = window.localStorage.getItem('dailyTips')
+const dailyTips = dt ? JSON.parse(dt) : []
+
+const auth_user = window.localStorage.getItem('authUser')
+const authUser = auth_user ? JSON.parse(auth_user) : null
+
+const user_loggedin = window.localStorage.getItem('userIsLoggedIn')
+const userIsLoggedIn = user_loggedin ? true : false
+
+const redirect = window.localStorage.getItem('redirOnlogin')
+const redirectOnLogin = redirect ? redirect : null
 
 
 export const store = new Vuex.Store({
@@ -48,7 +59,15 @@ export const store = new Vuex.Store({
         newExpertCreated: false,
         adminUpdatedExpert: false,
         expertUserDeleted: false,
-        newCountryAdded: false
+        newCountryAdded: false,
+        dailyTips: dailyTips,
+        newDaiyTipCreated: false,
+        dailyTipDeleted: false,
+        tipAddedToDailyTips: false,
+        authUser: authUser,
+        userIsLoggedIn: userIsLoggedIn,
+        redirectOnLogin: redirectOnLogin,
+        tipSubscribed: false
     },
     getters: {
         isBusy(state)
@@ -122,6 +141,38 @@ export const store = new Vuex.Store({
         newCountryAdded(state)
         {
             return state.newCountryAdded
+        },
+        getDailyTips(state)
+        {
+            return state.dailyTips
+        },
+        newDaiyTipCreated(state)
+        {
+            return state.newDaiyTipCreated
+        },
+        dailyTipDeleted(state)
+        {
+            return state.dailyTipDeleted
+        },
+        tipAddedToDailyTips(state)
+        {
+            return state.tipAddedToDailyTips
+        },
+        authUser(state)
+        {
+            return state.authUser
+        },
+        userIsLoggedIn(state)
+        {
+            return state.userIsLoggedIn
+        },
+        redirectOnLogin(state)
+        {
+            return state.redirectOnLogin
+        },
+        tipSubscribed(state)
+        {
+            return state.tipSubscribed
         }
     },
     actions: {},
@@ -144,12 +195,11 @@ export const store = new Vuex.Store({
             state.adminIsLoggedIn = false
             state.authAdmin = null
         },
-        logOut(state)
+        logOutAuthUser(state)
         {
             localStorage.removeItem('authUser')
-            localStorage.removeItem('isLoggedIn')
-            localStorage.removeItem('authService')
-            state.isLoggedIn = false
+            localStorage.removeItem('userIsLoggedIn')
+            state.userIsLoggedIn = false
             state.authUser = null
         },
         adminUpdatedSuperUser(state)
@@ -164,7 +214,8 @@ export const store = new Vuex.Store({
             state.newExpertCreated = false
             state.adminUpdatedExpert = false
             state.expertUserDeleted = false,
-            state.newCountryAdded = false
+                state.newCountryAdded = false
+            state.dailyTipDeleted = false
         },
         adminUserDeleted(state)
         {
@@ -283,6 +334,57 @@ export const store = new Vuex.Store({
         newCountryAdded(state)
         {
             state.newCountryAdded = true
+        },
+        addDailyTips(state, payload)
+        {
+            state.dailyTips.unshift(payload)
+            localStorage.setItem('dailyTips', JSON.stringify(state.dailyTips))
+        },
+        removeDailyTip(state, payload)
+        {
+            state.dailyTips.splice(payload, 1)
+            localStorage.setItem('dailyTips', JSON.stringify(state.dailyTips))
+        },
+        newDaiyTipCreated(state)
+        {
+            state.newDaiyTipCreated = true
+        },
+        clearDailyTip(state)
+        {
+            localStorage.removeItem('dailyTips')
+            state.dailyTips = []
+        },
+        dailyTipDeleted(state)
+        {
+            state.dailyTipDeleted = true
+        },
+        tipAddedToDailyTips(state)
+        {
+            this.tipAddedToDailyTips = true
+        },
+        userLoginSuccess(state, payload)
+        {
+            localStorage.removeItem('authExpert')
+            localStorage.removeItem('isLoggedIn')
+            localStorage.removeItem('authAdmin')
+            localStorage.removeItem('adminIsLoggedIn')
+            state.authExpert = null
+            state.adminIsLoggedIn = false
+            state.expertIsLoggedIn = false
+            state.authadmin = null
+            state.userIsLoggedIn = true
+            state.authUser = Object.assign({}, payload.user, {token: payload.access_token})
+            window.localStorage.setItem('authUser', JSON.stringify(state.authUser))
+            window.localStorage.setItem('userIsLoggedIn', true)
+        },
+        redirectOnLogin(state, payload)
+        {
+            window.localStorage.setItem('redirOnLogin', payload)
+            state.redirectOnLogin = payload
+        },
+        tipSubscribed(state, payload)
+        {
+            state.tipSubscribed = true
         }
     },
 })

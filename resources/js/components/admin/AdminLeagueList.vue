@@ -9,7 +9,7 @@
             <v-col cols="12" md="10">
                 <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
                 <v-card v-else light raised elevation="8" min-height="200" class="scroll">
-                    <v-card-title class="sub_title primary white--text justify-center">Banks <span class="ml-2"><v-chip color="primary lighten-2" v-if="total > 0">{{ total }}</v-chip></span></v-card-title>
+                    <v-card-title class="sub_title primary white--text justify-center">Leagues <span class="ml-2"><v-chip color="primary lighten-2" v-if="total > 0">{{ total }}</v-chip></span></v-card-title>
                     <v-card-text>
                         <template v-if="total > 0">
                             <table class="table table-condensed table-striped table-hover">
@@ -18,26 +18,28 @@
                                         <th>ID</th>
                                         <th>Country</th>
                                         <th>League</th>
+                                        <th>Abbrv</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody class="table_list">
                                     <tr v-for="(lg, i) in leagues" :key="lg.id">
                                         <td>{{ lg.id }}</td>
-                                        <td>{{ lg.country.name }}</td>
+                                        <td v-if="lg.country">{{ lg.country.country }}</td>
                                         <td>{{ lg.league }}</td>
+                                        <td>{{ lg.abbrv }}</td>
                                         <td><v-btn small text color="primary" @click="openUpdate(lg)"><v-icon>edit</v-icon></v-btn> &nbsp; <v-btn small text color="red darken-2" @click="confirmDel(lg, i)"><v-icon>delete_forever</v-icon></v-btn></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </template>
                         <template v-else>
-                            <v-alert type="info" border="left">
+                            <v-alert type="info" border="left" class="mt-8">
                                 There are currently no leagues in the database.
                             </v-alert>
                         </template>
                     </v-card-text>
-                    <v-card-actions class="my-5">
+                    <v-card-actions class="my-5" v-if="total > 0">
                         <span class="pl-4">
                             <v-btn color="primary" @click.prevent="getLeagues(pagination.first_link)" :disabled="!pagination.prev_link">&lt;&lt;</v-btn>
                             <v-btn color="primary" @click.prevent="getLeagues(pagination.prev_link)" :disabled="!pagination.prev_link">&lt;</v-btn>
@@ -56,8 +58,8 @@
                 <v-card-title class="sub_title primary white--text justify-center">Update League</v-card-title>
                 <v-card-text class="text-center mt-5 subtitle-1">
                     <v-text-field label="League" v-model="edit.league" required v-validate="'required|min:3|max:15'" :error-messages="errors.collect('update.league')" data-vv-scope="update" name="league"></v-text-field>
-                    <v-text-field label="Abbreviation" v-model="edit.abbrv" required v-validate="'required|min:3|max:8'" :error-messages="errors.collect('update.abbreviation')" name="abbreviation"></v-text-field>
-                    <v-select label="Select Country" v-model="edit.country" :items="countries" item-text="name" item-value="id" required v-validate="'required'" :error-messages="errors.collect('update.country')" name="country"></v-select>
+                    <v-text-field label="Abbreviation" v-model="edit.abbrv" required v-validate="'required|min:3|max:8'" :error-messages="errors.collect('update.abbreviation')" data-vv-scope="update" name="abbreviation"></v-text-field>
+                    <v-select label="Select Country" v-model="edit.country" :items="countries" item-text="country" item-value="id" required v-validate="'required'" :error-messages="errors.collect('update.country')" data-vv-scope="update" name="country"></v-select>
                 </v-card-text>
                 <v-card-actions class="pb-8 justify-center">
                     <v-btn text color="red darken--2" @click="updateDial = false" width="30%">Cancel</v-btn>
@@ -73,17 +75,17 @@
                 </v-card-text>
                 <v-card-actions class="pb-8 justify-center">
                     <v-btn text color="red darken--2" @click="confirmDelDial = false" width="30%">Cancel</v-btn>
-                    <v-btn dark color="primary" :loading="isUpdating" @click="delLeague" width="50%">Yes, Delete</v-btn>
+                    <v-btn dark color="primary" :loading="isDeleting" @click="delLeague" width="50%">Yes, Delete</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
         <v-dialog v-model="newLgDial" max-width="480">
             <v-card min-height="250">
-                <v-card-title class="sub_title primary white--text justify-center">Add New Bank</v-card-title>
+                <v-card-title class="sub_title primary white--text justify-center">Create New League</v-card-title>
                 <v-card-text class="text-center mt-5 subtitle-1">
-                    <v-text-field label="League" v-model="newLg.league" required v-validate="'required|min:3|max:15'" :error-messages="errors.collect('new.league')" data-vv-scope="update" name="league"></v-text-field>
-                    <v-text-field label="Abbreviation" v-model="newLg.abbrv" required v-validate="'required|min:3|max:8'" :error-messages="errors.collect('new.abbreviation')" name="abbreviation"></v-text-field>
-                    <v-select label="Select Country" v-model="newLg.country" :items="countries" item-text="name" item-value="id" required v-validate="'required'" :error-messages="errors.collect('new.country')" name="country"></v-select>
+                    <v-text-field label="League" v-model="newLg.league" required v-validate="'required|min:3|max:15'" :error-messages="errors.collect('new.league')" data-vv-scope="new" name="league"></v-text-field>
+                    <v-text-field label="Abbreviation" v-model="newLg.abbrv" required v-validate="'required|min:3|max:8'" :error-messages="errors.collect('new.abbreviation')" data-vv-scope="new" name="abbreviation"></v-text-field>
+                    <v-select label="Select Country" v-model="newLg.country" :items="countries" item-text="country" item-value="id" required v-validate="'required'" :error-messages="errors.collect('new.country')" data-vv-scope="new" name="country"></v-select>
                 </v-card-text>
                 <v-card-actions class="pb-8 justify-center">
                     <v-btn text color="red darken--2" @click="newLgDial = false" width="30%">Cancel</v-btn>
@@ -113,7 +115,7 @@
         </v-snackbar>
         <v-snackbar v-model="lgDelFailed" :timeout="6000" top dark color="red darken-2">
             An error occured while deleting. Please try again.
-            <v-btn text color="white--text" @click="bankDeleteFailed = false">Close</v-btn>
+            <v-btn text color="white--text" @click="lgDelFailed = false">Close</v-btn>
         </v-snackbar>
     </v-container>
 </template>
@@ -147,7 +149,7 @@ export default {
             newLg: {
                 league: '',
                 abbrv: '',
-                country: '',
+                country: null,
             },
             newLgAdded: false,
             createLgFailed: false
@@ -180,6 +182,7 @@ export default {
             axios.get(pag, this.adminHeaders)
             .then((res) => {
                 this.isLoading = false
+                console.log(res.data)
                 this.leagues = res.data.data
                 this.total = res.data.total
                 this.pagination = {
@@ -200,7 +203,7 @@ export default {
             })
         },
         confirmDel(lg, i){
-            this.lgTodel = bank
+            this.lgTodel = lg
             this.lgTodelIndex = i
             this.confirmDelDial = true
         },
@@ -222,10 +225,10 @@ export default {
             this.lgToUpdt =  lg
             this.edit.league = lg.league
             this.edit.abbrv = lg.abbrv
-            this.edit.country = lg.country
+            this.edit.country = lg.country.id
         },
         updateLeague(){
-            this.$validator.validateAll().then((isValid) => {
+            this.$validator.validateAll('update').then((isValid) => {
                 if(isValid) {
                     this.isUpdating = true
                     axios.post(this.api + `/auth-admin/update_league/${this.lgToUpdt.id}`, {
@@ -233,9 +236,11 @@ export default {
                     }, this.adminHeaders).then((res)=>{
                         this.isUpdating = false
                         this.updateDial = false
+                        let rez = res.data
                         let lg = this.leagues.find((item) => item.id === this.lgToUpdt.id)
-                        lg.league = res.data.league
-                        lg.abbrv = res.data.abbrv
+                        lg.country.country = rez.country.country
+                        lg.league = rez.league
+                        lg.abbrv = rez.abbrv
                         this.updateSuccess = true
                     }).catch((err)=>{
                         this.isUpdating = false
@@ -251,10 +256,10 @@ export default {
                     axios.post(this.api + '/auth-admin/create_new_league', {
                         league: this.newLg
                     }, this.adminHeaders).then((res)=>{
+                        console.log(res.data)
                         this.isUpdating = false
                         this.leagues.unshift(res.data)
                         this.newLgAdded = true
-                        this.newLg = ''
                         this.newLgDial = false
                     }).catch(()=>{
                         this.isUpdating = false

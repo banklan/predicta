@@ -131,7 +131,6 @@ export default {
                 this.total_won = total_won
                 let perc = (total_won * 100) / this.total
                 this.perc_won = Math.round(perc)
-                // console.log(res.data)
             }).catch((err)=>{
                 this.isLoading = false
                 console.log(err)

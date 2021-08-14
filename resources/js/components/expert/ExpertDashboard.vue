@@ -101,7 +101,7 @@ export default {
             axios.get(this.api + '/auth-expert/get_forecast_summary', this.expertHeader)
             .then((res) => {
                 this.total = res.data.length
-                let running = res.data.filter((item) => item.is_opened === true)
+                let running = res.data.filter((item) => item.progress === 2)
                 this.running = running.length
                 let won = res.data.filter((item)=> item.progress === '1')
                 let total_won = won.length

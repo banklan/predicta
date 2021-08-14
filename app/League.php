@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Builder;
 
 class League extends Model
 {
-    protected $guards = [];
+    protected $fillable = ['country_id', 'league', 'abbrv'];
 
-    protected $with = ['team'];
+    protected $with = ['country'];
 
 
     protected static function boot(){
@@ -21,7 +21,7 @@ class League extends Model
 
 
     public function setLeagueAttribute($value){
-        $this->attributes['league'] = ucwords($value);
+        $this->attributes['league'] = ucfirst($value);
     }
 
     public function setAbbrvAttribute($value){

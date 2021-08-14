@@ -112,12 +112,10 @@ export default {
                     console.log(this.edit)
                     axios.post(this.api + `/auth-admin/admin_update_expert/${this.id}`, {
                         user: this.user,
-                        // bank_details: this.bankDetails
                     }, this.adminHeaders).then((res) => {
                         this.isUpdating = false
                         this.$store.commit('adminUpdatedExpert')
                         this.$router.push({name: 'AdminExpertDetail', params: {id: res.data.id}})
-                        // console.log(res.data)
                     }).catch(() => {
                         this.isUpdating = false
                         this.updateFailed = true

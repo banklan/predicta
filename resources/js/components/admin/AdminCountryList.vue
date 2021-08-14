@@ -34,8 +34,8 @@
                             </table>
                         </template>
                         <template v-else>
-                            <v-alert type="info" border="left">
-                                There are currently no countries.
+                            <v-alert type="info" border="left" class="mt-5">
+                                There are currently no countries data in the database.
                             </v-alert>
                         </template>
                     </v-card-text>

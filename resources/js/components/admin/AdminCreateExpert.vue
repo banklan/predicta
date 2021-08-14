@@ -80,7 +80,6 @@ export default {
                         user: this.user
                     }, this.adminHeaders).then((res)=>{
                         this.isLoading = false
-                        console.log(res.data)
                         this.$store.commit('newExpertCreated')
                         this.$router.push({name: 'AdminExpertList'})
                     }).catch(() => {

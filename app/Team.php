@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class Team extends Model
 {
-    protected $guards = [];
+    protected $fillable = ['team', 'abbrv', 'league_id'];
 
     protected $with = ['league', 'country'];
 

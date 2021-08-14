@@ -12,32 +12,21 @@ class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
-        'name', 'email', 'password',
+        'first_name', 'last_name', 'username', 'email', 'phone', 'picture',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
+    protected $appends = ['fullname', 'user_status', 'created'];
+
     protected $hidden = [
         'password', 'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
+
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
 
 
     public function getJWTIdentifier()
@@ -53,5 +42,37 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function getCreatedAttribute($value)
+    {
+        $date = $this->created_at->format('F jS, Y');
+        return $date;
+    }
+
+    public function getUserStatusAttribute($value)
+    {
+        if($this->status == 0){
+            return 'Disabled';
+        }
+        return 'Enabled';
+    }
+
+    public function getFullnameAttribute()
+    {
+        $fullname = $this->name." ".$this->last_name;
+        return $this->first_name." ".$this->last_name;
+    }
+
+    public function setFirstNameAttribute($value){
+        $this->attributes['first_name'] = ucwords($value);
+    }
+
+    public function setLastNameAttribute($value){
+        $this->attributes['last_name'] = ucwords($value);
+    }
+
+    public function subscription(){
+        return $this->hasMany('App\Subscription');
     }
 }

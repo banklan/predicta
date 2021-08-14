@@ -1,90 +1,79 @@
 <template>
     <div class="sureodds">
-        <v-card light raised elevation="8" min-height="200" class="mx-auto">
-            <v-card-title class="sub_title primary white--text justify-center">Free Daily Sure Tips (2-3 odds)</v-card-title>
+        <v-progress-circular indeterminate color="primary" :width="5" :size="50" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
+        <v-card v-else light raised elevation="8" min-height="200">
+            <v-card-title class="sub_title primary white--text justify-center">Free Daily Tips &nbsp;<span v-if="tips.length > 0">{{ tips[0].event_date | moment('DD/MM/YY') }}</span> </v-card-title>
             <v-card-text>
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr class="caption">
-                            <th>Country</th>
-                            <th>League</th>
-                            <th>Time</th>
-                            <th>Home</th>
-                            <th>Away</th>
-                            <th>Tip</th>
-                            <th>Odd</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Spain</td>
-                            <td>Liga</td>
-                            <td>2.00PM</td>
-                            <td>Barca</td>
-                            <td>Valencia</td>
-                            <td>1</td>
-                            <td>1.15</td>
-                        </tr>
-                        <tr>
-                            <td>Spain</td>
-                            <td>Liga</td>
-                            <td>4.00PM</td>
-                            <td>Atletico</td>
-                            <td>Leganes</td>
-                            <td>1</td>
-                            <td>1.53</td>
-                        </tr>
-                        <tr>
-                            <td>Spain</td>
-                            <td>Liga</td>
-                            <td>6.00PM</td>
-                            <td>Atletico</td>
-                            <td>Leganes</td>
-                            <td>1</td>
-                            <td>1.53</td>
-                        </tr>
-                        <tr>
-                            <td>Spain</td>
-                            <td>Liga</td>
-                            <td>7:45PM</td>
-                            <td>Atletico</td>
-                            <td>Leganes</td>
-                            <td>1</td>
-                            <td>1.53</td>
-                        </tr>
-                        <tr>
-                            <td>Spain</td>
-                            <td>Liga</td>
-                            <td>8:45PM</td>
-                            <td>Atletico</td>
-                            <td>Leganes</td>
-                            <td>1</td>
-                            <td>1.53</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <template v-if="tips.length > 0">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr class="subtitle-2">
+                                <th>Country</th>
+                                <th>League</th>
+                                <th>Time</th>
+                                <th>Home</th>
+                                <th>Away</th>
+                                <th>Tip</th>
+                                <th>Odd</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="subtitle-2" v-for="tip in tips" :key="tip.id">
+                                <td>{{ tip.country }}</td>
+                                <td>{{ tip.league }}</td>
+                                <td>{{ tip.time }}</td>
+                                <td>{{ tip.home }}</td>
+                                <td>{{ tip.away }}</td>
+                                <td>{{ tip.tip }}</td>
+                                <td>{{ tip.odd }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </template>
+                <template v-else>
+                    <v-alert type="info" border="left" class="mt-5">
+                        There are no daily tips in the database yet.
+                    </v-alert>
+                </template>
             </v-card-text>
-            <v-card-text class="pb-5">
-                <div class="sub_title px-3 pb-3">Back this bundle</div>
-                <table class="table table-condensed table-borderless">
-                    <thead></thead>
-                    <tbody>
-                        <tr>
-                            <!-- <td width="30%"><v-img src="/images/bookmakers/bet9ja.png" width="60" height="60" contain></v-img></td> -->
-                            <td width="25%"><v-btn class="mt-n1" text color="primary" href="https://www.bet9ja.com" target="_blank">Bet9ja</v-btn></td>
-                            <td>0145fcggdggd</td>
-                        </tr>
-                        <tr>
-                            <td width="25%"><v-btn class="mt-n1" text color="primary" href="https://www.merrybet.com" target="_blank">Merrybet</v-btn></td>
-                            <td>JDUUDJJVHNSPWRGD</td>
-                        </tr>
-                        <tr>
-                            <td width="25%"><v-btn class="mt-n1" text color="primary" href="https://www.betking.com" target="_blank">Betking</v-btn></td>
-                            <td>07852QXOKDRHWOODF524</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </v-card-text>
+            <v-card-actions class="justify-center mt-3 pb-6">
+                <v-btn large text color="primary darken-2" :to="{name: 'TodaysTips'}">View All Today's Tips</v-btn>
+            </v-card-actions>
         </v-card>
     </div>
 </template>
+
+<script>
+export default {
+    data() {
+        return {
+            tips: [],
+            isLoading: false
+        }
+    },
+    computed:{
+        api(){
+            return this.$store.getters.api
+        },
+    },
+    methods: {
+        getFeaturedDailyTips(){
+            this.isLoading = true
+            axios.get(this.api + '/get_featured_daily_tips').then((res) =>{
+                this.isLoading = false
+                this.tips = res.data
+                // console.log(res.data)
+            })
+        }
+    },
+    created() {
+        this.getFeaturedDailyTips()
+    },
+}
+</script>
+
+<style lang="css" scoped>
+    .v-card, .v-card__text{
+        overflow-x: scroll !important;
+    }
+</style>

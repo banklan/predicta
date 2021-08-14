@@ -20,13 +20,31 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::get('get_all_national_teams', 'TeamController@getAllNatnlTeams');
     Route::get('get_all_banks', 'CountryController@getAllBanks');
     Route::get('get_all_bookmakers', 'TipController@getAllBookmakers');
+    Route::get('get_featured_daily_tips', 'TipController@getFeaturedDailyTips');
+    Route::get('get_won_daily_tips', 'TipController@getWonDailyTips');
+    Route::get('get_top_experts', 'TipController@getTopExpertsBrief');
+    Route::get('get_all_experts', 'TipController@getAllExperts');
+    Route::get('get_tip_expert/{id}', 'TipController@getTipExpert');
+    Route::get('get_open_events_for_expert/{id}', 'TipController@getExpertOpenEvents');
+    // Route::get('get_expert_winning_forecasts/{id}', 'TipController@getExpertWonEvents');
 });
 
-Route::group(['middleware' => 'api',  'prefix' => 'auth'], function ($router) {
+Route::group(['middleware' => 'api'], function ($router) {
     Route::post('login', 'AuthController@login');
     Route::post('logout', 'AuthController@logout');
-    Route::post('refresh', 'AuthController@refresh');
-    Route::post('me', 'AuthController@me');
+    Route::post('register', 'AuthController@register');
+    Route::post('confirm_user_email', 'UserController@confirmEmail');
+    // Route::post('refresh', 'AuthController@refresh');
+    // Route::post('me', 'AuthController@me');
+});
+
+// users protected routes
+Route::group(['middleware' => 'jwt.auth',  'prefix' => 'auth'], function($router){
+    Route::post('logout', 'AuthController@logout');
+    Route::post('auth_user', 'AuthController@AuthUser');
+    Route::get('get_expert_winning_forecasts/{id}', 'TipController@getExpertWonEvents');
+    Route::post('subscribe_to_expert_tips', 'SubscriptionController@subscribeToExpertTips');
+    Route::get('get_subscription/{id}', 'SubscriptionController@getSubscription');
 });
 
 
@@ -70,9 +88,41 @@ Route::group(['prefix' => 'auth-admin', 'middleware' => ['assign.guard:admin-api
     Route::post('update_bank/{id}', 'AdminController@updateBank');
     Route::post('create_new_bank', 'AdminController@createBank');
     Route::get('get_all_countries', 'AdminController@getAllCountries');
-    // Route::get('get_paginated_leagues', 'AdminController@getPgntdLeagues');
+    Route::get('get_paginated_leagues', 'AdminController@getPgntdLeagues');
     Route::post('delete_league/{id}', 'AdminController@delLeague');
     Route::post('update_league/{id}', 'AdminController@updateLeague');
+    Route::post('create_new_league', 'AdminController@createLeague');
+    Route::get('get_paginated_teams', 'AdminController@getPgntdTeams');
+    Route::get('get_all_leagues', 'AdminController@getAllLeagues');
+    Route::post('delete_team/{id}', 'AdminController@deleteTeam');
+    Route::post('update_team/{id}', 'AdminController@updateTeam');
+    Route::post('create_new_team', 'AdminController@createNewTeam');
+    // Route::post('admin_filter_models', 'AdminController@filterModels');
+    Route::get('admin_filter_teams_by_league/{id}', 'AdminController@filterTeamsByLeague');
+    Route::get('admin_get_league/{id}', 'AdminController@getLeague');
+    Route::post('admin_search_for_teams', 'AdminController@searchForTeams');
+    Route::get('get_all_bookmakers', 'AdminController@getBookmakers');
+    Route::post('create_new_bookmaker', 'AdminController@createNewBookmaker');
+    Route::post('update_bookmaker/{id}', 'AdminController@updateBookmaker');
+    Route::post('delete_bookmaker/{id}', 'AdminController@deleteBookmaker');
+    Route::get('get_pgntd_markets', 'AdminController@getPgntdMarkets');
+    Route::post('create_new_market', 'AdminController@createNewMarket');
+    Route::post('update_market/{id}', 'AdminController@updateMarket');
+    Route::post('delete_market/{id}', 'AdminController@deleteMarket');
+    Route::get('get_teams_for_a_league/{id}', 'AdminController@getTeamsForALeague');
+    Route::get('get_all_markets', 'AdminController@getAllMarkets');
+    Route::get('get_leagues_for_a_country/{id}', 'AdminController@getLeaguesForCountry');
+    Route::post('create_daily_tips', 'AdminController@createDailyTips');
+    Route::get('get_pgntd_daily_tips', 'AdminController@getPgntdDailyTips');
+    Route::get('admin_get_daily_tip_summary/{id}', 'AdminController@getDailyTipSummary');
+    Route::post('change_daily_tip_status/{id}', 'AdminController@adminChangeDailyTipsStatus');
+    Route::post('remove_event_from_daily_tips/{id}', 'AdminController@removeEventFromDailyTips');
+    Route::post('admin_delete_daily_tips/{tc}', 'AdminController@deleteDailyTips');
+    Route::post('add_tip_to_daily_tips/{tc}', 'AdminController@addToDailyTips');
+    Route::post('change_daily_tip_is_featured/{id}', 'AdminController@changeIsFeaturedOfDailyTip');
+    Route::post('admin_delete_daily_tip_summary/{tc}', 'AdminController@deleteDailyTipSummary');
+    Route::get('get_international_comps', 'AdminController@getIntnlCompetitions');
+    Route::get('get_national_teams', 'AdminController@getNationalTeams');
 });
 
 

@@ -305,7 +305,6 @@ export default {
                 axios.post(this.api + `/auth-expert/update_profile_picture`, form, this.expertHeader)
                 .then((res) => {
                     this.isUpdating = false
-                    // console.log(res.data)
                     this.changePic = false
                     const payload = {}
                     payload.user = res.data

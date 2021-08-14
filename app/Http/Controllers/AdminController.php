@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use App\Admin;
 use App\Bank;
 use App\Expert;
@@ -11,6 +12,13 @@ use App\ExpertPrediction;
 use App\ExpertPredictionSummary;
 use App\Country;
 use App\League;
+use App\Team;
+use App\Bookmaker;
+use App\DailyTip;
+use App\Tip;
+use App\DailyTipsSummary;
+use App\InternationalCompetition;
+use App\NationalTeam;
 use Image;
 
 class AdminController extends Controller
@@ -246,11 +254,37 @@ class AdminController extends Controller
     public function adminChangeExpertEventStatus(Request $request, $id){
         $event = ExpertPrediction::findOrFail($id);
         $newStatus = $request->status;
-        // print_r($event);
 
         $event->update([
             $event->status = $newStatus
         ]);
+
+        $all_events = ExpertPrediction::where('prediction_code', $event->prediction_code)->get();
+        $summary = ExpertPredictionSummary::where('forecast_id', $event->prediction_code)->first();
+        $won = [];
+        $lost = [];
+        //status = 0 means not played, 1 means lost and 2 means won
+        foreach($all_events as $tip){
+            if($tip->status === 2){
+                $won[] = $tip;
+            }else if($tip->status === 1){
+                $lost[] = $tip;
+            }
+        };
+
+        if($all_events->count() === count($won)){
+            $summary->update([
+                $summary->prog_status = 2 //won
+            ]);
+        }else if(count($lost) > 0){
+            $summary->update([
+                $summary->prog_status = 1 //lost
+            ]);
+        }else{
+            $summary->update([
+                $summary->prog_status = 0 //still running
+            ]);
+        }
 
         return response()->json($event, 200);
     }
@@ -389,11 +423,11 @@ class AdminController extends Controller
         return response()->json($countries, 200);
     }
 
-    // public function getPgntdLeagues(){
-    //     $lgs = League::latest()->paginate(10);
+    public function getPgntdLeagues(){
+        $lgs = League::latest()->paginate(10);
 
-    //     return response()->json($lgs, 200);
-    // }
+        return response()->json($lgs, 200);
+    }
 
     public function delLeague($id){
         $lg = League::findOrFail($id);
@@ -404,6 +438,427 @@ class AdminController extends Controller
     }
 
     public function updateLeague(Request $request, $id){
+        $this->validate($request, [
+            'league.league' => 'required|min:3|max:15',
+            'league.abbrv' => 'required|min:3|max:8',
+            'league.country' => 'required|numeric',
+        ]);
 
+        $league = League::findOrFail($id);
+        $league->update([
+            $league->league = $request->league['league'],
+            $league->abbrv = $request->league['abbrv'],
+            $league->country_id = $request->league['country'],
+        ]);
+
+        return response()->json($league, 200);
+    }
+
+    public function createLeague(Request $request){
+        $this->validate($request, [
+            'league.league' => 'required|min:3|max:15',
+            'league.abbrv' => 'required|min:3|max:8',
+            'league.country' => 'required|numeric',
+        ]);
+
+        $lg = New League;
+        $lg->country_id = $request->league['country'];
+        $lg->league = $request->league['league'];
+        $lg->abbrv = $request->league['abbrv'];
+        $lg->save();
+        $lg = $lg->fresh();
+
+        return response()->json($lg, 200);
+    }
+
+    public function getPgntdTeams(){
+        $teams = Team::latest()->paginate(10);
+
+        return response()->json($teams, 200);
+    }
+
+    public function getAllLeagues(){
+        $lgs = League::all();
+
+        return response()->json($lgs, 200);
+    }
+
+    public function deleteTeam($id){
+        $team = Team::findOrFail($id);
+
+        $team->delete();
+
+        return response()->json(['message'=>'deleted'], 200);
+    }
+
+    public function updateTeam(Request $request, $id){
+        $this->validate($request, [
+            'team.team' => 'required|min:3|max:20',
+            'team.abbrv' => 'required|min:3|max:8',
+            'team.league' => 'required|numeric',
+        ]);
+
+        $team = Team::findOrFail($id);
+        $team->update([
+            $team->team = $request->team['team'],
+            $team->abbrv = $request->team['abbrv'],
+            $team->league_id = $request->team['league'],
+        ]);
+
+        return response()->json($team, 200);
+    }
+
+    public function createNewTeam(Request $request){
+        $this->validate($request, [
+            'team.team' => 'required|min:3|max:20|unique:teams,team',
+            'team.abbrv' => 'required|min:3|max:8|unique:teams,abbrv',
+            'team.league' => 'required|numeric',
+        ]);
+
+        $team = New Team;
+        $team->league_id = $request->team['league'];
+        $team->team = $request->team['team'];
+        $team->abbrv = $request->team['abbrv'];
+        $team->save();
+        $team = $team->fresh();
+
+        return response()->json($team, 200);
+    }
+
+    public function filterTeamsByLeague($id){
+        $teams = Team::where('league_id', $id)->get();
+        return response()->json($teams, 200);
+    }
+
+    public function getLeague($id){
+        $lg = League::findOrFail($id);
+        return response()->json($lg, 200);
+    }
+
+    public function searchForTeams(Request $request){
+        $q = $request->q;
+
+        $teams = Team::where('team', 'LIKE', "%".$q."%")
+        ->orWhere('abbrv', 'LIKE', "%".$q."%")
+        ->get();
+
+        return response()->json($teams, 200);
+    }
+
+    public function getBookmakers(){
+        $bkm = Bookmaker::all();
+
+        return response()->json($bkm, 200);
+    }
+
+    public function createNewBookmaker(Request $request){
+        $this->validate($request, [
+            'name' => 'required|min:3|max:12|unique:bookmakers,name',
+            'logo' => 'required|mimes:jpeg,jpg,bmp,png,gif',
+        ]);
+
+        // $logoname = null;
+        $file = $request->logo;
+        if($file){
+            $pool = '0123456789abcdefghijklmnopqrstuvwxyz@&';
+            $ext = $file->getClientOriginalExtension();
+            $filename = substr(str_shuffle($pool), 0, 4).".".$ext;
+
+            //save logo in folder
+            $file_loc = public_path('/images/bookmakers/'.$filename);
+            if(in_array($ext, ['jpeg', 'jpg', 'png', 'gif', 'pdf'])){
+                $upload = Image::make($file)->resize(70, 120, function($constraint){
+                    $constraint->aspectRatio();
+                });
+                $upload->sharpen(1)->save($file_loc);
+            }
+        }
+
+        $bkmr = new Bookmaker;
+        $bkmr->name = $request->name;
+        $bkmr->logo = $filename;
+        $bkmr->save();
+
+        return response()->json($bkmr, 200);
+    }
+
+    public function updateBookmaker(Request $request, $id){
+        $this->validate($request, [
+            'bkm.name' => 'required|min:3|max:12',
+        ]);
+
+        $bkm = Bookmaker::findOrFail($id);
+
+        $bkm->update([
+            $bkm->name = $request->bkm['name']
+        ]);
+
+        return response()->json($bkm, 200);
+    }
+
+    public function deleteBookmaker($id){
+        $bkm = Bookmaker::findOrFail($id);
+
+        // remove file
+        $logo = $bkm->logo;
+        if($logo){
+            $filePath = public_path('/images/bookmakers/'.$logo);
+            if(file_exists($filePath)){
+                unlink($filePath);
+            }
+        }
+        $bkm ->delete();
+
+        return response()->json(['message' => 'Deleted!'], 200);
+    }
+
+    public function getPgntdMarkets(){
+        $tips = Tip::latest()->paginate(10);
+        return response()->json($tips, 200);
+    }
+
+    public function updateMarket(Request $request, $id){
+        $this->validate($request, [
+            'mkt.tip' => 'required|min:3|max:20',
+            'mkt.abbrv' => 'required|min:3|max:8',
+        ]);
+
+        $mkt = Tip::findOrFail($id);
+
+        $mkt->update([
+            $mkt->tip = $request->mkt['tip'],
+            $mkt->abbrv = $request->mkt['abbrv'],
+        ]);
+
+        return response()->json($mkt, 200);
+    }
+
+    public function deleteMarket($id){
+        $mkt = Tip::findOrFail($id);
+
+        $mkt ->delete();
+
+        return response()->json(['message' => 'Deleted!'], 200);
+    }
+
+
+    public function createNewMarket(Request $request){
+        $this->validate($request, [
+            'mkt.tip' => 'required|min:3|max:20|unique:tips,tip',
+            'mkt.abbrv' => 'required|min:3|max:8|unique:tips,abbrv',
+        ]);
+
+        $mkt = new Tip;
+        $mkt->tip = $request->mkt['tip'];
+        $mkt->abbrv = $request->mkt['abbrv'];
+        $mkt->save();
+
+        return response()->json($mkt, 200);
+    }
+
+    public function getTeamsForALeague($id){
+        $teams = Team::where('league_id', $id)->get();
+
+        return response()->json($teams, 200);
+    }
+
+    public function getAllMarkets(){
+        $mkts = Tip::all();
+        return response()->json($mkts, 200);
+    }
+
+    public function getLeaguesForCountry($id){
+        $lgs = League::where('country_id', $id)->get();
+        return response()->json($lgs, 200);
+    }
+
+    public function createDailyTips(Request $request){
+        $tips = $request->tips;
+
+        $data = ['data' => $tips];
+        // print_r($data);
+        $validator = Validator::make($data, [
+            'data.*.country' => 'min:3|max:22',
+            'data.*.league' => 'required|min:3|max:22',
+            'data.*.odd' => 'required|numeric|between:1,100',
+            'data.*.home' => 'required|min:3|max:22',
+            'data.*.away' => 'required|min:3|max:22',
+            'data.*.tip' => 'required|min:1|max:15',
+            'data.*.date' => 'required',
+            'data.*.time' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return response()->json(['message' => 'validation failed'], 500);
+        }else{
+            $tip_code = bin2hex(random_bytes(5));
+            $admin_id = auth('admin-api')->user()->id;
+
+            // create summary
+            $summary = new DailyTipsSummary;
+            $summary->admin_id = $admin_id;
+            $summary->tip_code = $tip_code;
+            $summary->event_count = count($tips);
+            $summary->status = 0;
+
+            $summary->save();
+
+            foreach($tips as $tip){
+                $pred = new DailyTip;
+                $pred->admin_id = $admin_id;
+                $pred->daily_tips_summary_id = $summary->id;
+                $pred->tip_code = $tip_code;
+                $pred->country = $tip['country'];
+                $pred->league = $tip['league'];
+                $pred->home = $tip['home'];
+                $pred->away = $tip['away'];
+                $pred->tip = $tip['tip'];
+                $pred->odd = $tip['odd'];
+                $pred->event_date = $tip['date'];
+                $pred->event_time = $tip['time'];
+                $pred->status = 0;
+
+                $pred->save();
+            }
+        }
+        return response()->json($summary, 201);
+    }
+
+    public function getPgntdDailyTips(){
+        $tips = DailyTipsSummary::latest()->paginate(10);
+
+        return response()->json($tips, 201);
+    }
+
+    public function getDailyTipSummary($id){
+        $summ = DailyTipsSummary::findOrFail($id);
+
+        return response()->json($summ, 201);
+    }
+
+    public function adminChangeDailyTipsStatus(Request $request, $id){
+        $event = DailyTip::findOrFail($id);
+        $newStatus = $request->status['newStatus'];
+        $isFeatured = $request->status['isFeatured'];
+
+        $event->update([
+            $event->status = $newStatus,
+            $event->is_featured = $isFeatured,
+        ]);
+
+        if($newStatus !== 0){
+            $event->update([
+                $event->is_open = false
+            ]);
+        }
+
+        return response()->json($event, 200);
+    }
+
+    public function removeEventFromDailyTips($id){
+        // print_r($id);
+        $event = DailyTip::findOrFail($id);
+
+        $tc = $event->tip_code;
+        $summary = DailyTipsSummary::where('tip_code', $tc)->first();
+        $summary->update([
+            $summary->event_count--
+        ]);
+
+        $event->delete();
+
+        return response()->json($summary, 200);
+    }
+
+    public function deleteDailyTips($tc){
+        $summary = DailyTipsSummary::where('tip_code', $tc)->first();
+        $summary->delete();
+
+        $tips = DailyTip::where('tip_code', $tc)->get();
+        foreach($tips as $tip){
+            $tip->delete();
+        }
+
+        return response()->json(['message' => 'Deleted!'], 200);
+    }
+
+    public function addToDailyTips(Request $request, $tc){
+        $this->validate($request, [
+            'tip.country' => 'min:3|max:22',
+            'tip.league' => 'required|min:3|max:22',
+            'tip.odd' => 'required|numeric|between:1,100',
+            'tip.home' => 'required|min:3|max:22',
+            'tip.away' => 'required|min:3|max:22',
+            'tip.tip' => 'required|min:1|max:15',
+            'tip.date' => 'required',
+            'tip.time' => 'required',
+        ]);
+
+        $summary =  DailyTipsSummary::where('tip_code', $tc)->first();
+        $admin_id = auth('admin-api')->user()->id;
+
+        $summary->update([
+            $summary->event_count++
+        ]);
+
+        $tip = new DailyTip;
+        $tip->admin_id = $admin_id;
+        $tip->daily_tips_summary_id = $summary->id;
+        $tip->tip_code = $summary->tip_code;
+        $tip->country = $request->tip['country'];
+        $tip->league = $tip['league'];
+        $tip->home = $request->tip['home'];
+        $tip->away = $request->tip['away'];
+        $tip->tip = $request->tip['tip'];
+        $tip->odd = $request->tip['odd'];
+        $tip->event_date = $request->tip['date'];
+        $tip->event_time = $request->tip['time'];
+        $tip->status = 0;
+
+        $tip->save();
+        $summary = $summary->fresh();
+        return response()->json($summary, 201);
+    }
+
+    public function changeIsFeaturedOfDailyTip($id){
+        $summary =  DailyTipsSummary::findOrFail($id);
+
+        if($summary->is_featured == true){
+            $summary->update([
+                $summary->is_featured = false
+            ]);
+        }else{
+            $summary->update([
+                $summary->is_featured = true
+            ]);
+        }
+
+        return response()->json($summary, 200);
+    }
+
+    public function deleteDailyTipSummary($code){
+        $summary =  DailyTipsSummary::where('tip_code', $code)->first();
+
+        $summary->delete();
+
+        $tips = DailyTip::where('tip_code', $code)->get();
+
+        foreach($tips as $tip){
+            $tip->delete();
+        }
+
+        return response()->json(['message' => 'Deleted!'], 200);
+    }
+
+    public function getIntnlCompetitions(){
+        $comps = InternationalCompetition::all();
+
+        return response()->json($comps, 200);
+    }
+
+    public function getNationalTeams(){
+        $teams = Country::all();
+
+        return response()->json($teams, 200);
     }
 }

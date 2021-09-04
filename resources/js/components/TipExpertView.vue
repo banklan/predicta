@@ -77,6 +77,7 @@ export default {
             axios.get(this.api + `/get_tip_expert/${this.$route.params.id}`).then((res) => {
                 this.isLoading = false
                 this.expert = res.data
+                console.log(res.data)
                 let predicts = this.expert.prediction_summary
                 let open3 = predicts.filter(item => item.is_opened == true && item.forecast_odd == 3)
                 this.opened3 = open3
@@ -93,11 +94,6 @@ export default {
                 this.openEvents = res.data
             })
         },
-        // accessEvent(odd, expert){
-        //     console.log(odd, expert)
-        //     this.$router.push({name: 'TipExpertPremShow', params: {odd: odd, expert: expert}})
-        // },
-
     },
     created(){
         this.getExperts()

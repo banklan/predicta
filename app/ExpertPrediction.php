@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Carbon\Carbon;
 
 class ExpertPrediction extends Model
 {
@@ -56,4 +57,5 @@ class ExpertPrediction extends Model
     public function expert(){
         return $this->belongsTo('App\Expert');
     }
+
 }

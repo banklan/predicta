@@ -55,6 +55,16 @@ router.beforeEach((to, from, next) => {
         next('/expert-login')
     }else if(to.path == '/expert-login' && authExpert){
         next('/expert')
+    }else if(to.path == '/expert-register' && authExpert){
+        next('/expert')
+    }else if(to.path.substring(0, 6) == '/admin'  && authExpert){
+        next('/expert')
+    }else if(to.path == '/dashboard' && authExpert){
+        next('/expert')
+    }else if (to.path == '/subscriptions' && authExpert) {
+        next('/expert')
+    }else if (to.path == '/user-account' && authExpert) {
+        next('/expert')
     }else {
         next()
     }
@@ -69,6 +79,10 @@ router.beforeEach((to, from, next) => {
     }else if(to.path == '/login' && authUser){
         next('/dashboard')
     }else if(to.path == '/register' && authUser){
+        next('/dashboard')
+    }else if(to.path.substring(0, 6) == '/admin' && authUser){
+        next('/dashboard')
+    }else if(to.path.substring(0, 7) == '/expert' && authUser){
         next('/dashboard')
     }else {
         next()
@@ -95,6 +109,7 @@ axios.interceptors.response.use(null, (err) =>
 Vue.component('tips-route', require('./components/children/TipsRoute.vue').default);
 Vue.component('sure-odds', require('./components/children/SureOdds.vue').default);
 Vue.component('won-tips', require('./components/children/WonTips.vue').default);
+// Vue.component('tip-bundles', require('./components/children/TipBundles.vue').default);
 Vue.component('top-experts', require('./components/children/TopExpertsBrief.vue').default);
 Vue.component('expert-navbar', require('./components/includes/ExpertNavbar.vue').default);
 Vue.component('auth-navbar', require('./components/includes/AuthUserNavbar.vue').default);
@@ -111,10 +126,11 @@ Vue.component('create-daily-tips-international', require('./components/children/
 Vue.component('create-daily-tips-club', require('./components/children/DailyTipsClub.vue').default);
 Vue.component('admin-dailytip-summary', require('./components/children/AdminDailyTipSummary.vue').default);
 Vue.component('admin-new-club-tip', require('./components/children/AdminNewClubTip.vue').default);
-// Vue.component('admin-newips-international', require('./components/children/AdminNewClubTip.vue').default);
 Vue.component('admin-update-dailytip-summary', require('./components/children/AdminModifyDailyTip.vue').default);
 Vue.component('experts-premium-tips', require('./components/children/ExpertsPremiumTips.vue').default);
 Vue.component('authuser-top-panel', require('./components/children/AuthUserTopPanel.vue').default);
+Vue.component('expert-outstanding-earnings', require('./components/children/AdminExpertOutstandingEarning.vue').default);
+Vue.component('newuser-feedback', require('./components/children/NewUserFeedback.vue').default);
 
 const app = new Vue({
     el: '#app',

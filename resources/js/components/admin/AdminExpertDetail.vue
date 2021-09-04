@@ -16,18 +16,26 @@
                         <v-img v-if="user.picture" :src="`/images/profiles/experts/${user.picture}`" aspect-ratio="1" height="300" transition="scale-transition"></v-img>
                         <v-img v-else src="/images/profiles/experts/avatar.jpg" aspect-ratio="1" height="300" transition="scale-transition"></v-img>
                         <v-card-text>
-                            <div class="sub_title my-3 text-center">Expert Details</div>
+                            <div class="subtitle-1 my-3 text-center">Expert Details</div>
                             <v-simple-table light>
                                 <template v-slot:default>
                                     <thead></thead>
                                     <tbody>
                                         <tr>
-                                            <th width="35%">First Name:</th>
+                                            <th width="35%">Expert ID:</th>
+                                            <td>{{ user.expert_id }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>First Name:</th>
                                             <td>{{ user.first_name }}</td>
                                         </tr>
                                         <tr>
                                             <th>Last Name:</th>
                                             <td>{{ user.last_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Username:</th>
+                                            <td>{{ user.username }}</td>
                                         </tr>
                                         <tr>
                                             <th>Email:</th>
@@ -63,7 +71,7 @@
                                         </tr>
                                         <tr>
                                             <th>Updated:</th>
-                                            <td>{{ user.updated_at }}</td>
+                                            <td>{{ user.updated_at | moment('DD/MM/YY, H:ma') }}</td>
                                         </tr>
                                     </tbody>
                                 </template>
@@ -84,7 +92,7 @@
             </v-col>
             <v-col cols="12" md="5">
                 <v-card light raised outlined elevation="4" min-height="150">
-                    <v-card-title class="primary white--text justify-center sub_title">Reset Password</v-card-title>
+                    <v-card-title class="primary white--text justify-center subtitle-1">Reset Password</v-card-title>
                     <v-card-text class="mt-4">
                         <v-btn text dark color="primary darken--2" @click="resetPassword = !resetPassword">Reset Password</v-btn>
                         <template v-if="resetPassword">
@@ -97,12 +105,14 @@
                         <v-btn dark class="primary darken-2" :loading="isUpdating" @click="updatePswd">Submit</v-btn>
                     </v-card-actions>
                 </v-card>
-                <expert-brief-performance :expert="id" />
+                <expert-brief-performance :expert="id" :active="activeSub" :count="subCount" />
+                <expert-outstanding-earnings :expert="id" />
+                <!-- <expert- -->
             </v-col>
         </v-row>
         <v-dialog v-model="confirmDelDialog" max-width="480">
             <v-card min-height="150">
-                <v-card-title class="sub_title justify-center pt-8 mb-4">Do you really want to delete this expert user?</v-card-title>
+                <v-card-title class="subtitle-1 justify-center pt-8 mb-4">Do you really want to delete this expert user?</v-card-title>
                 <v-card-text class="text-center mt-4 subtitle-1">
                     If you proceed to delete, the expert user will be deleted irrecoverably.
                 </v-card-text>
@@ -114,7 +124,7 @@
         </v-dialog>
         <v-dialog v-model="statusDialog" max-width="450">
             <v-card min-height="150">
-                <v-card-title class="sub_title justify-center pt-8 mb-4">Do you want to {{ user && user.status == 0 ? 'enable' : 'disable'}} this expert user?</v-card-title>
+                <v-card-title class="subtitle-1 justify-center pt-8 mb-4">Do you want to {{ user && user.status == 0 ? 'enable' : 'disable'}} this expert user?</v-card-title>
                 <v-card-actions class="pb-8 justify-center">
                     <v-btn text color="red darken--2" @click="statusDialog = false">Cancel</v-btn>
                     <v-btn dark color="primary" :loading="isLoading" @click="toggleUserStatus">Yes, {{ user && user.status == 0 ? 'enable' : 'disable' }}</v-btn>
@@ -163,6 +173,9 @@ export default {
             isUpdating: false,
             passwordResetSuccessfull: false,
             passwordResetFailed: false,
+            subCount: 0,
+            activeSub: [],
+            subscriptions: []
         }
     },
     computed: {
@@ -235,9 +248,21 @@ export default {
                 }
             })
         },
+        getSubscriptions(){
+            axios.get(this.api + `/auth-admin/admin_get_expert_subs/${this.$route.params.id}`, this.adminHeaders)
+            .then((res) => {
+                let rez = res.data
+                this.subscriptions = rez
+                this.subCount = rez.length
+                let active = rez.filter((sub) => sub.active_status == 'Active')
+                this.activeSub = active
+                // let outstnd = rez.filter((sub) =>sub.)
+            })
+        }
     },
     created() {
         this.getUser()
+        this.getSubscriptions()
     },
 }
 </script>
@@ -248,6 +273,6 @@ export default {
     }
 
     .v-card .v-card__text{
-        overflow: scroll !important;
+        overflow-x: scroll !important;
     }
 </style>

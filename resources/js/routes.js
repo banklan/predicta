@@ -1,8 +1,8 @@
 import NotFound from './components/NotFound';
 import Welcome from './components/Welcome';
 import TodaysTips from './components/TodaysTips';
-import TomorrowsTips from './components/TomorrowsTips';
-import WonTips from './components/WonTips';
+// import TomorrowsTips from './components/TomorrowsTips';
+import DailyWonTips from './components/WonTips';
 import AllExperts from './components/AllExperts';
 import TipExpertView from './components/TipExpertView';
 import TipOddView from './components/user/TipOddView';
@@ -34,7 +34,24 @@ import AdminMarketList from './components/admin/AdminMarketList';
 import AdminDailyTips from './components/admin/AdminDailyTips';
 import AdminCreateDailyTips from './components/admin/AdminCreateDailyTips';
 import AdminDailyTipShow from './components/admin/AdminDailyTipShow';
+import AdminDailyTipUpdate from './components/admin/AdminDailyTipUpdate';
 import AdminDailyTipAddNew from './components/admin/AdminDailyTipAddNew';
+import AdminSubscriptionsList from './components/admin/AdminSubscriptionList';
+import AdminSubscriptionShow from './components/admin/AdminSubscriptionShow';
+import AdminPlanList from './components/admin/AdminPlanList';
+import AdminUsersList from './components/admin/AdminUsersList';
+import AdminUserShow from './components/admin/AdminUserShow';
+import AdminUserUpdate from './components/admin/AdminUserUpdate';
+import AdminCreateUser from './components/admin/AdminCreateUser';
+import AdminPaymentList from './components/admin/AdminPaymentList';
+import AdminPaymentDetail from './components/admin/AdminPaymentDetail';
+import AdminEarningList from './components/admin/AdminEarningList';
+import AdminEarningDetail from './components/admin/AdminEarningDetail';
+import AdminExpertSubscriptionsDetail from './components/admin/AdminExpertSubscriptionsDetail';
+import AdminFeedbacks from './components/admin/AdminFeedbacks';
+import AdminFeedbackInboxShow from './components/admin/AdminFeedbackInboxShow';
+import AdminFeedbackOutboxShow from './components/admin/AdminFeedbackOutboxShow';
+import AdminSearchFeedbackRes from './components/admin/AdminSearchFeedbackRes';
 import ExpertRegister from './components/expert/ExpertRegister';
 import ExpertLogin from './components/expert/ExpertLogin';
 import ExpertEmailConfirmation from './components/expert/ExpertEmailConfirmation';
@@ -44,20 +61,28 @@ import MyForecasts from './components/expert/MyForecasts';
 import ExpertForecastShow from './components/expert/ExpertForecastShow';
 import ExpertAccount from './components/expert/Account';
 import ExpertSubscriptions from './components/expert/ExpertSubscriptions';
+import ExpertSubscriptionView from './components/expert/ExpertSubscriptionView';
+import ExpertEarnings from './components/expert/ExpertEarnings';
 import UserLogin from './components/user/UserLogin.vue';
 import UserRegister from './components/user/Register.vue';
 import UserEmailConfirmation from './components/user/EmailConfirmation.vue';
 import UserDashboard from './components/user/Dashboard.vue';
 import SubscriptionView from './components/user/SubscriptionView.vue';
-// import ExpertUpdateBankDetails from './components/expert/ExpertUpdateBankDetails';
+import SubscriptionTipView from './components/user/SubscriptionTipView.vue';
+import Subscriptions from './components/user/Subscriptions.vue';
+import UserAccount from './components/user/UserAccount.vue';
+import UserFeedback from './components/user/UserFeedback.vue';
+import NewUserfeedback from './components/user/NewUserfeedback.vue';
+import UserFeedbackShow from './components/user/UserFeedbackShow.vue';
+import UserFeedbackOutboxShow from './components/user/UserFeedbackOutboxShow.vue';
 
 
 export default [
     {path: '*', name: 'NotFound', component: NotFound},
     { path: '/', name: 'Welcome', component: Welcome },
     { path: '/todays-tips', name: 'TodaysTips', component: TodaysTips },
-    { path: '/tomorrows-tips', name: 'TomorrowsTips', component: TomorrowsTips },
-    { path: '/won-tips', name: 'WonTips', component: WonTips },
+    // { path: '/tomorrows-tips', name: 'TomorrowsTips', component: TomorrowsTips },
+    { path: '/won-tips', name: 'DailyWonTips', component: DailyWonTips },
     { path: '/tip-experts', name: 'AllTipExperts', component: AllExperts },
     { path: '/tip-expert/:id', name: 'TipExpertView', component: TipExpertView },
     {
@@ -72,6 +97,18 @@ export default [
             requireUsersAuth: true
         }
     },
+    {
+        path: '/subscriptions/:sub_id/:pred_id', name: 'SubscriptionTipView', component: SubscriptionTipView,
+        meta: {
+            requireUsersAuth: true
+        }
+    },
+    {
+        path: '/subscriptions', name: 'Subscriptions', component: Subscriptions,
+        meta: {
+            requireUsersAuth: true
+        }
+    },
     { path: '/login', name: 'UserLogin', component: UserLogin },
     { path: '/register', name: 'UserRegister', component: UserRegister },
     { path: '/email-confirmation', name: 'UserEmailConfirmation', component: UserEmailConfirmation, props: true },
@@ -81,8 +118,36 @@ export default [
             requireUsersAuth: true
         }
     },
-
-    // { path: '/tip-expert-premium/:odd/:expert', name: 'TipExpertPremShow', component: TipExpertPremShow },
+    {
+        path: '/user-account', name: 'UserAccount', component: UserAccount,
+        meta: {
+            requireUsersAuth: true
+        }
+    },
+    {
+        path: '/user-feedback', name: 'UserFeedback', component: UserFeedback,
+        meta: {
+            requireUsersAuth: true
+        }
+    },
+    {
+        path: '/user-feedback/:id', name: 'UserFeedbackShow', component: UserFeedbackShow,
+        meta: {
+            requireUsersAuth: true
+        }
+    },
+    {
+        path: '/user-feedback/outbox/:id', name: 'UserFeedbackOutboxShow', component: UserFeedbackOutboxShow,
+        meta: {
+            requireUsersAuth: true
+        }
+    },
+    {
+        path: '/user-feedback/new', name: 'NewUserfeedback', component: NewUserfeedback,
+        meta: {
+            requireUsersAuth: true
+        }
+    },
     { path: '/admin/login', name: 'AdminLogin', component: AdminLogin },
     {
         path: '/admin', name: 'AdminDashboard', component: AdminDashboard,
@@ -247,7 +312,109 @@ export default [
         }
     },
     {
+        path: '/admin/daily-tip-update/:code/:tip', name: 'AdminDailyTipUpdate', component: AdminDailyTipUpdate,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
         path: '/admin/daily-tips/:id/:code/add-tip', name: 'AdminDailyTipAddNew', component: AdminDailyTipAddNew,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
+        path: '/admin/subscriptions', name: 'AdminSubscriptionsList', component: AdminSubscriptionsList,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
+        path: '/admin/subscription/:sub', name: 'AdminSubscriptionShow', component: AdminSubscriptionShow,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
+        path: '/admin/plans', name: 'AdminPlanList', component: AdminPlanList,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
+        path: '/admin/users/:id/update', name: 'AdminUserUpdate', component: AdminUserUpdate,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
+        path: '/admin/users/create', name: 'AdminCreateUser', component: AdminCreateUser,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
+        path: '/admin/users', name: 'AdminUsersList', component: AdminUsersList,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
+        path: '/admin/users/:id', name: 'AdminUserShow', component: AdminUserShow,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
+        path: '/admin/payments', name: 'AdminPaymentList', component: AdminPaymentList,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
+        path: '/admin/payments/:trx', name: 'AdminPaymentDetail', component: AdminPaymentDetail,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
+        path: '/admin/earnings', name: 'AdminEarningList', component: AdminEarningList,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
+        path: '/admin/earnings/:id', name: 'AdminEarningDetail', component: AdminEarningDetail,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
+        path: '/admin/expert-subscriptions/:id', name: 'AdminExpertSubscriptionsDetail', component: AdminExpertSubscriptionsDetail,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
+        path: '/admin/feedbacks', name: 'AdminFeedbacks', component: AdminFeedbacks,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
+        path: '/admin/feedbacks/inbox/:id', name: 'AdminFeedbackInboxShow', component: AdminFeedbackInboxShow,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
+        path: '/admin/feedbacks/outbox/:id', name: 'AdminFeedbackOutboxShow', component: AdminFeedbackOutboxShow,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
+        path: '/admin/feedbacks/search', name: 'AdminSearchFeedbackRes', component: AdminSearchFeedbackRes, props: true,
         meta: {
             requireAdminsAuth: true
         }
@@ -299,6 +466,18 @@ export default [
     },
     {
         path: '/expert/subscriptions', name: 'ExpertSubscriptions', component: ExpertSubscriptions,
+        meta: {
+            requireExpertAuth: true
+        }
+    },
+    {
+        path: '/expert/subscriptions/:id', name: 'ExpertSubscriptionView', component: ExpertSubscriptionView,
+        meta: {
+            requireExpertAuth: true
+        }
+    },
+    {
+        path: '/expert/earnings', name: 'ExpertEarnings', component: ExpertEarnings,
         meta: {
             requireExpertAuth: true
         }

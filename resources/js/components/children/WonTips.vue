@@ -12,14 +12,16 @@
                                 <th>League</th>
                                 <th>Event</th>
                                 <th>Tip</th>
+                                <th>Result</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr class="" v-for="tip in tips" :key="tip.id">
                                 <td>{{ tip.date }}</td>
                                 <td>{{ tip.league }}</td>
-                                <td>{{ tip.home }} VS {{ tip.away }}</td>
+                                <td>{{ tip.game }}</td>
                                 <td>{{ tip.tip }}</td>
+                                <td>{{ tip.result }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -30,6 +32,9 @@
                     </v-alert>
                 </template>
             </v-card-text>
+            <v-card-actions class="justify-center pb-6">
+                <v-btn text color="primary darken-2" :to="{name: 'DailyWonTips'}">View All Won Tips</v-btn>
+            </v-card-actions>
         </v-card>
     </div>
 </template>
@@ -48,23 +53,23 @@ export default {
         },
     },
     methods: {
-        getWonTips(){
+        getBriefWonTips(){
             this.isLoading = true
-            axios.get(this.api + '/get_won_daily_tips').then((res) =>{
+            axios.get(this.api + '/get_brief_won_daily_tips').then((res) =>{
                 this.isLoading = false
                 this.tips = res.data
-                // console.log(res.data)
+                console.log(res.data)
             })
         }
     },
     created() {
-        this.getWonTips()
+        this.getBriefWonTips()
     },
 }
 </script>
 
 <style lang="css" scoped>
-    .v-card, .v-card__text{
+    .v-card{
         overflow-x: scroll !important;
     }
 </style>

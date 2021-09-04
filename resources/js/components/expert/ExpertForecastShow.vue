@@ -1,10 +1,10 @@
 <template>
     <v-container>
         <v-row justify="center" class="justify-center">
-            <v-col cols="12" md="3">
+            <v-col cols="12" md="2">
                 <v-btn rounded color="primary lighten--2" dark elevation="4" left @click.prevent="$router.go(-1)"><v-icon left>arrow_left</v-icon> Back</v-btn>
             </v-col>
-            <v-col cols="12" md="9">
+            <v-col cols="12" md="10">
                 <expert-top-panel :title="`Forecast ${id}`"/>
             </v-col>
         </v-row>

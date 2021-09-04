@@ -12,7 +12,7 @@ class DailyTip extends Model
 
     protected $with = ['admin'];
 
-    protected $appends = ['date', 'time'];
+    protected $appends = ['date', 'time', 'game'];
 
 
     protected static function boot(){
@@ -57,5 +57,12 @@ class DailyTip extends Model
     {
         $time = Carbon::parse($this->event_time)->format('h:ia');
         return $time;
+    }
+
+    public function getGameAttribute(){
+        $home = $this->home;
+        $away = $this->away;
+        $game = $home.' vs '.$away;
+        return $game;
     }
 }

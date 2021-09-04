@@ -99,6 +99,10 @@
                                         <th>Total Odds</th>
                                         <td>{{ forecastSummary.total_odds | formatOdds }}</td>
                                     </tr>
+                                    <tr>
+                                        <th>Availability</th>
+                                        <td>{{ forecastSummary.is_available ? 'Available' : 'Not Available' }}</td>
+                                    </tr>
                                     <tr v-if="forecastSummary.bet9ja">
                                         <th>Bet9ja code</th>
                                         <td>{{ forecastSummary.bet9ja }}</td>
@@ -120,9 +124,29 @@
                             </v-alert>
                         </template>
                     </v-card-text>
+                    <v-card-actions class="justify-center pb-8">
+                        <v-btn color="primary darken-2" @click="toggleAvailDial = true">{{ forecastSummary.is_available ? 'Make Unavailable' : 'Make Available'}}</v-btn>
+                    </v-card-actions>
                 </v-card>
             </v-col>
         </v-row>
+        <v-dialog v-model="toggleAvailDial" max-width="500">
+            <v-card min-height="150">
+                <v-card-title class="subtitle-1 primary white--text justify-center">Make this forecast {{ forecastSummary.is_available ? ' not available': ' available' }} for Subscription?</v-card-title>
+                <v-card-actions class="pb-8 justify-center mt-5">
+                    <v-btn text color="red darken--2" @click="toggleAvailDial = false" width="30%">Cancel</v-btn>
+                    <v-btn dark color="primary" :loading="isUpdating" @click="toggleAvailability" width="50%">Yes, Make {{ forecastSummary.is_available ? ' not available': ' available' }}</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+        <v-snackbar v-model="availUpdated" :timeout="4000" top color="green darken-1 white--text">
+            The forecast availability has been updated successfully.
+            <v-btn text color="white--text" @click="availUpdated = false">Close</v-btn>
+        </v-snackbar>
+        <v-snackbar v-model="availUpdtFail" :timeout="6000" top color="red darken-1 white--text">
+            there was an error while trying to update the forecast availability. Please try again.
+            <v-btn text color="white--text" @click="availUpdtFail = false">Close</v-btn>
+        </v-snackbar>
     </v-container>
 </template>
 
@@ -141,7 +165,11 @@ export default {
                 {id: 2, status: 'Won'},
             ],
             newStatus: null,
-            isBusy: false
+            isBusy: false,
+            toggleAvailDial: false,
+            isUpdating: false,
+            availUpdated: false,
+            availUpdtFail: false
         }
     },
     computed: {
@@ -190,7 +218,21 @@ export default {
             .then((res)=>{
                 this.isLoading = false
                 this.forecastSummary = res.data
-                console.log(res.data)
+                // console.log(res.data)
+            })
+        },
+        toggleAvailability(){
+            this.isUpdating = true
+            axios.post(this.api + `/auth-admin/admin_toggle_forecast_availability/${this.$route.params.fc}`, {}, this.adminHeaders)
+            .then((res) => {
+                // console.log(res.data)
+                this.isUpdating = false
+                this.toggleAvailDial = false
+                this.availUpdated = true
+                this.forecastSummary.is_available = res.data
+            }).catch(() => {
+                this.isUpdating = false
+                this.availUpdtFail = true
             })
         }
     },
@@ -207,7 +249,7 @@ export default {
     }
 
     .v-card .v-card__text{
-        overflow: scroll !important;
+        overflow-x: scroll !important;
     }
     .status{
         text-align: center;

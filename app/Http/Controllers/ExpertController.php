@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Validator;
 use Image;
 use Illuminate\Support\Facades\Hash;
 use App\Bank;
+use App\Subscription;
+use App\Earning;
 
 class ExpertController extends Controller
 {
@@ -254,5 +256,34 @@ class ExpertController extends Controller
         $summary = ExpertPredictionSummary::where('expert_id', $user)->get();
 
         return response()->json($summary, 200);
+    }
+
+    public function getExpertSubscriptions(){
+        $user = auth('expert-api')->user()->id;
+        $subs = Subscription::where('expert_id', $user)->get();
+
+        return response()->json($subs, 200);
+    }
+
+    public function getExpertEarnings(){
+        $exp = auth('expert-api')->user()->id;
+        $earnings = Earning::where('expert_id', $exp)->get();
+
+        return response()->json($earnings, 200);
+    }
+
+    public function getExpertSubscription($id){
+        $user = auth('expert-api')->user()->id;
+        $sub = Subscription::where('expert_id', $user)->where('sub_id', $id)->first();
+
+        return response()->json($sub, 200);
+    }
+
+    public function getUserOtherSubscriptions($id){
+        $auth = auth('expert-api')->user()->id;
+        $sub = Subscription::where('sub_id', $id)->first();
+        $subs = Subscription::where('expert_id', $auth)->where('user_id', $sub->user_id)->where('sub_id', '!=', $id)->get();
+
+        return response()->json($subs, 200);
     }
 }

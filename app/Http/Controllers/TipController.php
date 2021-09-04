@@ -33,14 +33,15 @@ class TipController extends Controller
     }
 
     public function getFeaturedDailyTips(){
-        $tip = DailyTipsSummary::where('is_featured', true)->latest('created_at')->first();
+        $tip = DailyTipsSummary::where('is_featured', true)->latest()->first();
         $tips = DailyTip::where('daily_tips_summary_id', $tip->id)->where('is_featured', true)->get();
+        $tipDate = $tip->tip_date;
 
-        return response()->json($tips, 200);
+        return response()->json(['tips' => $tips, 'tipDate' => $tipDate], 200);
     }
 
-    public function getWonDailyTips(){
-        $won_tips = DailyTip::where('status', 2)->orderBy('event_date', 'desc')->take(10)->get();
+    public function getBriefWonDailyTips(){
+        $won_tips = DailyTip::where('status', 2)->where('is_featured', true)->orderBy('event_date', 'desc')->take(6)->get();
 
         return response()->json($won_tips, 200);
     }
@@ -70,4 +71,22 @@ class TipController extends Controller
         return response()->json($events, 200);
     }
 
+    public function getExpertsByWinningRate(){
+        $exps = Expert::all()->sortByDesc('winning_rate')->values();
+
+        return response()->json($exps, 200);
+    }
+
+    public function getTodaysTips(){
+        $tip = DailyTipsSummary::where('is_featured', true)->latest()->first();
+        $tips = DailyTip::where('daily_tips_summary_id', $tip->id)->get();
+
+        return response()->json(['tips' => $tips, 'tipDate'=>$tip->tip_date], 200);
+    }
+
+    public function getWonTips(){
+        $tips = DailyTip::where('status', 2)->take('30')->get();
+
+        return response()->json($tips, 200);
+    }
 }

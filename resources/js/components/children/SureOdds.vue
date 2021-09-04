@@ -2,10 +2,10 @@
     <div class="sureodds">
         <v-progress-circular indeterminate color="primary" :width="5" :size="50" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
         <v-card v-else light raised elevation="8" min-height="200">
-            <v-card-title class="sub_title primary white--text justify-center">Free Daily Tips &nbsp;<span v-if="tips.length > 0">{{ tips[0].event_date | moment('DD/MM/YY') }}</span> </v-card-title>
+            <v-card-title class="sub_title primary white--text justify-center">Free Daily Tips &nbsp;<span v-if="tips.length > 0">{{ tipDate | moment('DD/MM/YY')  }}</span> </v-card-title>
             <v-card-text>
                 <template v-if="tips.length > 0">
-                    <table class="table table-striped table-hover">
+                    <table class="table table-striped table-hover table-condensed">
                         <thead>
                             <tr class="subtitle-2">
                                 <th>Country</th>
@@ -36,7 +36,7 @@
                     </v-alert>
                 </template>
             </v-card-text>
-            <v-card-actions class="justify-center mt-3 pb-6">
+            <v-card-actions class="justify-center pb-5">
                 <v-btn large text color="primary darken-2" :to="{name: 'TodaysTips'}">View All Today's Tips</v-btn>
             </v-card-actions>
         </v-card>
@@ -48,6 +48,7 @@ export default {
     data() {
         return {
             tips: [],
+            tipDate: null,
             isLoading: false
         }
     },
@@ -61,7 +62,8 @@ export default {
             this.isLoading = true
             axios.get(this.api + '/get_featured_daily_tips').then((res) =>{
                 this.isLoading = false
-                this.tips = res.data
+                this.tips = res.data.tips
+                this.tipDate = res.data.tipDate
                 // console.log(res.data)
             })
         }
@@ -73,7 +75,7 @@ export default {
 </script>
 
 <style lang="css" scoped>
-    .v-card, .v-card__text{
+    .v-card{
         overflow-x: scroll !important;
     }
 </style>

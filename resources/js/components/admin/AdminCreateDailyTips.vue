@@ -50,6 +50,19 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <div class="tip_date mt-8">
+                                <div class="text-center subtitle-1">Select Tip Date</div>
+                                <v-menu ref="datePicker" v-model="datePicker" :close-on-content-click="false" :return-value.sync="tipDate" transition="scale-transition" offset-y min-width="290px">
+                                    <template v-slot:activator="{ on }">
+                                        <v-text-field v-model="tipDate" label="Event Date" prepend-icon="event" readonly v-on="on"></v-text-field>
+                                    </template>
+                                    <v-date-picker v-model="tipDate" color="primary" elevation="4" scrollable :allowed-dates="disablePastDates" >
+                                        <div class="flex-grow-1"></div>
+                                        <v-btn text color="red darken-2" @click="datePicker = false">Cancel</v-btn>
+                                        <v-btn text color="primary" @click="$refs.datePicker.save(tipDate)">Ok</v-btn>
+                                    </v-date-picker>
+                                </v-menu>
+                            </div>
                         </template>
                         <template v-else>
                             <v-alert class="mt-5" type="info" border="left">
@@ -100,7 +113,10 @@ export default {
             removeDial: false,
             isBusy: false,
             submitSuccess: false,
-            dailyTipCreateError: false
+            dailyTipCreateError: false,
+            date: new Date().toISOString().substr(0, 10),
+            datePicker: false,
+            tipDate: new Date().toISOString().substr(0, 10),
         }
     },
 
@@ -137,9 +153,9 @@ export default {
         },
         submit(){
             this.isBusy = true
-            // console.log(this.dailyTips)
             axios.post(this.api + '/auth-admin/create_daily_tips', {
-                tips: this.dailyTips
+                tips: this.dailyTips,
+                tipDate: this.tipDate
             }, this.adminHeaders).then((res)=>{
                 console.log(res.data)
                 this.isBusy = false
@@ -151,7 +167,10 @@ export default {
                 this.isBusy = false
                 this.dailyTipCreateError = true
             })
-        }
+        },
+        disablePastDates(val) {
+            return val >= new Date().toISOString().substr(0, 10)
+        },
     }
 }
 </script>

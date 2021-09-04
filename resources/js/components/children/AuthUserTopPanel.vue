@@ -2,7 +2,7 @@
     <div class="auth_toppanel primary darken-2 subtitle-1 white--text">
         <v-row justify="center">
             <v-col cols="6">
-                <div class="pl-3">{{ user }}</div>
+                <div class="pl-5">{{ user }}</div>
             </v-col>
             <v-col cols="6">
                  <div class="pr-2">{{ title }}</div>

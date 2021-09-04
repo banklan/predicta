@@ -4,7 +4,7 @@
         <v-row justify="center">
             <v-col cols="12" md="8">
                 <v-card light raised elevation="8" min-height="200">
-                    <v-card-title class="sub_title primary white--text justify-center">Today's Tips 19/07/2021</v-card-title>
+                    <v-card-title class="sub_title primary white--text justify-center">Today's Tips {{ tipsDate | moment('DD/MM/YY') }}</v-card-title>
                     <v-card-text>
                         <v-simple-table light fixed-header height="400">
                             <template v-slot:default>
@@ -20,95 +20,14 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>England</td>
-                                    <td>Prem</td>
-                                    <td>4:00PM</td>
-                                    <td>Arsenal</td>
-                                    <td>Tottenham</td>
-                                    <td>1X</td>
-                                    <td>1.23</td>
-                                </tr>
-                                <tr>
-                                    <td>England</td>
-                                    <td>Prem</td>
-                                    <td>4:00PM</td>
-                                    <td>Arsenal</td>
-                                    <td>Tottenham</td>
-                                    <td>1X</td>
-                                    <td>1.23</td>
-                                </tr>
-                                <tr>
-                                    <td>England</td>
-                                    <td>Prem</td>
-                                    <td>4:00PM</td>
-                                    <td>Arsenal</td>
-                                    <td>Tottenham</td>
-                                    <td>1X</td>
-                                    <td>1.23</td>
-                                </tr>
-                                <tr>
-                                    <td>England</td>
-                                    <td>Prem</td>
-                                    <td>4:00PM</td>
-                                    <td>Arsenal</td>
-                                    <td>Tottenham</td>
-                                    <td>1X</td>
-                                    <td>1.23</td>
-                                </tr>
-                                <tr>
-                                    <td>England</td>
-                                    <td>Prem</td>
-                                    <td>4:00PM</td>
-                                    <td>Arsenal</td>
-                                    <td>Tottenham</td>
-                                    <td>1X</td>
-                                    <td>1.23</td>
-                                </tr>
-                                <tr>
-                                    <td>England</td>
-                                    <td>Prem</td>
-                                    <td>4:00PM</td>
-                                    <td>Arsenal</td>
-                                    <td>Tottenham</td>
-                                    <td>1X</td>
-                                    <td>1.23</td>
-                                </tr>
-                                <tr>
-                                    <td>England</td>
-                                    <td>Prem</td>
-                                    <td>4:00PM</td>
-                                    <td>Arsenal</td>
-                                    <td>Tottenham</td>
-                                    <td>1X</td>
-                                    <td>1.23</td>
-                                </tr>
-                                <tr>
-                                    <td>England</td>
-                                    <td>Prem</td>
-                                    <td>4:00PM</td>
-                                    <td>Arsenal</td>
-                                    <td>Tottenham</td>
-                                    <td>1X</td>
-                                    <td>1.23</td>
-                                </tr>
-                                <tr>
-                                    <td>England</td>
-                                    <td>Prem</td>
-                                    <td>4:00PM</td>
-                                    <td>Arsenal</td>
-                                    <td>Tottenham</td>
-                                    <td>1X</td>
-                                    <td>1.23</td>
-                                </tr>
-                                <tr>
-                                    <td>England</td>
-                                    <td>Prem</td>
-                                    <td>4:00PM</td>
-                                    <td>Arsenal</td>
-                                    <td>Tottenham</td>
-                                    <td>1X</td>
-                                    <td>1.23</td>
+                                <tr v-for="tip in todaysTips" :key="tip.id">
+                                    <td>{{ tip.country }}</td>
+                                    <td>{{ tip.league }}</td>
+                                    <td>{{ tip.time }}</td>
+                                    <td>{{ tip.home }}</td>
+                                    <td>{{ tip.away }}</td>
+                                    <td>{{ tip.tip }}</td>
+                                    <td>{{ tip.odd }}</td>
                                 </tr>
                             </tbody>
                             </template>
@@ -119,6 +38,37 @@
         </v-row>
     </v-container>
 </template>
+
+<script>
+export default {
+    data() {
+        return {
+            todaysTips: [],
+            isLoading: false,
+            tipsDate: null
+        }
+    },
+    computed:{
+        api(){
+            return this.$store.getters.api
+        },
+    },
+    methods: {
+        getTodaysTips(){
+            this.isLoading = true
+            axios.get(this.api + '/get_todays_tips').then((res) => {
+                this.isLoading = false
+                this.todaysTips = res.data.tips
+                this.tipsDate = res.data.tipDate
+                console.log(res.data)
+            })
+        },
+    },
+    created(){
+        this.getTodaysTips()
+    }
+}
+</script>
 
 <style lang="css" scoped>
     a, .v-btn{

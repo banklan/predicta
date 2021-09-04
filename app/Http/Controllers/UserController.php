@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\UserEmailConfirmation;
 use App\User;
+use Image;
+use Illuminate\Support\Facades\Hash;
+use App\UsersFeedback;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\FeedbackPostedEmail;
 
 class UserController extends Controller
 {
@@ -29,5 +34,203 @@ class UserController extends Controller
                 return response()->json(['message' => 'Verified'], 200);
             }
         }
+    }
+
+    public function updateProfile(Request $request){
+        $this->validate($request, [
+            'profile.first_name' => 'required|min:3|max:30',
+            'profile.last_name' => 'required|min:3|max:30',
+            'profile.phone' => 'required|max:14'
+        ]);
+
+        $user = auth('api')->user();
+        $user->update([
+            $user->first_name = $request->profile['first_name'],
+            $user->last_name = $request->profile['last_name'],
+            $user->phone = $request->profile['phone'],
+        ]);
+
+        return response()->json($user, 200);
+    }
+
+    public function updateProfilePicture(Request $request){
+        $this->validate($request, [
+            'image' => 'mimes:jpeg,jpg,bmp,png,gif'
+        ]);
+
+        $user = auth('api')->user();
+        // check if picture exists for profile, then unlink
+        $old_pic = $user->picture;
+        if($old_pic){
+            $filePath = public_path('/images/profiles/users/'.$old_pic);
+            if(file_exists($filePath)){
+                unlink($filePath);
+            }
+        }
+
+        // save file in folder...later in s3 when ready to deploy
+        $file = $request->image;
+        if($file){
+            $pool = '0123456789abcdefghijklmnopqrstuvwxyz@&';
+            $ext = $file->getClientOriginalExtension();
+            $filename = substr(str_shuffle($pool), 0, 8).".".$ext;
+
+            //save new file in folder
+            $file_loc = public_path('/images/profiles/users/'.$filename);
+            if(in_array($ext, ['jpeg', 'jpg', 'png', 'gif', 'pdf'])){
+                $upload = Image::make($file)->resize(220, 280, function($constraint){
+                    $constraint->aspectRatio();
+                });
+                $upload->sharpen(2)->save($file_loc);
+            }
+        }
+
+        // save path in db
+        $user->update([
+            $user->picture = $filename
+        ]);
+
+        return response()->json($user, 201);
+    }
+
+    public function confirmCurrentPassword(Request $request){
+        $user = auth('api')->user();
+        $current = $user->password;
+        $check = Hash::check($request->password, $current);
+
+        return response()->json($check, 200);
+    }
+
+    public function updateProfilePassword(Request $request){
+        $this->validate($request, [
+            'password' => 'required|min:5|max:20|confirmed',
+            'password_confirmation' => 'required'
+        ]);
+
+        $user = auth('api')->user();
+        $new = $request->password;
+
+        $user->update([
+            $user->password = Hash::make($new)
+        ]);
+
+        return response()->json(['message' => 'Password changed successfully']);
+    }
+
+    public function submitUsersFeedback(Request $request){
+        $this->validate($request, [
+            'feedback.subject' => 'required|min:5|max:120',
+            'feedback.body' => 'required|min:20|max:600',
+        ]);
+
+        if($request->feedback['sub_id']){
+            $this->validate($request, [
+                'feedback.sub_id' => 'min:3|max:8',
+            ]);
+            $target = $request->feedback['sub_id'];
+        }elseif($request->feedback['expert']){
+            $this->validate($request, [
+                'feedback.expert' => 'min:3|max:20',
+            ]);
+            $target = $request->feedback['expert'];
+        }else{
+            $target = 'general';
+        }
+
+        $user = auth('api')->user();
+        $admin = 9999999;
+
+        $fb = new UsersFeedback;
+        // $fb->user_id_from = $user->id;
+        $fb->user_id = $user->id;
+        $fb->user_id_to = $admin;
+        $fb->is_parent = TRUE;
+        $fb->parent_id = null;
+        $fb->target = $target;
+        $fb->subject = $request->feedback['subject'];
+        $fb->body = $request->feedback['body'];
+        $fb->save();
+
+        // send email to user and admin
+        Mail::to($user->email)->send(new FeedbackPostedEmail($user, $fb));
+        Mail::to('banklan2010@gmail.com')->send(new FeedbackPostedEmail($user, $fb));
+
+        return response()->json($fb, 200);
+    }
+
+    public function getUsersOutboxMsgs(){
+        $user = auth('api')->user()->id;
+        $msgs = UsersFeedback::where('user_id', $user)->where('is_parent', true)->where('is_deleted', false)->get();
+        return response()->json($msgs, 200);
+    }
+
+    public function userDelOutboxMsg($id){
+        $msg = UsersFeedback::findOrFail($id);
+
+        $msg->update([
+            $msg->is_deleted = true
+        ]);
+
+        $threads = UsersFeedback::where('parent_id', $id)->get();
+
+        foreach($threads as $fb){
+            $fb->update([
+                $fb->is_deleted = true
+            ]);
+        }
+
+        return response()->json($msg, 200);
+    }
+
+    public function getUsersInboxMsgs(){
+        $user = auth('api')->user()->id;
+        $msgs = UsersFeedback::where('user_id_to', $user)->where('is_deleted', false)->get();
+        return response()->json($msgs, 200);
+    }
+
+    public function userDelInboxMsg($id){
+        $msg = UsersFeedback::findOrFail($id);
+
+        $msg->update([
+            $msg->is_deleted = true
+        ]);
+
+        return response()->json($msg, 200);
+    }
+
+    public function getUserFeedback($id){
+        $fb = UsersFeedback::where('is_deleted', false)->findOrFail($id);
+
+        return response()->json($fb, 200);
+    }
+
+    public function updateFeedbackIsRead($id){
+        $fb = UsersFeedback::findOrFail($id);
+
+        $fb->update([
+            $fb->is_read = true
+        ]);
+
+        return response()->json($fb, 200);
+    }
+
+    public function getFeedbackParent($id){
+        $fb = UsersFeedback::where('is_deleted', false)->findOrFail($id);
+
+        return response()->json($fb, 200);
+    }
+
+    public function getFeedbackThread($id){
+        $fb = UsersFeedback::findOrFail($id);
+
+        $thread = UsersFeedback::where('parent_id', $fb->parent_id)->where('is_deleted', false)->where('created_at', '<', $fb->created_at)->where('id', '!=', $id)->get();
+
+        return response()->json($thread, 200);
+    }
+
+    public function getOutboxMsg($id){
+        $msg = UsersFeedback::findOrFail($id);
+
+        return response()->json($msg, 200);
     }
 }

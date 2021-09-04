@@ -12,6 +12,7 @@
                     <v-card-text class="body-1 mt-5 px-8">
                         <v-text-field label="First Name" v-model="user.first_name" required placeholder="First Name" v-validate="'required|min:2|max:50'" :error-messages="errors.collect('first_name')" name="first_name" data-vv-as="first name"></v-text-field>
                         <v-text-field label="Last Name" v-model="user.last_name" required placeholder="Surname" v-validate="'required|min:2|max:50'" :error-messages="errors.collect('last_name')" name="last_name" data-vv-as="last name"></v-text-field>
+                        <v-text-field label="Username" v-model="user.last_name" required placeholder="Unique Username" v-validate="'required|min:2|max:50'" :error-messages="errors.collect('username')" name="username" data-vv-as="username"></v-text-field>
                         <v-row>
                             <v-col cols="12" md="6">
                                 <v-text-field label="Email" type="text" v-model="user.email" required v-validate="'required|email'" :error-messages="errors.collect('email')" name="email"></v-text-field>
@@ -32,7 +33,7 @@
             </v-col>
         </v-row>
         <v-snackbar v-model="createFail" :timeout="8000" top color="red darken-1 white--text">
-            There was an error trying to create the expert user. Please try again and ensure all fields are validly filled.
+            There was an error trying to create the expert user. Please use a unique username and ensure all fields are validly filled.
             <v-btn text color="white--text" @click="createFail = false">Close</v-btn>
         </v-snackbar>
     </v-container>
@@ -45,6 +46,7 @@ export default {
             user:{
                 first_name: '',
                 last_name: '',
+                username: '',
                 email: '',
                 phone: '',
                 role: '',
@@ -89,15 +91,8 @@ export default {
                 }
             })
         },
-        // getBanks(){
-        //     axios.get(this.api + '/auth-admin/get_all_banks', this.adminHeaders)
-        //     .then((res) => {
-        //         this.banks = res.data
-        //     })
-        // }
     },
     created(){
-        // this.getBanks()
     }
 }
 </script>

@@ -14,7 +14,7 @@ class ExpertPredictionSummary extends Model
 
     protected $with = ['expert'];
 
-    protected $appends = ['status', 'progress', 'is_opened', 'published'];
+    protected $appends = ['status', 'progress', 'is_opened', 'published', 'predictions'];
 
     protected static function boot(){
         parent::boot();
@@ -54,7 +54,7 @@ class ExpertPredictionSummary extends Model
             return '1'; //won
         }else if(count($lost) > 0){
             return '0'; //lost
-        }else{
+        }else if(count($won) == 0 && count($lost) == 0){
             return '2'; //still running
         }
     }
@@ -81,18 +81,22 @@ class ExpertPredictionSummary extends Model
         return $date;
     }
 
-    // public function getEventOpenedAttribute(){
-    //     $events = ExpertPrediction::where('prediction_code', $this->forecast_id)->get();
-    //     $started = [];
-    //     foreach($events as $event){
-    //         if($event->is_open == 0){
-    //             $started[] = $event;
-    //         }
-    //     }
-    //     if(count($started) > 0){
-    //         return true;
-    //     }else{
-    //         return false;
-    //     }
-    // }
+    public function getPredictionsAttribute(){
+        $pc = $this->forecast_id;
+        $predictions = ExpertPrediction::where('prediction_code', $pc)->get();
+        return $predictions;
+    }
+
+    public function getOpenedForecastAttribute(){
+        // $pc = $this->forecast_id;
+        // $events = ExpertPrediction::where('prediction_code', $pc)->get();
+        // // $summary = ExpertPredictionSummary::where('forecast_id', $pc)
+        // $opened = [];
+        // foreach($events as $ev){
+        //     if($ev->is_open == 1){
+        //         $opened[] = $ev;
+        //     }
+        // }
+        // if(count($opened) === )
+    }
 }

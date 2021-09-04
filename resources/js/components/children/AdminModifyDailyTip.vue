@@ -23,7 +23,7 @@
         </v-dialog>
         <v-dialog v-model="confirmStatusDial" max-width="480">
             <v-card min-height="150">
-                <v-card-title class="sub_title justify-center pt-4"><span v-if="summary">{{ summary.is_featured ? 'Un-feature' : 'Feature'}}&nbsp;</span> this tip?</v-card-title>
+                <v-card-title class="sub_title justify-center pt-4 primary white--text"><span v-if="summary">{{ summary.is_featured ? 'Un-feature' : 'Feature'}}&nbsp;</span> this tip?</v-card-title>
                 <v-card-actions class="mt-8 pb-8 justify-space-around">
                     <v-btn text color="red darken--2" @click="confirmStatusDial = false" width="30%">Cancel</v-btn>
                     <v-btn dark color="primary" :loading="isUpdating" @click="changeStatus" width="50%">Yes, &nbsp;<span v-if="summary">{{ summary.is_featured ? 'Un-feature' : 'Feature' }}</span></v-btn>

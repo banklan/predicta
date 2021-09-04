@@ -81,4 +81,16 @@ class DailyTipsSummary extends Model
         }
         return round($success);
     }
+
+    // public function getWinningRateAttribute(){
+    //     $code = $this->tip_code;
+    //     $predictions = DailyTip::where('tip_code', $code)->get();
+
+    //     $won = [];
+    //     foreach($predictions as $pred){
+    //         if($pred->status === 2){
+    //             $won[] = $pred;
+    //         }
+    //     };
+    // }
 }

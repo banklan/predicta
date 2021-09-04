@@ -67,7 +67,15 @@ export const store = new Vuex.Store({
         authUser: authUser,
         userIsLoggedIn: userIsLoggedIn,
         redirectOnLogin: redirectOnLogin,
-        tipSubscribed: false
+        tipSubscribed: false,
+        subscriptionDeleted: false,
+        adminUpdatedUser: false,
+        adminDeletedUser: false,
+        newUserCreated: false,
+        userProfileUpdated: false,
+        adminUpdatedTip: false,
+        feedbackPosted: false,
+        adminDeleteFeedbackThread: false
     },
     getters: {
         isBusy(state)
@@ -173,6 +181,38 @@ export const store = new Vuex.Store({
         tipSubscribed(state)
         {
             return state.tipSubscribed
+        },
+        subscriptionDeleted(state)
+        {
+            return state.subscriptionDeleted
+        },
+        adminUpdatedUser(state)
+        {
+            return state.adminUpdatedUser
+        },
+        adminDeletedUser(state)
+        {
+            return state.adminDeletedUser
+        },
+        newUserCreated(state)
+        {
+            return state.newUserCreated
+        },
+        userProfileUpdated(state)
+        {
+            return state.userProfileUpdated
+        },
+        adminUpdatedTip(state)
+        {
+            return state.adminUpdatedTip
+        },
+        feedbackPosted(state)
+        {
+            return state.feedbackPosted
+        },
+        adminDeleteFeedbackThread(state)
+        {
+            return state.adminDeleteFeedbackThread
         }
     },
     actions: {},
@@ -213,9 +253,13 @@ export const store = new Vuex.Store({
             state.newAdminCreated = false
             state.newExpertCreated = false
             state.adminUpdatedExpert = false
-            state.expertUserDeleted = false,
-                state.newCountryAdded = false
+            state.expertUserDeleted = false
+            state.newCountryAdded = false
             state.dailyTipDeleted = false
+            state.subscriptionDeleted = false
+            state.adminUpdatedTip = false
+            state.feedbackPosted = false
+            state.adminDeleteFeedbackThread = false
         },
         adminUserDeleted(state)
         {
@@ -385,6 +429,55 @@ export const store = new Vuex.Store({
         tipSubscribed(state, payload)
         {
             state.tipSubscribed = true
+        },
+        resetUsersFlashMsg(state)
+        {
+            state.tipSubscribed = false
+        },
+        subscriptionDeleted(state){
+            state.subscriptionDeleted = true
+        },
+        adminUpdatedUser(state)
+        {
+            state.adminUpdatedUser = true
+        },
+        adminDeletedUser(state)
+        {
+            state.adminDeletedUser = true
+        },
+        newUserCreated(state)
+        {
+            state.newUserCreated = true
+        },
+        // userProfileUpdated(state)
+        // {
+        //     state.userProfileUpdated = true
+        // },
+        updatedUserProfile(state, payload)
+        {
+            state.authUser.first_name = payload.first_name
+            state.authUser.last_name = payload.last_name
+            state.authUser.phone = payload.phone
+            state.authUser.fullname = payload.first_name + ' '+ payload.last_name
+            window.localStorage.setItem('authUser', JSON.stringify(state.authUser))
+            state.userProfileUpdated = true
+        },
+        userProfilePicUpdated(state, payload)
+        {
+            state.authUser = Object.assign({}, payload.user, {token: payload.token})
+            window.localStorage.setItem('authUser', JSON.stringify(state.authUser))
+            state.userProfileUpdated = true
+        },
+        adminUpdatedTip(state, payload)
+        {
+            state.adminUpdatedTip = true
+        },
+        feedbackPosted(state, payload){
+            state.feedbackPosted = true
+        },
+        adminDeletedfeedbackThread(state, payload)
+        {
+            state.adminDeleteFeedbackThread = true
         }
     },
 })

@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-n3">
+    <div class="mt-5">
         <v-list nav rounded>
             <v-list-item-group color="primary">
                 <v-list-item v-for="(item, i) in otherRoutes" :key="i" link :to="item.path" exact>
@@ -19,6 +19,7 @@ export default {
             otherRoutes:[
                 {title: 'My Forecasts', path: '/expert/forecasts'},
                 {title: 'Subscriptions', path: '/expert/subscriptions'},
+                {title: 'Earnings', path: '/expert/earnings'},
                 {title: 'Make New Forecast', path: '/expert/new-forecast'},
             ]
         }

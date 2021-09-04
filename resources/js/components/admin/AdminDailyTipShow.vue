@@ -2,7 +2,7 @@
     <v-container>
         <v-row justify="space-between">
             <v-col cols="12" md="1">
-                <v-btn rounded color="primary lighten--2" dark elevation="4" left @click.prevent="$router.go(-1)"><v-icon left>arrow_left</v-icon> Back</v-btn>
+                <v-btn rounded color="primary lighten--2" dark elevation="4" left :to="{name: 'AdminDailyTips'}"><v-icon left>arrow_left</v-icon> Back</v-btn>
             </v-col>
             <v-col cols="12" md="11">
                 <admin-top-panel title="Daily Tip" />
@@ -46,6 +46,14 @@
                                                     <td>{{ fc.time }}</td>
                                                 </tr>
                                                 <tr>
+                                                    <th>Event Result:</th>
+                                                    <td>{{ fc.result }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Feature Event?</th>
+                                                    <td>{{ fc.is_featured ? 'Yes' : 'No' }}</td>
+                                                </tr>
+                                                <tr>
                                                     <th>Status</th>
                                                     <td v-if="fc.status == 0"><div class="status nyd"></div></td>
                                                     <td v-if="fc.status == 1"><div class="status lost"></div></td>
@@ -53,12 +61,8 @@
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <div class="d-flex">
-                                            <div class="ml-3 subtitle-1 font-weight-bold">Feature?</div>
-                                            <div class="mt-n6 ml-10 pl-5"><v-switch label="Feature?" color="primary" v-model="fc.is_featured"></v-switch></div>
-                                        </div>
                                     </v-card-text>
-                                    <v-card-text class="d-flex text-center mt-n5">
+                                    <!-- <v-card-text class="d-flex text-center mt-n5">
                                         <v-row class="justify-center">
                                             <v-col cols="6">
                                                 <v-select solo dense small label="Change Status" :items="statuses" item-text="status" item-value="id" v-model="updateEvent.newStatus"></v-select>
@@ -67,9 +71,10 @@
                                                 <v-btn block dark color="primary rounded darken-2" class="ml-2" @click="changeStatus(fc)" :loading="isBusy">Save</v-btn>
                                             </v-col>
                                         </v-row>
-                                    </v-card-text>
-                                    <v-card-actions class="justify-center mt-n5 pb-5">
-                                        <v-btn text color="red darken-3" @click="confirmRemoveEvent(fc, index)"><v-icon>delete_forever</v-icon>Remove Event</v-btn>
+                                    </v-card-text> -->
+                                    <v-card-actions class="justify-space-around mt-n3 pb-6">
+                                        <v-btn dark color="primary darken-2" width="40%" :to="{name: 'AdminDailyTipUpdate', params: {code:$route.params.code, tip: fc.id}}">Update Event</v-btn>
+                                        <v-btn text color="red darken-3" width="40%" @click="confirmRemoveEvent(fc, index)"><v-icon>delete_forever</v-icon>Remove Event</v-btn>
                                     </v-card-actions>
                                 </v-card>
                             </template>
@@ -101,14 +106,14 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-        <v-snackbar v-model="changeStatusFail" :timeout="6000" top color="red darken-1 white--text">
+        <!-- <v-snackbar v-model="changeStatusFail" :timeout="6000" top color="red darken-1 white--text">
             There was an error while trying to change event status. Please try again.
             <v-btn text color="white--text" @click="changeStatusFail = false">Close</v-btn>
         </v-snackbar>
         <v-snackbar v-model="statusChanged" :timeout="4000" top color="green darken-1 white--text">
             Status of event has been changed.
             <v-btn text color="white--text" @click="statusChanged = false">Close</v-btn>
-        </v-snackbar>
+        </v-snackbar> -->
         <v-snackbar v-model="eventRemoved" :timeout="4000" top color="green darken-1 white--text">
             An event has been removed from the list.
             <v-btn text color="white--text" @click="eventRemoved = false">Close</v-btn>
@@ -117,10 +122,10 @@
             Error occured while trying to remove an event from the list. Please try again.
             <v-btn text color="white--text" @click="eventRmvFail = false">Close</v-btn>
         </v-snackbar>
-        <!-- <v-snackbar v-model="delDailyTipFail" :timeout="6000" top color="red darken-1 white--text">
-            Error occured while trying to delete this daily tips. Please try again.
-            <v-btn text color="white--text" @click="delDailyTipFail = false">Close</v-btn>
-        </v-snackbar> -->
+        <v-snackbar :value="adminUpdatedTip" :timeout="4000" top color="green darken-1 white--text">
+            A tip has been updated.
+            <v-btn text color="white--text" @click="adminUpdatedTip = false">Close</v-btn>
+        </v-snackbar>
     </v-container>
 </template>
 
@@ -142,8 +147,8 @@ export default {
                 newStatus: null,
                 isFeatured: null
             },
-            changeStatusFail: false,
-            statusChanged: false,
+            // changeStatusFail: false,
+            // statusChanged: false,
             eventToRemove: null,
             eventToRmvindex: null,
             removeDial: false,
@@ -151,6 +156,10 @@ export default {
             eventRemoved: false,
             eventRmvFail: false,
         }
+    },
+    beforeRouteLeave (to, from, next) {
+        this.$store.commit('resetAdminUpdatedFlashMsgs')
+        next()
     },
     computed:{
          authAdmin(){
@@ -167,6 +176,9 @@ export default {
             }
             return headers
         },
+        adminUpdatedTip(){
+            return this.$store.getters.adminUpdatedTip
+        }
     },
     methods: {
         getTipSummary(){
@@ -179,27 +191,27 @@ export default {
                 console.log(res.data)
             })
         },
-        changeStatus(fc){
-            if(this.updateEvent.newStatus == null){
-                this.updateEvent.newStatus = fc.status
-            }
-            this.updateEvent.isFeatured = fc.is_featured
-            this.isBusy = true
-            axios.post(this.api + `/auth-admin/change_daily_tip_status/${fc.id}`, {
-                status: this.updateEvent
-            }, this.adminHeaders)
-            .then((res) => {
-                this.isBusy = false
-                let event = this.tips.filter((item)=>item.id == fc.id)
-                fc.status = res.data.status
-                this.updateEvent.newStatus = null
-                this.updateEvent.isFeatured = null
-                this.statusChanged = true
-            }).catch(() => {
-                this.isBusy = false
-                this.changeStatusFail = true
-            })
-        },
+        // changeStatus(fc){
+        //     if(this.updateEvent.newStatus == null){
+        //         this.updateEvent.newStatus = fc.status
+        //     }
+        //     this.updateEvent.isFeatured = fc.is_featured
+        //     this.isBusy = true
+        //     axios.post(this.api + `/auth-admin/change_daily_tip_status/${fc.id}`, {
+        //         status: this.updateEvent
+        //     }, this.adminHeaders)
+        //     .then((res) => {
+        //         this.isBusy = false
+        //         let event = this.tips.filter((item)=>item.id == fc.id)
+        //         fc.status = res.data.status
+        //         this.updateEvent.newStatus = null
+        //         this.updateEvent.isFeatured = null
+        //         this.statusChanged = true
+        //     }).catch(() => {
+        //         this.isBusy = false
+        //         this.changeStatusFail = true
+        //     })
+        // },
         confirmRemoveEvent(fc, index){
             this.eventToRemove = fc
             this.eventToRmvindex = index

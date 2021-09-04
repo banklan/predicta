@@ -46,6 +46,10 @@
                                         <th>Phone No:</th>
                                         <td>{{ authExpert.phone }}</td>
                                     </tr>
+                                    <tr style="border-top: none">
+                                        <th>Date Joined:</th>
+                                        <td>{{ authExpert.created_at | moment('DD/MM/YYYY') }}</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </v-card-text>
@@ -67,8 +71,8 @@
                 </v-card>
             </v-col>
             <v-col cols="12" md="6">
-                <v-card raised elevation="10" light flat min-height="200">
-                    <v-card-title class="justify-center sub_title primary white--text">
+                <v-card raised elevation="10" light flat min-height="150">
+                    <v-card-title class="justify-center subtitle-1 primary white--text">
                         Change Account Password
                     </v-card-title>
                     <v-card-text class="mt-5">
@@ -83,7 +87,12 @@
                                 <v-btn color="primary" large :loading="isUpdating" @click="updatePswd">Update Password</v-btn>
                             </v-card-actions>
                         </template>
-                        <v-divider></v-divider>
+                        <!-- <v-divider></v-divider> -->
+                    </v-card-text>
+                </v-card>
+                <v-card raised elevation="10" min-height="300" light flat class="mt-3">
+                    <v-card-title class="justify-center sub_title primary white--text">Account Links</v-card-title>
+                    <v-card-text>
                         <expert-other-routes />
                     </v-card-text>
                 </v-card>

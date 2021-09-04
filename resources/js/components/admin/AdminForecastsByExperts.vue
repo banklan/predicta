@@ -22,8 +22,8 @@
                                 <tbody class="expert_list">
                                     <tr v-for="(fc, i) in forecasts" :key="fc.id">
                                         <td @click="showForecast(fc)">{{ fc.published }}</td>
-                                        <td @click="showForecast(fc)">{{ fc.forecast_id }}</td>
-                                        <td @click="showForecast(fc)" v-if="fc.expert">{{ fc.expert.username }}</td>
+                                        <td @click="showForecast(fc)" class="primary--text font-weight-bold">{{ fc.forecast_id }}</td>
+                                        <td @click="showForecast(fc)" class="primary--text font-weight-bold" v-if="fc.expert">{{ fc.expert.username }}</td>
                                         <td @click="showForecast(fc)">{{ fc.forecast_odd }}</td>
                                         <td v-if="fc.progress == '0'" style="text-align: left"><v-icon color="red darken-2">mdi-close</v-icon> </td>
                                         <td v-if="fc.progress == '1'" style="text-align: left"><v-icon color="green darken-1">mdi-check-all</v-icon> </td>

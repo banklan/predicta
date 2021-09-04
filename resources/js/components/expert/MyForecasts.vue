@@ -68,6 +68,14 @@
                                     <td>{{ running }}</td>
                                 </tr>
                                 <tr>
+                                    <th>Played:</th>
+                                    <td>{{ played }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Won:</th>
+                                    <td>{{ total_won }}</td>
+                                </tr>
+                                <tr>
                                     <th>% Won:</th>
                                     <td>{{ perc_won }}%</td>
                                 </tr>
@@ -77,7 +85,7 @@
                 </v-card>
             </v-col>
         </v-row>
-        <v-snackbar :value="newForecast" :timeout="6000" top color="green darken-1 white--text">
+        <v-snackbar :value="newForecast" :timeout="4000" top color="green darken-1 white--text">
             Your new forecast has been submitted. Thank you.
             <v-btn text color="white--text" @click="newForecast = false">Close</v-btn>
         </v-snackbar>
@@ -94,6 +102,8 @@ export default {
             total: null,
             running: null,
             perc_won: null,
+            played: null,
+            total_won: null
         }
     },
     computed:{
@@ -139,14 +149,25 @@ export default {
             })
         },
         getForecastSummary(){
-            axios.get(this.api + '/auth-expert/get_forecast_summary', this.expertHeader)
+            this.isLoading = true
+            axios.get(this.api + '/auth-expert/get_expert_forecast_summary', this.expertHeader)
             .then((res) => {
-                let running = res.data.filter((item) => item.progress_status === 0)
-                this.running = running.length
+                this.isLoading = false
+                this.total = res.data.length
+                let opened = res.data.filter((item) => item.is_available)
+                this.running = opened.length > 0 ? opened.length : 0
+                this.played = parseInt(this.total - opened.length)
+                // console.log(this.played)
                 let won = res.data.filter((item)=> item.progress === '1')
-                let perc = (won.length * 100) / this.total
-                this.perc_won = Math.round(perc)
-                console.log(res.data)
+                let total_won = won.length
+                this.total_won = total_won
+                this.total_lost = this.played - total_won
+                if(this.total > 0 && this.played > 0){
+                    let perc = (total_won * 100) / this.played
+                    this.perc_won = Math.round(perc)
+                }else{
+                    this.perc_won = 0
+                }
             })
         }
     },
@@ -159,6 +180,6 @@ export default {
 
 <style lang="css" scoped>
     .v-card .v-card__text{
-        overflow: scroll !important;
+        overflow-x: scroll !important;
     }
 </style>

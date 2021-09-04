@@ -226,6 +226,6 @@ export default {
         cursor: pointer;
     }
     .v-card.scroll .v-card__text{
-        overflow: scroll !important;
+        overflow-x: scroll !important;
     }
 </style>

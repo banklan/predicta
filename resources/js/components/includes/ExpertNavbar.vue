@@ -44,6 +44,8 @@ export default {
                 {title: 'Dashboard', path: '/expert'},
                 {title: 'New Forecast', path: '/expert/new-forecast'},
                 {title: 'My Forecasts', path: '/expert/forecasts'},
+                {title: 'Subscriptions', path: '/expert/subscriptions'},
+                {title: 'Earnings', path: '/expert/earnings'},
                 {title: "Account", path: "/expert/account"},
             ],
             expertDrawer: false

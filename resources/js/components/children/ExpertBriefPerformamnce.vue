@@ -1,7 +1,7 @@
 <template>
     <div>
        <v-card light raised outlined elevation="4" min-height="150" class="mt-5">
-            <v-card-title class="primary white--text justify-center sub_title">Expert Forecasts</v-card-title>
+            <v-card-title class="primary white--text justify-center subtitle-1">Expert Forecasts</v-card-title>
             <v-card-text class="mt-4">
                 <table class="table table-condensed table-striped table-hover">
                     <thead></thead>
@@ -19,8 +19,20 @@
                             <td>{{ perc_won > 0 ? perc_won : 0}}</td>
                         </tr>
                         <tr>
-                            <th>Total Subscriptions:</th>
-                            <td>122</td>
+                            <th class="primary--text go_to" @click="goToSub">Total Subscriptions:</th>
+                            <td>{{ count }}</td>
+                        </tr>
+                        <tr>
+                            <th>Active Subscriptions:</th>
+                            <td>{{ active.length }}</td>
+                        </tr>
+                        <tr>
+                            <th>Total Earned:</th>
+                            <td>&#8358;{{ settled | price }}</td>
+                        </tr>
+                        <tr>
+                            <th>Outstanding Payment:</th>
+                            <td>&#8358;{{ outstanding | price }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -34,13 +46,15 @@
 
 <script>
 export default {
-    props: ['expert'],
+    props: ['expert', 'active', 'count'],
     data() {
         return {
             total: null,
             running: null,
             total_won: null,
             perc_won: null,
+            settled: 0,
+            outstanding: 0,
         }
     },
     computed: {
@@ -72,12 +86,39 @@ export default {
                 this.total_won = total_won
                 let perc = (total_won * 100) / this.total
                 this.perc_won = Math.round(perc)
-
             })
+        },
+        getEarning(){
+            axios.get(this.api + `/auth-admin/admin_get_expert_earnings/${this.expert}`, this.adminHeaders)
+            .then((res) => {
+                // console.log(res.data)
+                this.settled = res.data.settled / 100
+                this.outstanding = res.data.outstanding / 100
+            })
+        },
+        goToSub(){
+            this.$router.push({name: 'AdminExpertSubscriptionsDetail', params: {id: this.expert}})
         }
+        // getSubscriptions(){
+        //     axios.get(this.api + `/auth-admin/admin_get_expert_subs/${this.expert}`, this.adminHeaders)
+        //     .then((res) => {
+        //         let rez = res.data
+        //         this.subCount = rez.length
+        //         let active = rez.filter((sub) => sub.active_status == 'Active')
+        //         this.activeSub = active.length
+        //     })
+        // }
     },
     created() {
         this.getForecasts()
+        this.getEarning()
+        // this.getSubscriptions()
     },
 }
 </script>
+
+<style lang="css" scoped>
+    table tr .go_to{
+        cursor: pointer;
+    }
+</style>

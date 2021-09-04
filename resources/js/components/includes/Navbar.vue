@@ -6,7 +6,7 @@
         <template v-if="userIsLoggedIn">
             <auth-navbar />
         </template>
-        <template v-else>
+        <template v-if="!expertIsLoggedIn && !userIsLoggedIn">
             <v-app-bar flat light color="primary">
                 <v-toolbar-title class="ml-5 my-2 white--text">
                     <router-link to="/" style="cursor:pointer" exact>
@@ -54,7 +54,7 @@
                     </v-list-item-content>
                 </v-list-item>
             </template> -->
-        </v-list>
+                </v-list>
             </v-navigation-drawer>
         </template>
     </nav>

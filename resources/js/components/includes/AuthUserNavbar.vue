@@ -42,8 +42,9 @@ export default {
         return{
             menus: [
                 {title: 'Dashboard', path: '/dashboard'},
-                {title: 'My Subscriptions', path: '/my-subscriptions'},
-                {title: "Account", path: "/account"},
+                {title: 'My Subscriptions', path: '/subscriptions'},
+                {title: "Account", path: "/user-account"},
+                {title: "Feedback", path: "/user-feedback"},
             ],
             userDrawer: false
         }

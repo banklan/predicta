@@ -19,7 +19,8 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Fullname</th>
+                                        <th>Expert ID</th>
+                                        <th>Username</th>
                                         <th>Email</th>
                                         <th>Action</th>
                                     </tr>
@@ -27,7 +28,8 @@
                                 <tbody class="expert_list">
                                     <tr v-for="user in experts" :key="user.id">
                                         <td @click="showExpert(user)">{{ user.id }}</td>
-                                        <td @click="showExpert(user)">{{ user.fullname }}</td>
+                                        <td @click="showExpert(user)">{{ user.expert_id }}</td>
+                                        <td @click="showExpert(user)">{{ user.username }}</td>
                                         <td @click="showExpert(user)">{{ user.email }}</td>
                                         <td><v-btn small text color="primary" :to="{name: 'AdminExpertUpdate', params:{id: user.id}}"><v-icon>edit</v-icon></v-btn> &nbsp; <v-btn small text color="red darken-2" @click="confirmDel(user, i)"><v-icon>delete_forever</v-icon></v-btn></td>
                                     </tr>
@@ -56,7 +58,7 @@
         </v-row>
         <v-dialog v-model="confirmDelDial" max-width="480">
             <v-card min-height="150">
-                <v-card-title class="sub_title justify-center pt-8 mb-4">Do you really want to delete this expert user?</v-card-title>
+                <v-card-title class="sub_title primary white--text darken-2 justify-center">Do you really want to delete this expert user?</v-card-title>
                 <v-card-text class="text-center mt-4 subtitle-1">
                     If you proceed to delete, the expert user will be deleted irrecoverably.
                 </v-card-text>
@@ -79,7 +81,7 @@
             <v-btn text color="white--text" @click="adminUpdatedExpert = false">Close</v-btn>
         </v-snackbar>
         <v-snackbar :value="newExpertCreated" :timeout="4000" top dark color="green darken-2">
-            A new expert has been created successful.
+            A new expert has been created successfully.
             <v-btn text color="white--text" @click="newExpertCreated = false">Close</v-btn>
         </v-snackbar>
     </v-container>

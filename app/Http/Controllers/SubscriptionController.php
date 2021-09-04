@@ -7,6 +7,9 @@ use Carbon\Carbon;
 use App\Subscription;
 use App\User;
 use App\Expert;
+use App\ExpertPredictionSummary;
+use App\Earning;
+use App\Payment;
 
 class SubscriptionController extends Controller
 {
@@ -43,7 +46,29 @@ class SubscriptionController extends Controller
         $sub->amount = $amount;
         $sub->expiry = $expiry;
         $sub->status = 1;
+        $sub->is_active = 1;
         $sub->save();
+
+        $sub->fresh();
+        //create an earning entry for the subscription
+        $earning = new Earning;
+        $earning->subscription_id = $sub->id;
+        $earning->expert_id = $sub->expert_id;
+        $earning->total = $sub->amount;
+        $earning->exp_amount = $sub->amount * 0.5;
+        $earning->admin_amount = $sub->amount * 0.5;
+        $earning->is_settled = false;
+        $earning->save();
+
+        // create a payment entry for subscription
+        $pay_pool = '0123456789abcdefghijklmnopqrstuvwxyz';
+        $payment_id = substr(str_shuffle($pay_pool), 0, 6);
+        $payment = new Payment;
+        $payment->user_id = $user->id;
+        $payment->subscription_id = $sub->id;
+        $payment->amount = $sub->amount;
+        $payment->tx_id = $payment_id;
+        $payment->save();
 
         return response()->json($sub, 200);
     }
@@ -52,5 +77,50 @@ class SubscriptionController extends Controller
         $sub = Subscription::where('sub_id', $id)->first();
 
         return response()->json($sub, 200);
+    }
+
+    public function getForecastSummary($id){
+        $fc = ExpertPredictionSummary::where('forecast_id', $id)->first();
+
+        return response()->json($fc, 200);
+    }
+
+    public function getMySubscriptions(){
+        $me = auth('api')->user()->id;
+        $subs = Subscription::where('user_id', $me)->latest()->get();
+
+        return response()->json($subs, 200);
+    }
+
+    public function checkIfSubscribed($odd, $exp){
+        $expert = Expert::where('expert_id', $exp)->first();
+        $auth = auth('api')->user()->id;
+
+        $subscriptions = Subscription::where('user_id', $auth)
+                                        ->where('expert_id', $expert->id)
+                                        ->where('odd_cat', $odd)
+                                        ->first();
+        if($subscriptions){
+            return response()->json(['status' => true], 200);
+        }else{
+            return response()->json(['status' => false], 200);
+        }
+    }
+
+    public function subscriptionCount($odd, $exp){
+        $expert = Expert::where('expert_id', $exp)->first();
+
+        $count = Subscription::where('status', true)
+                                        ->where('expert_id', $expert->id)
+                                        ->where('odd_cat', $odd)
+                                        ->count();
+
+        return response()->json($count, 200);
+    }
+
+    public function getHotTipExperts(){
+        $sort = Expert::all()->sortByDesc('winning_rate')->values()->take(3);
+
+        return response()->json($sort, 200);
     }
 }

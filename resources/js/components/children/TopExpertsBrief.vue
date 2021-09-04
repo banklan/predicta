@@ -8,7 +8,7 @@
                     <table class="table table-striped table-hover table-condensed">
                         <thead>
                             <tr class="caption" style="text-align:center">
-                                <th>Expert</th>
+                                <th>Tip Expert</th>
                                 <th>Win Rate(%)</th>
                                 <th>Access</th>
                             </tr>
@@ -24,7 +24,7 @@
                 </template>
                 <template v-else>
                     <v-alert type="info" border="left" class="mt-5">
-                        There are no experts to view yet.
+                        There are no tip experts to view yet.
                     </v-alert>
                 </template>
             </v-card-text>
@@ -65,7 +65,7 @@ export default {
 </script>
 
 <style lang="css" scoped>
-    .v-card, .v-card__text{
+    .v-card{
         overflow-x: scroll !important;
     }
 </style>

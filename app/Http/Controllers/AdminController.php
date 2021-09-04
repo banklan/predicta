@@ -19,7 +19,16 @@ use App\Tip;
 use App\DailyTipsSummary;
 use App\InternationalCompetition;
 use App\NationalTeam;
+use App\Payment;
+use App\Subscription;
+use App\User;
 use Image;
+use Carbon\Carbon;
+use App\Earning;
+use App\UsersFeedback;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\FeedbackReplyEmail;
+
 
 class AdminController extends Controller
 {
@@ -139,6 +148,7 @@ class AdminController extends Controller
         $this->validate($request, [
             'user.first_name' => 'required|min:3|max:30',
             'user.last_name' => 'required|min:3|max:30',
+            'user.username' => 'required|min:3|max:30|unique:experts,username',
             'user.email' => 'required|email|unique:experts,email',
             'user.phone' => 'required|max:14',
             'user.password' => 'required|min:5|max:30|confirmed',
@@ -151,6 +161,7 @@ class AdminController extends Controller
         $user = new Expert;
         $user->first_name = $request->user['first_name'];
         $user->last_name = $request->user['last_name'];
+        $user->username = $request->user['username'];
         $user->email = $request->user['email'];
         $user->phone = $request->user['phone'];
         $user->expert_id = $id;
@@ -263,6 +274,8 @@ class AdminController extends Controller
         $summary = ExpertPredictionSummary::where('forecast_id', $event->prediction_code)->first();
         $won = [];
         $lost = [];
+
+        // if $newStatus == 1 || 2, update $summary->is_available to null
         //status = 0 means not played, 1 means lost and 2 means won
         foreach($all_events as $tip){
             if($tip->status === 2){
@@ -271,6 +284,12 @@ class AdminController extends Controller
                 $lost[] = $tip;
             }
         };
+
+        if(count($won) > 0 || count($lost) > 0){
+            $summary->update([
+                $summary->is_available = false
+            ]);
+        }
 
         if($all_events->count() === count($won)){
             $summary->update([
@@ -282,7 +301,7 @@ class AdminController extends Controller
             ]);
         }else{
             $summary->update([
-                $summary->prog_status = 0 //still running
+                $summary->prog_status = 0 //still opened
             ]);
         }
 
@@ -700,8 +719,10 @@ class AdminController extends Controller
             $summary->tip_code = $tip_code;
             $summary->event_count = count($tips);
             $summary->status = 0;
+            $summary->tip_date = $request->tipDate;
 
             $summary->save();
+            $summary->fresh();
 
             foreach($tips as $tip){
                 $pred = new DailyTip;
@@ -736,24 +757,17 @@ class AdminController extends Controller
         return response()->json($summ, 201);
     }
 
-    public function adminChangeDailyTipsStatus(Request $request, $id){
-        $event = DailyTip::findOrFail($id);
-        $newStatus = $request->status['newStatus'];
-        $isFeatured = $request->status['isFeatured'];
+    // public function adminChangeDailyTipsStatus(Request $request, $id){
+    //     $event = DailyTip::findOrFail($id);
+    //     $newStatus = $request->status['newStatus'];
+    //     $isFeatured = $request->status['isFeatured'];
 
-        $event->update([
-            $event->status = $newStatus,
-            $event->is_featured = $isFeatured,
-        ]);
-
-        if($newStatus !== 0){
-            $event->update([
-                $event->is_open = false
-            ]);
-        }
-
-        return response()->json($event, 200);
-    }
+    //     $event->update([
+    //         $event->status = $newStatus,
+    //         $event->is_featured = $isFeatured,
+    //     ]);
+    //     return response()->json($event, 200);
+    // }
 
     public function removeEventFromDailyTips($id){
         // print_r($id);
@@ -860,5 +874,441 @@ class AdminController extends Controller
         $teams = Country::all();
 
         return response()->json($teams, 200);
+    }
+
+    public function getPgntdSubscriptions(){
+        $subs = Subscription::latest()->paginate(3);
+
+        return response()->json($subs, 200);
+    }
+
+    public function getSubscription($id){
+        $sub = Subscription::with('payment')->where('sub_id', $id)->first();
+
+        return response()->json($sub, 200);
+    }
+
+    public function adminDelSubscription($id){
+        $sub =  Subscription::where('sub_id', $id)->first();
+
+        $sub->delete();
+
+        return response()->json(['message' => 'Deleted!'], 200);
+    }
+
+    public function updateExpertForecastAvail($id){
+        $forecast = ExpertPredictionSummary::where('forecast_id', $id)->first();
+
+        if($forecast->is_available == true){
+            $forecast->update([
+                $forecast->is_available = false
+            ]);
+        }else{
+            $forecast->update([
+                $forecast->is_available = true
+            ]);
+        }
+
+        return response()->json($forecast->is_available, 200);
+    }
+
+    public function getPgntdUsers(){
+        $users = User::latest()->paginate(5);
+
+        return response()->json($users, 200);
+    }
+
+    public function updateUserStatus($id){
+        $user = User::findOrFail($id);
+
+        if($user->status == true){
+            $user->update([
+                $user->status = false
+            ]);
+        }else{
+            $user->update([
+                $user->status = true
+            ]);
+        }
+
+        return response()->json($user->status, 200);
+    }
+
+    public function adminGetUser($id){
+        $user = User::with('subscription')->findOrFail($id);
+
+        return response()->json($user, 200);
+    }
+
+    public function updateUser(Request $request, $id){
+        $validator = $this->validate($request, [
+            'user.first_name' => 'required|min:3|max:30',
+            'user.last_name' => 'required|min:3|max:30',
+            'user.phone' => 'required|max:14',
+        ]);
+
+        $user = User::findOrFail($id);
+
+        $user->update([
+            $user->first_name = $request->user['first_name'],
+            $user->last_name = $request->user['last_name'],
+            $user->phone = $request->user['phone'],
+        ]);
+
+        return response()->json($user, 201);
+    }
+
+    public function adminDelUser($id){
+        $user = User::findOrFail($id);
+
+        $user->delete();
+
+        return response()->json(['message' => 'User deleted!'], 200);
+    }
+
+    public function updateUserPassword(Request $request, $id){
+        $this->validate($request, [
+            'password.password' => 'required|min:5|max:20|confirmed',
+            'password.password_confirmation' => 'required'
+        ]);
+
+        $user = User::findOrFail($id);
+
+        $new = $request->password['password'];
+        $user->update([
+            $user->password = Hash::make($new)
+        ]);
+
+        return response()->json($user, 200);
+    }
+
+    public function adminCreateUser(Request $request){
+        $this->validate($request, [
+            'user.first_name' => 'required|min:3|max:30',
+            'user.last_name' => 'required|min:3|max:30',
+            'user.email' => 'required|email|unique:users,email',
+            'user.phone' => 'required|max:14',
+            'user.password' => 'required|min:5|max:30|confirmed',
+            'user.password_confirmation' => 'required'
+        ]);
+
+        $user = new User;
+        $user->first_name = $request->user['first_name'];
+        $user->last_name = $request->user['last_name'];
+        $user->email = $request->user['email'];
+        $user->phone = $request->user['phone'];
+        $user->password = Hash::make($request->user['password']);
+        $user->save();
+
+        return response()->json($user, 201);
+    }
+
+    public function changeSubStatus($id){
+        $sub = Subscription::findOrFail($id);
+        if($sub->status == 0){
+            $sub->update([
+                $sub->status = 1
+            ]);
+        }else{
+            $sub->update([
+                $sub->status = 0
+            ]);
+        }
+
+        return response()->json($sub->status, 201);
+    }
+
+    public function getTodaysSubscriptions(){
+        $subs = Subscription::whereDate('created_at', Carbon::today())->get();
+
+        return response()->json($subs, 200);
+    }
+
+    public function getWeekPayment(){
+        $payments = Payment::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
+
+        return response()->json($payments, 200);
+    }
+
+    public function getWeekEarnings(){
+        $earnings = Earning::with('subscription')->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
+
+        return response()->json($earnings, 200);
+    }
+
+    public function getNewlyRegExperts(){
+        $exps = Expert::whereDate('created_at', Carbon::today())->get();
+
+        return response()->json($exps, 200);
+    }
+
+    public function getNewlyRegUsers(){
+        $users = User::whereDate('created_at', Carbon::today())->get();
+
+        return response()->json($users, 200);
+    }
+
+    public function getLatestForecasts(){
+        $fcs = ExpertPredictionSummary::latest()->take(5)->get();
+
+        return response()->json($fcs, 200);
+    }
+
+    public function getLatestDailyTips(){
+        $tips = DailyTip::whereDate('created_at', Carbon::today())->get();
+
+        return response()->json($tips, 200);
+    }
+
+    public function getAllUsersCounts(){
+        $users = User::count();
+        $loggedin_users = User::where('is_loggedin', true)->count();
+        $disabled_users = User::where('status', false)->count();
+
+        $exps = Expert::count();
+        $loggedin_exps = Expert::where('is_loggedin', true)->count();
+        $disabled_exps = Expert::where('status', false)->count();
+
+        $admin = Admin::count();
+
+        return response()->json(['users'=> $users,
+                                 'loggedInUsers' => $loggedin_users,
+                                 'disabledUsers' => $disabled_users,
+                                'experts' => $exps,
+                                'loggedInExperts' => $loggedin_exps,
+                                'disabledExperts' => $disabled_exps,
+                                'admins' => $admin], 200);
+    }
+
+    public function getDailyTipsSuccessRate(){
+        $tips = DailyTipsSummary::whereDate('created_at', '!=', Carbon::today())->latest()->take(5)->get();
+
+        return response()->json($tips, 200);
+    }
+
+    public function getDailyStats(){
+        $dt = DailyTipsSummary::whereDate('created_at', Carbon::today())->first();
+        if($dt){
+            $dtt = $dt->event_count;
+        }else{
+            $dtt = 0;
+        }
+        // $dtcount = $dt->event_count;
+        $fc = ExpertPredictionSummary::whereDate('created_at', Carbon::today())->count();
+        $subs = Subscription::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->count();
+        $exps = Expert::whereDate('created_at', Carbon::today())->count();
+        $users = User::whereDate('created_at', Carbon::today())->count();
+
+        return response()->json(['dt'=> $dtt,
+                                'ft' =>  $fc,
+                                'subs' => $subs,
+                                'exps' => $exps,
+                                'users' => $users], 200);
+    }
+
+    public function getPgntdPayments(){
+        $pymts = Payment::latest()->paginate(5);
+
+        return response()->json($pymts, 200);
+    }
+
+    public function getSubPymtDetails($id){
+        $pymt= Payment::where('tx_id', $id)->first();
+
+        return response()->json($pymt, 200);
+    }
+
+    public function getPgntdEarnings(){
+        $earnings = Earning::with('subscription')->latest()->paginate(5);
+
+        return response()->json($earnings, 200);
+    }
+
+    public function getEarningDetail($id){
+        $earning = Earning::with('subscription')->findOrFail($id);
+
+        return response()->json($earning, 200);
+    }
+
+    public function changeEarningStatus($id){
+        $earning = Earning::findOrFail($id);
+
+        if($earning->is_settled == true){
+            $earning->update([
+                $earning->is_settled = false
+            ]);
+        }else{
+            $earning->update([
+                $earning->is_settled = true
+            ]);
+        }
+
+        return response()->json($earning->is_settled, 200);
+    }
+
+    public function getExpertEarning($id){
+        $expert = Expert::findOrFail($id);
+        $earnings = Earning::where('expert_id', $expert->id)->where('is_settled', true)->get();
+        $unsettled = Earning::where('expert_id', $expert->id)->where('is_settled', false)->get();
+
+        $settled = 0;
+        $outstanding = 0;
+        foreach ($earnings as $earn) {
+            $settled = $earn->exp_amount + $settled;
+        }
+
+        foreach ($unsettled as $uns) {
+            $outstanding = $uns->exp_amount + $outstanding;
+        }
+
+        return response()->json(['settled' => $settled, 'outstanding' => $outstanding], 200);
+    }
+
+    public function getExpertSubscriptions($id){
+        $subs = Subscription::where('expert_id', $id)->get();
+        return response()->json($subs, 200);
+    }
+
+    public function getExpertOutstandingEarnings($id){
+        $earnings = Earning::with('subscription')->where('expert_id', $id)->where('is_settled', 0)->get();
+
+        return response()->json($earnings, 200);
+    }
+
+    public function getExpertEarnings($id){
+        $earnings = Earning::where('expert_id', $id)->get();
+
+        return response()->json($earnings, 200);
+    }
+
+    public function getSingleDailyTip($code, $id){
+        $dt = DailyTip::where('id', $id)->where('tip_code', $code)->first();
+
+        return response()->json($dt, 200);
+    }
+
+    public function adminUpdateSingleDailyTip(Request $request, $id){
+        $dt = DailyTip::findOrFail($id);
+        $result = $request->update['home'].'-'.$request->update['away'];
+        $dt->update([
+            $dt->result = $result,
+            $dt->is_featured = $request->update['is_featured'],
+            $dt->status = $request->update['status']
+        ]);
+
+        return response()->json($dt, 200);
+    }
+
+    public function getDailyTipSummaryWithCode($code){
+        $summary = DailyTipsSummary::where('tip_code', $code)->first();
+
+        return response()->json($summary, 200);
+    }
+
+    public function getPgntdInboxFeedbacks(){
+        $fbks = UsersFeedback::where('user_id', '!=', 9999999)->latest()->paginate(50);
+
+        return response()->json($fbks, 200);
+    }
+
+    public function adminGetUserFeedback($id){
+        $fb = UsersFeedback::findOrFail($id);
+
+        return response()->json($fb, 200);
+    }
+
+    public function adminGetFeedbackParent($id){
+        $fb = UsersFeedback::findOrFail($id);
+
+        return response()->json($fb, 200);
+    }
+
+    public function adminGetInboxFeedbackThread($id){
+        $fb = UsersFeedback::findOrFail($id);
+
+        $thread = UsersFeedback::where('is_parent', false)->where('parent_id', $fb->parent_id)->where('created_at', '<', $fb->created_at)->get();
+
+        return response()->json($thread, 200);
+    }
+
+    public function updateFeedbackIsRead($id){
+        $fb = UsersFeedback::findOrFail($id);
+        if($fb->is_read == false){
+            $fb->update([
+                $fb->is_read = true
+            ]);
+        }
+
+        return response()->json($fb, 200);
+    }
+
+    public function adminUserId(){
+        $id = 9999999;
+        return $id;
+    }
+
+    public function adminReplyFeedback(Request $request, $id){
+        $this->validate($request, [
+            'reply.subject' => 'required|min:3|max:60',
+            'reply.body' => 'required|min:5|max:600',
+        ]);
+
+        // $msg = UsersFeedback::findOrFail($id);
+        $receiver = $request->reply['receiver'];
+        $fb = new UsersFeedback;
+        $fb->user_id_to = $request->reply['user_id_to'];
+        $fb->user_id = $this->adminUserId();
+        $fb->is_parent = false;
+        $fb->parent_id = $request->reply['parent_id'];
+        $fb->target = $request->reply['target'];
+        $fb->subject = $request->reply['subject'];
+        $fb->body = $request->reply['body'];
+        $fb->save();
+
+        Mail::to($receiver->email)->send(new FeedbackReplyEmail($receiver, $fb));
+
+        return response()->json(['fb' => $fb, 'to' => $receiver], 200);
+    }
+
+    public function getPgntdOutboxFeedbacks(){
+        $fbks = UsersFeedback::where('user_id', 9999999)->latest()->paginate(50);
+
+        return response()->json($fbks, 200);
+    }
+
+    public function adminDelOutboxMsg($id){
+        $msg = UsersFeedback::findOrFail($id);
+        $msg->delete();
+
+        return response()->json(['message' => 'Deleted'], 200);
+    }
+
+    public function adminDelFeedbackThread($id){
+        $msg = UsersFeedback::findOrFail($id);
+        $parent_id = $msg->parent_id;
+        $parent = UsersFeedback::findOrFail($parent_id);
+        $thread = UsersFeedback::where('parent_id', $parent_id)->get();
+
+        $msg->delete();
+
+        foreach($thread as $fb){
+            $fb->delete();
+        }
+
+        $parent->delete();
+        return response()->json(['message' => 'Thread Deleted'], 200);
+    }
+
+    public function getFeedbackSearchResult(Request $request){
+        $q = $request->q;
+        $fbs = UsersFeedback::where('subject', 'LIKE', "%".$q."%")
+                            ->orWhere('body', 'LIKE', "%".$q."%")
+                            ->orWhereHas('user', function($query) use($q){
+                                $query->where('first_name', 'LIKE', "%".$q."%")
+                                    ->orWhere('last_name', 'LIKE', "%".$q."%")
+                                    ->orWhere('email', 'LIKE', "%".$q."%");
+                            })->get();
+
+        return response()->json($fbs, 200);
     }
 }

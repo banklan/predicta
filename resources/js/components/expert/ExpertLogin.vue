@@ -11,11 +11,14 @@
                     <v-card-actions class="justify-center px-5">
                         <v-btn color="primary" large block @click.prevent="login" :loading="isLoading">Login</v-btn>
                     </v-card-actions>
-                    <template v-if="authError">
-                        <div class="error white--text pa-4 mx-3 mb-5">
+                    <v-card-actions class="justify-center pb-5">
+                        You want to register as a tip expert? <v-btn text color="primary" :to="{name: 'ExpertRegister'}">Register</v-btn>
+                    </v-card-actions>
+                    <div v-if="authError" class="pb-5">
+                        <div class="error white--text pa-4 mx-3">
                             {{ errorMsg }}
                         </div>
-                    </template>
+                    </div>
                 </v-card>
             </v-col>
         </v-row>

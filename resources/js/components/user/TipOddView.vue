@@ -10,7 +10,7 @@
             <v-col cols="12" md="6">
                 <v-progress-circular indeterminate color="primary" :width="5" :size="50" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
                 <v-card v-else light raised elevation="8" min-height="100">
-                    <v-card-title class="subtitle-1 primary white--text justify-center">{{ odd }} odd events by Tip Expert &nbsp;<span v-if="expert">{{ expert.username }}</span>&nbsp;<v-chip v-if="tips.length > 0" color="primary darken-2">{{ tips.length }}</v-chip></v-card-title>
+                    <v-card-title class="subtitle-1 primary white--text justify-center">{{ odd }} odds tips by Tip Expert &nbsp;<span v-if="expert">{{ expert.username }}</span>&nbsp;<v-chip v-if="tips.length > 0" color="primary darken-2">{{ tips.length }}</v-chip></v-card-title>
                     <v-card-text>
                         <table class="table table-condensed table-hover table-striped">
                             <thead>
@@ -30,7 +30,8 @@
                         </table>
                     </v-card-text>
                     <v-card-actions class="justify-center pb-6 mt-n5">
-                        <v-btn text large color="primary darken-2" @click="makePaymentDial = true">Subscribe</v-btn>
+                        <v-btn v-if="isSubscribed" text large color="primary darken-2" disabled>Already Subscribed</v-btn>
+                        <v-btn v-else text large color="primary darken-2" @click="makePaymentDial = true">Subscribe</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-col>
@@ -53,7 +54,7 @@
                                     </tr>
                                     <tr>
                                         <th>Subscribers:</th>
-                                        <td>150</td>
+                                        <td v-if="subCount">{{ subCount }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -122,7 +123,9 @@ export default {
             odd: this.$route.params.odd,
             winnings: [],
             makePaymentDial: false,
-            isBusy: false
+            isBusy: false,
+            isSubscribed: false,
+            subCount: null
         }
     },
     computed:{
@@ -150,7 +153,6 @@ export default {
                 let predicts = this.expert.prediction_summary
                 let tips = predicts.filter(item => item.is_opened == true && item.forecast_odd == this.$route.params.odd)
                 this.tips = tips
-                // console.log(this.tips)
             })
         },
         getWinningForecasts(){
@@ -159,7 +161,7 @@ export default {
             .then((res) => {
                 this.isLoading = false
                 this.winnings = res.data
-                console.log(res.data)
+                // console.log(res.data)
             })
         },
         subscribe(){
@@ -174,12 +176,27 @@ export default {
                 this.$store.commit('tipSubscribed', res.data)
                 this.$router.push({name: 'SubscriptionView', params:{sub_id: res.data.sub_id}})
             })
+        },
+        checkIfSubscribed(){
+            axios.get(this.api + `/auth/check_if_subscribed/${this.$route.params.odd}/${this.$route.params.expert}`, this.authHeaders)
+            .then((res) => {
+                this.isSubscribed = res.data.status
+                // console.log(res.data.status)
+            })
+        },
+        getSubscriptionCount(){
+            axios.get(this.api + `/auth/subscription_count/${this.$route.params.odd}/${this.$route.params.expert}`, this.authHeaders)
+            .then((res) => {
+                this.subCount = res.data
+                // console.log(res.data)
+            })
         }
     },
     created(){
         this.getExperts()
         this.getWinningForecasts()
-        // console.log(this.$route.params.odd)
+        this.checkIfSubscribed()
+        this.getSubscriptionCount()
     }
 }
 </script>

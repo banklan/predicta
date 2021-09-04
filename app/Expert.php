@@ -8,6 +8,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Earning;
 
 class Expert extends Authenticatable implements JWTSubject
 {
@@ -17,8 +18,7 @@ class Expert extends Authenticatable implements JWTSubject
         'first_name', 'last_name', 'username', 'email', 'phone', 'status', 'picture', 'bank_id', 'account_type', 'account_no', 'account_name'
     ];
 
-    protected $appends = ['fullname', 'expert_status', 'created', 'winning_rate', 'event_count', 'open_events_count'];
-
+    protected $appends = ['fullname', 'expert_status', 'created', 'winning_rate', 'event_count', 'open_events_count', 'total_earning'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -149,5 +149,19 @@ class Expert extends Authenticatable implements JWTSubject
 
     public function subscription(){
         return $this->hasMany('App\Subscription');
+    }
+
+    public function earnings(){
+        return $this->hasMany('App\Earning');
+    }
+
+    public function getTotalEarningAttribute(){
+        $earnings = Earning::where('expert_id', $this->id)->where('is_settled', true)->get();
+
+        $settled = 0;
+        foreach ($earnings as $earn) {
+            $settled = $earn->exp_amount + $settled;
+        }
+        return $settled;
     }
 }

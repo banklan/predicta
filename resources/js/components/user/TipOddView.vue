@@ -67,7 +67,7 @@
                     </v-card-text>
                 </v-card>
                 <v-card light raised elevation="8" min-height="100" class="mt-5">
-                    <v-card-title class="subtitle-1 primary white--text justify-center">Winning Forecasts By <span v-if="expert">{{ expert.username }}</span></v-card-title>
+                    <v-card-title class="subtitle-1 primary white--text justify-center">Winning Forecasts By <span v-if="expert" class="ml-1"> {{ expert.username }}</span></v-card-title>
                     <v-card-text>
                         <template v-if="winnings.length > 0">
                             <table class="table table-condensed table-hover">
@@ -161,7 +161,6 @@ export default {
             .then((res) => {
                 this.isLoading = false
                 this.winnings = res.data
-                // console.log(res.data)
             })
         },
         subscribe(){
@@ -170,7 +169,6 @@ export default {
                 odd: this.$route.params.odd,
                 expert: this.$route.params.expert
             }, this.authHeaders).then((res)=>{
-                console.log(res.data)
                 this.isBusy = false
                 this.makePaymentDial = false
                 this.$store.commit('tipSubscribed', res.data)
@@ -181,14 +179,12 @@ export default {
             axios.get(this.api + `/auth/check_if_subscribed/${this.$route.params.odd}/${this.$route.params.expert}`, this.authHeaders)
             .then((res) => {
                 this.isSubscribed = res.data.status
-                // console.log(res.data.status)
             })
         },
         getSubscriptionCount(){
             axios.get(this.api + `/auth/subscription_count/${this.$route.params.odd}/${this.$route.params.expert}`, this.authHeaders)
             .then((res) => {
                 this.subCount = res.data
-                // console.log(res.data)
             })
         }
     },

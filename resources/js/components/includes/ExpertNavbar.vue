@@ -55,6 +55,9 @@ export default {
         api(){
             return this.$store.getters.api
         },
+        authExpert(){
+            return this.$store.getters.authExpert
+        },
         expertHeaders(){
             let headers = {
                 headers: {
@@ -72,15 +75,12 @@ export default {
             if(this.expertIsLoggedIn){
                 this.$store.commit('logOutExpert')
                 this.$router.push('/')
-                // axios.post(this.api + `/auth-expert/logout`, {}, this.expertHeaders).then(() =>{
-                //     this.$store.commit('logOutExpert')
-                //     this.$router.push('/')
-                // })
+                axios.post(this.api + `/auth-expert/logout`, {}, this.expertHeaders).then(() =>{
+                    this.$store.commit('logOutExpert')
+                    this.$router.push('/')
+                })
             }
         }
-    },
-    created() {
-        // console.log(this.authUser)
     },
 }
 </script>

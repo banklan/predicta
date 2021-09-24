@@ -80,7 +80,7 @@ class SubscriptionController extends Controller
     }
 
     public function getForecastSummary($id){
-        $fc = ExpertPredictionSummary::where('forecast_id', $id)->first();
+        $fc = ExpertPredictionSummary::with('bookmaker_code')->where('forecast_id', $id)->first();
 
         return response()->json($fc, 200);
     }

@@ -170,7 +170,6 @@ export default {
                 this.isLoading = false
             })
         },
-
         confirmDel(country, i){
             this.cntryTodel = country
             this.cntryTodelIndex = i

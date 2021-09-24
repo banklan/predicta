@@ -14,8 +14,8 @@
                             <v-select label="Choose Expert" v-model="fb.expert" :items="experts" item-text="username" item-value="username"></v-select>
                         </v-col>
                     </v-row>
-                    <v-text-field label="Subject" required v-model="fb.subject"></v-text-field>
-                    <v-textarea rows="2" auto-grow label="Type your feedback here" v-model="fb.body"></v-textarea>
+                    <v-text-field label="Subject" required v-model="fb.subject" v-validate="'required|min:3|max:120'" :error-messages="errors.collect('subject')" name="subject"></v-text-field>
+                    <v-textarea label="Type feedback here" rows="2" auto-grow v-model="fb.body" v-validate="'required|min:10|max:600'" :error-messages="errors.collect('body')" name="body"></v-textarea>
                 </v-card-text>
                 <v-card-actions class="justify-center pb-8">
                     <v-btn dark width="60%" large color="primary darken-2" :loading="isBusy" @click="submit">Submit</v-btn>
@@ -96,15 +96,19 @@ export default {
             })
         },
         submit(){
-            this.isBusy = true
-            axios.post(this.api + '/auth/submit_users_feedback', {
-                feedback: this.fb
-            }, this.authHeaders).then((res) => {
-                this.isBusy = false
-                this.feedbackSent = true
-                console.log(res.data)
-            }).catch(() => {
-                this.isBusy = false
+            this.$validator.validateAll().then((isValid) => {
+                if (isValid) {
+                    this.isBusy = true
+                    axios.post(this.api + '/auth/submit_users_feedback', {
+                        feedback: this.fb
+                    }, this.authHeaders).then((res) => {
+                        this.isBusy = false
+                        this.feedbackSent = true
+                        console.log(res.data)
+                    }).catch(() => {
+                        this.isBusy = false
+                    })
+                }
             })
         }
     }

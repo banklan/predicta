@@ -10950,11 +10950,27 @@ a.text-dark:focus {
 
 .body_text {
   font-size: 1rem;
-  color: #484848;
+  color: #272727;
 }
 
 a,
 .v-btn {
   text-decoration: none !important;
+}
+
+.caption_text {
+  font-size: 1.05rem !important;
+  color: #000000c7 !important;
+  line-height: 1.5 !important;
+}
+
+.blade_table thead th {
+  font-size: 10px !important;
+  text-align: center !important;
+}
+
+.blade_table tbody tr td {
+  font-size: 9px !important;
+  text-align: center !important;
 }
 

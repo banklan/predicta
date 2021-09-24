@@ -201,7 +201,7 @@ export default {
                                     this.pick.league = this.pickedLeague.abbrv
                                 }
                                 this.pick.odd = parseFloat(this.pick.odd)
-                                if(this.foreCastOdd == 3 && this.forecasts.length < 6 || this.foreCastOdd == 5 && this.forecasts.length < 7 || this.foreCastOdd == 10 && this.forecasts.length < 7){
+                                if(this.foreCastOdd == 3 && this.forecasts.length < 6 || this.foreCastOdd == 5 && this.forecasts.length < 7 || this.foreCastOdd == 10 && this.forecasts.length < 8){
                                     this.$store.commit('addTipsToForecast', this.pick)
                                     this.clearPrediction()
                                     this.saveSuccess = true

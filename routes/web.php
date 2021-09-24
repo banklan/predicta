@@ -15,4 +15,5 @@
 //     return view('welcome');
 // });
 
+
 Route::get('/{any}', 'HomeController@index')->where('any', '.*');

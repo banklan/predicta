@@ -3,7 +3,6 @@
         <v-row justify="start" class="mt-5">
             <v-col cols="12" md="8">
                 <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
-                <!-- <div class="sub_title text-center mb-4 primary white--text py-2 px-3">Update Super-User Details</div> -->
                 <v-card light raised outlined elevation="4" min-height="400" class="ml-n6">
                     <v-card-title class="justify-center sub_title primary white--text">Update Super-User Details</v-card-title>
                     <v-card-text class="mt-5">
@@ -75,7 +74,6 @@ export default {
             axios.get(this.api + `/auth-admin/get_super_user/${this.id}`, this.headers).then((res) => {
                 this.isLoading = false
                 this.user = res.data
-                // console.log(res.data)
             })
         },
         updateUser(){
@@ -86,7 +84,6 @@ export default {
                 this.isUpdating = false
                 this.$store.commit('adminUpdatedSuperUser')
                 this.$router.push({name: 'AdminSuperUserDetail', params: {id: res.data.id}})
-                // console.log(res.data)
             }).catch(() => {
                 this.isUpdating = false
                 this.updateFailed = true

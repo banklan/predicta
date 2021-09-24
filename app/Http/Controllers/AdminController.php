@@ -22,12 +22,17 @@ use App\NationalTeam;
 use App\Payment;
 use App\Subscription;
 use App\User;
+use App\Enquiry;
 use Image;
 use Carbon\Carbon;
 use App\Earning;
 use App\UsersFeedback;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\FeedbackReplyEmail;
+use App\Mail\DailyTipMail;
+use App\Mail\DailyTipsFromSurePredict;
+use App\MailingList;
+use App\DailyTipsMailing;
 
 
 class AdminController extends Controller
@@ -139,7 +144,7 @@ class AdminController extends Controller
     }
 
     public function getPgntdExperts(){
-        $users = Expert::latest()->paginate(2);
+        $users = Expert::latest()->paginate(10);
 
         return response()->json($users, 200);
     }
@@ -305,6 +310,12 @@ class AdminController extends Controller
             ]);
         }
 
+        if($newStatus == 1 || $newStatus == 2){
+            $summary->update([
+                $summary->is_available = false
+            ]);
+        }
+
         return response()->json($event, 200);
     }
 
@@ -315,7 +326,7 @@ class AdminController extends Controller
     }
 
     public function adminGetPgntdExpertforecasts(){
-        $fc = ExpertPredictionSummary::latest()->paginate(3);
+        $fc = ExpertPredictionSummary::latest()->paginate(10);
 
         return response()->json($fc, 200);
     }
@@ -877,7 +888,7 @@ class AdminController extends Controller
     }
 
     public function getPgntdSubscriptions(){
-        $subs = Subscription::latest()->paginate(3);
+        $subs = Subscription::latest()->paginate(10);
 
         return response()->json($subs, 200);
     }
@@ -913,7 +924,7 @@ class AdminController extends Controller
     }
 
     public function getPgntdUsers(){
-        $users = User::latest()->paginate(5);
+        $users = User::latest()->paginate(10);
 
         return response()->json($users, 200);
     }
@@ -1107,7 +1118,7 @@ class AdminController extends Controller
     }
 
     public function getPgntdPayments(){
-        $pymts = Payment::latest()->paginate(5);
+        $pymts = Payment::latest()->paginate(10);
 
         return response()->json($pymts, 200);
     }
@@ -1119,7 +1130,7 @@ class AdminController extends Controller
     }
 
     public function getPgntdEarnings(){
-        $earnings = Earning::with('subscription')->latest()->paginate(5);
+        $earnings = Earning::with('subscription')->latest()->paginate(10);
 
         return response()->json($earnings, 200);
     }
@@ -1206,7 +1217,7 @@ class AdminController extends Controller
     }
 
     public function getPgntdInboxFeedbacks(){
-        $fbks = UsersFeedback::where('user_id', '!=', 9999999)->latest()->paginate(50);
+        $fbks = UsersFeedback::where('user_id', '!=', 9999999)->latest()->paginate(25);
 
         return response()->json($fbks, 200);
     }
@@ -1271,7 +1282,7 @@ class AdminController extends Controller
     }
 
     public function getPgntdOutboxFeedbacks(){
-        $fbks = UsersFeedback::where('user_id', 9999999)->latest()->paginate(50);
+        $fbks = UsersFeedback::where('user_id', 9999999)->latest()->paginate(25);
 
         return response()->json($fbks, 200);
     }
@@ -1310,5 +1321,322 @@ class AdminController extends Controller
                             })->get();
 
         return response()->json($fbs, 200);
+    }
+
+    public function getPgntdEnquiries(){
+        $enqs = Enquiry::latest()
+                    ->paginate(10);
+
+        return response()->json($enqs, 200);
+    }
+
+    public function getUnreadEnquiryCount(){
+        $count = Enquiry::where('is_read', false)->count();
+
+        return response()->json($count, 200);
+    }
+
+    public function adminDelEnquiry($id){
+        $enq = Enquiry::findOrFail($id);
+        $enq->delete();
+
+        return response()->json(['message' => 'Enquiry deleted'], 200);
+    }
+
+    public function adminGetEnquiry($id){
+        $enquiry = Enquiry::findorFail($id);
+
+        return response()->json($enquiry, 200);
+    }
+
+    public function adminReadEnquiry($id){
+        $enquiry = Enquiry::findorFail($id);
+        $enquiry->update([
+            $enquiry->is_read = true
+        ]);
+
+        return response()->json(['message' => 'Enquiry read'], 200);
+    }
+
+    public function newFbkCount(){
+        $fb = UsersFeedback::whereDate('created_at', Carbon::today())->count();
+
+        return response()->json($fb, 200);
+    }
+
+    public function unreadEnqCount(){
+        $enq = Enquiry::where('is_read', false)->count();
+        return response()->json($enq, 200);
+    }
+
+    public function searchForDailyTip(Request $request){
+        $q = $request->q;
+
+        $tips = DailyTipsSummary::where('tip_code', 'LIKE', "%".$q."%")
+                                  ->get();
+
+        return response()->json($tips, 200);
+    }
+
+    public function searchForExperts(Request $request){
+        $q = $request->q;
+
+        $experts = Expert::where('expert_id', 'LIKE', "%".$q."%")
+                        ->orWhere('first_name', 'LIKE', "%".$q."%")
+                        ->orWhere('last_name', 'LIKE', "%".$q."%")
+                        ->orWhere('username', 'LIKE', "%".$q."%")
+                        ->orWhere('email', 'LIKE', "%".$q."%")
+                        ->orWhere('phone', 'LIKE', "%".$q."%")
+                        ->orWhere('account_name', 'LIKE', "%".$q."%")
+                        ->get();
+
+        return response()->json($experts, 200);
+    }
+
+    public function searchForUsers(Request $request){
+        $q = $request->q;
+
+        $experts = User::where('first_name', 'LIKE', "%".$q."%")
+                        ->orWhere('last_name', 'LIKE', "%".$q."%")
+                        ->orWhere('email', 'LIKE', "%".$q."%")
+                        ->orWhere('phone', 'LIKE', "%".$q."%")
+                        ->get();
+
+        return response()->json($experts, 200);
+    }
+
+    public function searchForExpertForecasts(Request $request){
+        $q = $request->q;
+
+        $fcs = ExpertPredictionSummary::where('forecast_id', 'LIKE', "%".$q."%")
+                        ->orWhere('forecast_odd', 'LIKE', "%".$q."%")
+                        ->orWhereHas('expert', function($query) use($q){
+                            $query->where('first_name', 'LIKE', "%".$q."%")
+                                ->orWhere('last_name', 'LIKE', "%".$q."%")
+                                ->orWhere('username', 'LIKE', "%".$q."%")
+                                ->orWhere('expert_id', 'LIKE', "%".$q."%")
+                                ->orWhere('email', 'LIKE', "%".$q."%");
+                        })->get();
+
+        return response()->json($fcs, 200);
+    }
+
+    public function searchForSubscription(Request $request){
+        $q = $request->q;
+
+        $fcs = Subscription::where('sub_id', 'LIKE', "%".$q."%")
+                            ->orWhere('odd_cat', 'LIKE', "%".$q."%")
+                            ->orWhereHas('user', function($query) use($q){
+                                $query->where('first_name', 'LIKE', "%".$q."%")
+                                    ->orWhere('last_name', 'LIKE', "%".$q."%")
+                                    ->orWhere('email', 'LIKE', "%".$q."%");
+                            })
+                            ->orWhereHas('expert', function($query) use($q){
+                                $query->where('first_name', 'LIKE', "%".$q."%")
+                                    ->orWhere('last_name', 'LIKE', "%".$q."%")
+                                    ->orWhere('username', 'LIKE', "%".$q."%")
+                                    ->orWhere('expert_id', 'LIKE', "%".$q."%")
+                                    ->orWhere('email', 'LIKE', "%".$q."%");
+                            })->get();
+
+        return response()->json($fcs, 200);
+    }
+
+    public function getAllSubscriptions(){
+        $subs = Subscription::all();
+
+        return response()->json($subs, 200);
+    }
+
+    public function searchForPayments(Request $request){
+        $q = $request->q;
+
+        $pymts = Payment::where('tx_id', 'LIKE', "%".$q."%")
+                        ->orWhere('amount', 'LIKE', "%".$q."%")
+                        ->orWhereHas('user', function($query) use($q){
+                            $query->where('first_name', 'LIKE', "%".$q."%")
+                                ->orWhere('last_name', 'LIKE', "%".$q."%")
+                                ->orWhere('email', 'LIKE', "%".$q."%");
+                        })
+                        ->orWhereHas('subscription', function($query) use($q){
+                            $query->where('sub_id', 'LIKE', "%".$q."%")
+                                ->orWhere('odd_cat', 'LIKE', "%".$q."%");
+                        })->get();
+
+        return response()->json($pymts, 200);
+    }
+
+    public function searchForEarnings(Request $request){
+        $q = $request->q;
+
+        $pymts = Earning::with('subscription')->where('total', 'LIKE', "%".$q."%")
+                        ->orWhere('exp_amount', 'LIKE', "%".$q."%")
+                        ->orWhere('admin_amount', 'LIKE', "%".$q."%")
+                        ->orWhereHas('subscription', function($query) use($q){
+                            $query->where('sub_id', 'LIKE', "%".$q."%")
+                                ->orWhere('odd_cat', 'LIKE', "%".$q."%")
+                                ->orWhere('amount', 'LIKE', "%".$q."%");
+                        })->get();
+
+        return response()->json($pymts, 200);
+    }
+
+    public function updateAdminProfile(Request $request){
+        $this->validate($request, [
+            'admin.f_name' => 'required|min:3|max:30',
+            'admin.l_name' => 'required|min:3|max:30',
+            'admin.phone' => 'required|min:8|max:14',
+        ]);
+
+        $admin = auth('admin-api')->user();
+        $admin->update([
+            $admin->first_name = $request->admin['f_name'],
+            $admin->last_name = $request->admin['l_name'],
+            $admin->phone = $request->admin['phone'],
+        ]);
+
+        return response()->json($admin, 200);
+    }
+
+    public function confirmCurrentPassword(Request $request){
+        $user = auth('admin-api')->user();
+        $current = $user->password;
+        $check = Hash::check($request->password, $current);
+
+        return response()->json($check, 200);
+    }
+
+    public function updateAdminProfilePassword(Request $request){
+        $this->validate($request, [
+            'password' => 'required|min:5|max:20|confirmed',
+            'password_confirmation' => 'required'
+        ]);
+
+        $user = auth('admin-api')->user();
+        $new = $request->password;
+
+        $user->update([
+            $user->password = Hash::make($new)
+        ]);
+
+        return response()->json(['message' => 'Password changed successfully']);
+    }
+
+    public function updateAdminProfilePicture(Request $request){
+        $this->validate($request, [
+            'image' => 'mimes:jpeg,jpg,bmp,png,gif'
+        ]);
+
+        $user = auth('admin-api')->user();
+        // check if picture exists for profile, then unlink
+        $old_pic = $user->picture;
+        if($old_pic){
+            $filePath = public_path('/images/profiles/admins/'.$old_pic);
+            if(file_exists($filePath)){
+                unlink($filePath);
+            }
+        }
+
+        // save file in folder...later in s3 when ready to deploy
+        $file = $request->image;
+        if($file){
+            $pool = '0123456789abcdefghijklmnopqrstuvwxyz';
+            $ext = $file->getClientOriginalExtension();
+            $filename = substr(str_shuffle($pool), 0, 6).".".$ext;
+
+            //save new file in folder
+            $file_loc = public_path('/images/profiles/admins/'.$filename);
+            if(in_array($ext, ['jpeg', 'jpg', 'png', 'gif', 'pdf'])){
+                $upload = Image::make($file)->resize(220, 280, function($constraint){
+                    $constraint->aspectRatio();
+                });
+                $upload->sharpen(2)->save($file_loc);
+            }
+        }
+
+        // save path in db
+        $user->update([
+            $user->picture = $filename
+        ]);
+
+        return response()->json($user, 201);
+    }
+
+    public function getMailingList(){
+        $list = MailingList::paginate(10);
+
+        return response()->json($list, 200);
+    }
+
+    public function toggleMailingListStatus($user){
+        $user = MailingList::findOrFail($user);
+
+        if($user->status == 1){
+            $user->update([
+                $user->status = false
+            ]);
+        }else{
+            $user->update([
+                $user->status = true
+            ]);
+        }
+
+        return response()->json($user, 200);
+    }
+
+    public function adminAddToMailingList(Request $request){
+        $this->validate($request, [
+            'mail.f_name' => 'required|min:3|max:30',
+            'mail.l_name' => 'required|min:3|max:30',
+            'mail.email' => 'required|email|unique:mailing_list,email'
+        ]);
+
+        $ml = new MailingList;
+        $ml->f_name = $request->mail['f_name'];
+        $ml->l_name = $request->mail['l_name'];
+        $ml->email = $request->mail['email'];
+        $ml->save();
+
+        return response()->json($ml, 200);
+    }
+
+    public function delUserFromMailingList($user){
+        $user = MailingList::findOrFail($user);
+        $user->delete();
+        return response()->json(['message' => 'User deleted'], 200);
+    }
+
+    public function checkDailyTipMailing($id){
+        $mailing = DailyTipsMailing::where('daily_tips_summary_id', $id)->count();
+
+        return response()->json($mailing, 200);
+    }
+
+    public function mailDailyTips($id){
+        $dailyTip = DailyTipsSummary::findOrFail($id);
+        $pd = $dailyTip->tip_code;
+        $tips = DailyTip::where('tip_code', $pd)->where('is_featured', true)->get();
+        $subscribers = MailingList::all();
+        foreach($subscribers as $user){
+            Mail::to($user->email)->send(new DailyTipsFromSurePredict($tips, $user, $dailyTip));
+        }
+
+        $mail = new DailyTipsMailing;
+        $mail->daily_tips_summary_id = $id;
+        $mail->save();
+        return response()->json(['message'=> 'Mails sent'], 200);
+    }
+
+    public function getMailedTips(){
+        $mails = DailyTipsMailing::with('daily_tips_summary')->latest()->paginate(10);
+
+        return response()->json($mails, 200);
+    }
+
+    public function deleteMailedDailyTip($id){
+        $mail = DailyTipsMailing::findOrFail($id);
+
+        $mail->delete();
+        return response()->json(['message' => 'Deleted'], 200);
     }
 }

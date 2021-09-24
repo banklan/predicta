@@ -1,5 +1,6 @@
 <template>
     <v-container>
+        <admin-top-panel title="Create Daily Tips" />
         <v-row class="mt-4">
             <v-col cols="12" md="3">
                 <v-btn rounded color="primary lighten--2" dark elevation="4" left @click.prevent="$router.go(-1)"><v-icon left>arrow_left</v-icon> Back</v-btn>

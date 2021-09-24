@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Image;
 use Illuminate\Support\Facades\Hash;
 use App\Bank;
+use App\BookmakerCode;
 use App\Subscription;
 use App\Earning;
 
@@ -41,6 +42,7 @@ class ExpertController extends Controller
 
     public function postPrediction(Request $request){
         $predictions = $request->predictions;
+        $cds = $request->cds;
 
         $prediction_code = bin2hex(random_bytes(5));
         $expert_id = auth('expert-api')->user()->id;
@@ -81,11 +83,22 @@ class ExpertController extends Controller
             $summary->prog_status = 0;
             $summary->forecast_odd = $request->forecastOdd;
             $summary->total_odds = intval($request->totalOdds * 100);
-            $summary->bet9ja = $request->codes['bet9ja'];
-            $summary->betking = $request->codes['betking'];
-            $summary->merrybet = $request->codes['merrybet'];
+            // $summary->bet9ja = $request->codes['bet9ja'];
+            // $summary->betking = $request->codes['betking'];
+            // $summary->merrybet = $request->codes['merrybet'];
             $summary->result = 'O';
             $summary->save();
+
+            $summary->fresh();
+
+            foreach($cds as $cd){
+                $bkm = new BookmakerCode;
+                $bkm->expert_prediction_summary_id = $summary->id;
+                $bkm->expert_id = $expert_id;
+                $bkm->bookmaker_id = $cd['bkm']['id'];
+                $bkm->bookmaker_code = $cd['code'];
+                $bkm->save();
+            }
 
         }
         return response()->json($summary, 201);
@@ -106,7 +119,7 @@ class ExpertController extends Controller
     }
 
     public function getExpertSummary($id){
-        $summary = ExpertPredictionSummary::where('forecast_id', $id)->first();
+        $summary = ExpertPredictionSummary::with('bookmaker_code')->where('forecast_id', $id)->first();
 
         return response()->json($summary, 201);
     }
@@ -260,7 +273,7 @@ class ExpertController extends Controller
 
     public function getExpertSubscriptions(){
         $user = auth('expert-api')->user()->id;
-        $subs = Subscription::where('expert_id', $user)->get();
+        $subs = Subscription::where('expert_id', $user)->latest()->get();
 
         return response()->json($subs, 200);
     }
@@ -285,5 +298,11 @@ class ExpertController extends Controller
         $subs = Subscription::where('expert_id', $auth)->where('user_id', $sub->user_id)->where('sub_id', '!=', $id)->get();
 
         return response()->json($subs, 200);
+    }
+
+    public function getExpertForecastPerformance(){
+        $auth = auth('expert-api')->user()->id;
+        $fcs = ExpertPredictionSummary::where('prog_status', '!=', 0)->where('expert_id', $auth)->latest()->take(5)->get();
+        return response()->json($fcs, 200);
     }
 }

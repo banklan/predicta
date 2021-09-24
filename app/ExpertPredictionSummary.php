@@ -87,16 +87,7 @@ class ExpertPredictionSummary extends Model
         return $predictions;
     }
 
-    public function getOpenedForecastAttribute(){
-        // $pc = $this->forecast_id;
-        // $events = ExpertPrediction::where('prediction_code', $pc)->get();
-        // // $summary = ExpertPredictionSummary::where('forecast_id', $pc)
-        // $opened = [];
-        // foreach($events as $ev){
-        //     if($ev->is_open == 1){
-        //         $opened[] = $ev;
-        //     }
-        // }
-        // if(count($opened) === )
+    public function bookmaker_code(){
+        return $this->hasMany('App\BookmakerCode');
     }
 }

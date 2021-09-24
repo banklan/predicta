@@ -5,11 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\UserEmailConfirmation;
 use App\User;
+use App\Enquiry;
+use App\Mail\EnquirySent;
+use App\Mail\EnquiryMail;
 use Image;
+use App\MailingList;
 use Illuminate\Support\Facades\Hash;
 use App\UsersFeedback;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\FeedbackPostedEmail;
+use phpDocumentor\Reflection\PseudoTypes\False_;
 
 class UserController extends Controller
 {
@@ -119,8 +124,8 @@ class UserController extends Controller
 
     public function submitUsersFeedback(Request $request){
         $this->validate($request, [
-            'feedback.subject' => 'required|min:5|max:120',
-            'feedback.body' => 'required|min:20|max:600',
+            'feedback.subject' => 'required|min:3|max:120',
+            'feedback.body' => 'required|min:10|max:600',
         ]);
 
         if($request->feedback['sub_id']){
@@ -160,7 +165,7 @@ class UserController extends Controller
 
     public function getUsersOutboxMsgs(){
         $user = auth('api')->user()->id;
-        $msgs = UsersFeedback::where('user_id', $user)->where('is_parent', true)->where('is_deleted', false)->get();
+        $msgs = UsersFeedback::where('user_id', $user)->where('is_deleted', false)->latest()->paginate(10);
         return response()->json($msgs, 200);
     }
 
@@ -184,7 +189,7 @@ class UserController extends Controller
 
     public function getUsersInboxMsgs(){
         $user = auth('api')->user()->id;
-        $msgs = UsersFeedback::where('user_id_to', $user)->where('is_deleted', false)->get();
+        $msgs = UsersFeedback::where('user_id_to', $user)->where('is_deleted', false)->latest()->paginate(10);
         return response()->json($msgs, 200);
     }
 
@@ -232,5 +237,76 @@ class UserController extends Controller
         $msg = UsersFeedback::findOrFail($id);
 
         return response()->json($msg, 200);
+    }
+
+    public function replyFeedback(Request $request){
+        $this->validate($request, [
+            'reply.body' => 'required|min:3|max:300',
+        ]);
+
+        $user = auth('api')->user();
+        $admin = 9999999;
+
+        $fb = new UsersFeedback;
+        $fb->user_id = $user->id;
+        $fb->user_id_to = $admin;
+        $fb->is_parent = False;
+        $fb->parent_id = $request->reply['parent_id'];
+        $fb->target = $request->reply['target'];
+        $fb->subject = $request->reply['subject'];
+        $fb->body = $request->reply['body'];
+        $fb->save();
+
+        $fb->fresh();
+        // Mail::to('banklan2010@gmail.com')->send(new FeedbackPostedEmail($user, $fb));
+
+        return response()->json(['feedback' => $fb, 'user'=> $user], 200);
+    }
+
+    public function sendEnquiry(Request $request){
+        $this->validate($request, [
+            'enquiry.fullname' => 'required|min:5|max:70',
+            'enquiry.organization' => 'required|min:3|max:100',
+            'enquiry.position' => 'min:2|max:30',
+            'enquiry.email' => 'required|email',
+            'enquiry.phone' => 'required|max:14',
+            'enquiry.subject' => 'required|min:3|max:100',
+            'enquiry.message' => 'required|min:5|max:500',
+        ]);
+
+        $enquiry = new Enquiry;
+        $enquiry->fullname = $request->enquiry['fullname'];
+        $enquiry->organization = $request->enquiry['organization'];
+        $enquiry->position = $request->enquiry['position'];
+        $enquiry->email = $request->enquiry['email'];
+        $enquiry->phone = $request->enquiry['phone'];
+        $enquiry->subject = $request->enquiry['subject'];
+        $enquiry->message = $request->enquiry['message'];
+        $enquiry->is_read = false;
+        $enquiry->save();
+
+        //send acknowledgement mail to user
+        Mail::to($enquiry->email)->send(new EnquirySent($enquiry));
+
+        //send mail with enquiry to lista
+        Mail::to('philiafinancing@gmail.com')->send(new EnquiryMail($enquiry));
+
+        return response()->json($enquiry, 200);
+    }
+
+    public function joinMailingList(Request $request){
+        $this->validate($request, [
+            'mail.f_name' => 'required|min:3|max:30',
+            'mail.l_name' => 'required|min:3|max:30',
+            'mail.email' => 'required|email|unique:mailing_list,email'
+        ]);
+
+        $ml = new MailingList;
+        $ml->f_name = $request->mail['f_name'];
+        $ml->l_name = $request->mail['l_name'];
+        $ml->email = $request->mail['email'];
+        $ml->save();
+
+        return response()->json($ml, 200);
     }
 }

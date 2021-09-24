@@ -107,6 +107,5 @@ export default {
     created(){
         this.getEvent()
     }
-
 }
 </script>

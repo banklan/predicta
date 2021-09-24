@@ -85,18 +85,12 @@
                                         <th>No of Events</th>
                                         <td>{{ forecast.event_count }}</td>
                                     </tr>
-                                    <tr v-if="forecast.bet9ja">
-                                        <th>Bet9ja Booking code</th>
-                                        <td>{{ forecast.bet9ja }}</td>
-                                    </tr>
-                                    <tr v-if="forecast.betking">
-                                        <th>Betking Booking code</th>
-                                        <td>{{ forecast.betking }}</td>
-                                    </tr>
-                                    <tr v-if="forecast.merrybet">
-                                        <th>Merrybet Booking code</th>
-                                        <td>{{ forecast.merrybet }}</td>
-                                    </tr>
+                                    <template v-if="bookmakers.length > 0">
+                                        <tr v-for="bkm in bookmakers" :key="bkm.id">
+                                            <th>{{ bkm.bookmaker.name }}</th>
+                                            <td>{{ bkm.bookmaker_code }}</td>
+                                        </tr>
+                                    </template>
                                 </template>
                             </tbody>
                         </table>
@@ -119,7 +113,8 @@ export default {
             pred_id: this.$route.params.pred_id,
             isLoading: false,
             subscription: null,
-            forecast: null
+            forecast: null,
+            bookmakers: []
         }
     },
     computed:{
@@ -148,7 +143,6 @@ export default {
             .then((res)=> {
                 this.isLoading = false
                 this.subscription = res.data
-                console.log(res.data)
             })
         },
         getForecast(){
@@ -156,14 +150,14 @@ export default {
             axios.get(this.api + `/auth/get_forecast_summary/${this.$route.params.pred_id}`, this.authHeaders).then((res) => {
                 this.isLoading = false
                 this.forecast = res.data
-                console.log(res.data)
+                this.bookmakers = res.data.bookmaker_code
+                // console.log(res.data)
             })
         },
 
     },
     created() {
         this.getForecast()
-        // this.getSubscription()
     },
 }
 </script>

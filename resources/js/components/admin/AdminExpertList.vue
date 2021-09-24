@@ -1,10 +1,11 @@
 <template>
     <v-container>
+        <admin-top-panel title="Experts (Forecasters)" />
         <v-row class="mt-4">
-            <v-col cols="8" md="8">
-                <div class="title justify-center">Experts (Forecasters)</div>
-            </v-col>
-            <v-col cols="4" md="4">
+            <v-col cols="12" md="5">
+               <admin-search model="Expert" searchFor="experts"/>
+           </v-col>
+            <v-col cols="4" md="4" offset-md="3">
                 <v-btn dark color="primary" :to="{name: 'AdminCreateExpert'}"><v-icon left>add</v-icon>New Expert</v-btn>
             </v-col>
         </v-row>

@@ -15,8 +15,9 @@ export default {
     },
     methods: {
         search(){
-            console.log(this.q)
-            this.$router.push({name: `AdminSearch${this.model}Res`, query:{q: this.q}})
+            if(this.q.trim() !== ''){
+                this.$router.push({name: `AdminSearch${this.model}Res`, query:{q: this.q.trim()}})
+            }
         }
     }
 }

@@ -1,10 +1,11 @@
 <template>
     <v-container>
+        <admin-top-panel title="Users" />
         <v-row class="mt-4">
-            <v-col cols="8" md="8">
-                <div class="title justify-center">Users</div>
-            </v-col>
-            <v-col cols="4" md="4">
+            <v-col cols="12" md="5">
+               <admin-search model="User" searchFor="users"/>
+           </v-col>
+            <v-col cols="4" md="4" offset-md="3">
                 <v-btn dark color="primary" :to="{name: 'AdminCreateUser'}"><v-icon left>add</v-icon>New User</v-btn>
             </v-col>
         </v-row>

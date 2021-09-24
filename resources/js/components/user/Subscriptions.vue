@@ -77,7 +77,6 @@ export default {
             .then((res)=> {
                 this.isLoading = false
                 this.subscriptions = res.data
-                console.log(res.data)
             })
         },
         viewSubscription(sub){

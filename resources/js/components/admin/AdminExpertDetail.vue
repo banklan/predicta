@@ -256,7 +256,6 @@ export default {
                 this.subCount = rez.length
                 let active = rez.filter((sub) => sub.active_status == 'Active')
                 this.activeSub = active
-                // let outstnd = rez.filter((sub) =>sub.)
             })
         }
     },

@@ -82,7 +82,6 @@ export default {
     },
     methods: {
         loadAbouts(){
-            console.log(this.fb.about)
             if(this.fb.about == 1){
                 this.openSubIdField = true
                 this.openExpField = false
@@ -104,14 +103,12 @@ export default {
         },
         submit(){
             this.isBusy = true
-            // console.log(this.fb)
             axios.post(this.api + '/auth/submit_users_feedback', {
                 feedback: this.fb
             }, this.authHeaders).then((res) => {
                 this.isBusy = false
                 this.$store.commit('feedbackPosted')
                 this.$router.push({name: 'UserFeedback'})
-                console.log(res.data)
             }).catch(() => {
                 this.isBusy = false
             })

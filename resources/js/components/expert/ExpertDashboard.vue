@@ -2,10 +2,10 @@
     <v-container>
         <expert-top-panel title="Expert Dashboard"/>
         <v-progress-circular indeterminate color="primary" :width="5" :size="50" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
-        <v-row v-else justify="space-around" wrap class="mt-5">
+        <v-row v-else justify="center" wrap class="mt-5">
             <v-col cols="12" md="5">
                 <v-card elevation="8" dark raised min-height="300" color="#3225f7">
-                    <v-card-title class="white--text sub_title justify-center">My Forecasts</v-card-title>
+                    <v-card-title class="white--text sub_title justify-center">Forecasts Briefs</v-card-title>
                     <v-card-text class="my-5 pl-7 pr-7">
                         <table class="table table-condensed table-hover">
                             <thead></thead>
@@ -45,9 +45,59 @@
                         <v-btn outlined color="white" :to="{name: 'MyForecasts'}">My Forecasts</v-btn>
                     </v-card-actions>
                 </v-card>
+                <v-card elevation="8" dark raised min-height="300" class="fc_perf mt-5">
+                    <v-card-title class="white--text sub_title justify-center">Forecast Performance</v-card-title>
+                    <v-card-text class="my-5 pl-7 pr-7">
+                        <table class="table table-condensed table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Forecast ID</th>
+                                    <th>Cat</th>
+                                    <th>Result</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="fc in perfs" :key="fc.id" @click="goToFc(fc)">
+                                    <td>{{ fc.created_at | moment('D/M/YY') }}</td>
+                                    <td>{{ fc.forecast_id }}</td>
+                                    <td>{{ fc.forecast_odd }}</td>
+                                    <td v-if="fc.prog_status == 2"><v-icon color="green darken-1">mdi-check-all</v-icon></td>
+                                    <td v-if="fc.prog_status == 1"><v-icon color="red darken-2">mdi-close</v-icon></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </v-card-text>
+                </v-card>
             </v-col>
             <v-col cols="12" md="5">
-                <v-card elevation="8" dark raised color="#f3137a" min-height="100">
+                <v-card elevation="8" dark raised color="#047149" min-height="100" class="mb-5 latest_sub">
+                    <v-card-title class="white--text sub_title justify-center">Latest Subscriptions</v-card-title>
+                    <v-card-text class="">
+                        <table class="table table-condensed table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Sub ID</th>
+                                    <th>Cat</th>
+                                    <th>Subscriber</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="sub in subscriptions.slice(0, 5)" :key="sub.id">
+                                    <td>{{ sub.created_at | moment('D/M/YY') }}</td>
+                                    <td @click="goToSub(sub)">{{ sub.sub_id }}</td>
+                                    <td>{{ sub.odd_cat }}</td>
+                                    <td v-if="sub.user">{{ sub.user.fullname }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </v-card-text>
+                    <v-card-actions class="justify-center pb-6">
+                        <v-btn outlined color="white--text" :to="{name: 'ExpertSubscriptions' }">All Subscriptions</v-btn>
+                    </v-card-actions>
+                </v-card>
+                <v-card elevation="8" dark raised color="#f3137a" min-height="100" class="earnings">
                     <v-card-title class="white--text sub_title justify-center">Earnings</v-card-title>
                     <v-card-text class="my-5 pl-7 pr-7">
                         <template v-if="earnings.length > 0">
@@ -81,30 +131,6 @@
                     </v-card-actions>
                 </v-card>
             </v-col>
-            <!-- <v-col cols="12" md="5">
-                <v-card elevation="8" dark raised color="#1d9478" min-height="100">
-                    <v-card-title class="white--text sub_title justify-center">Outstanding Earnings</v-card-title>
-                    <template v-if="oustanding_earnings.length > 0">
-                        <v-card-text class="my-5 pl-7 pr-7">{{ oustanding_earnings }}</v-card-text>
-                    </template>
-                    <template v-else>
-                        <v-alert type="info" border="left" class="mt-5">
-                            You have no outstanding earnings.
-                        </v-alert>
-                    </template>
-                </v-card>
-                <v-card elevation="8" dark raised color="#1d9478" min-height="100" class="mt-5">
-                    <v-card-title class="white--text sub_title justify-center">Outstanding Earnings</v-card-title>
-                    <template v-if="earnings.length > 0">
-                        <v-card-text class="my-5 pl-7 pr-7">{{ earnings }}</v-card-text>
-                    </template>
-                    <template v-else>
-                        <v-alert type="info" border="left" class="mt-5">
-                            You have no earnings.
-                        </v-alert>
-                    </template>
-                </v-card>
-            </v-col> -->
         </v-row>
     </v-container>
 </template>
@@ -124,7 +150,8 @@ export default {
             expired_subs: null,
             earnings: [],
             oustanding_earnings: [],
-            subscriptions: []
+            subscriptions: [],
+            perfs: []
         }
     },
     computed: {
@@ -148,13 +175,14 @@ export default {
             this.isLoading = true
             axios.get(this.api + '/auth-expert/get_expert_forecast_summary', this.expertHeader)
             .then((res) => {
+                // console.log(res.data)
                 this.isLoading = false
                 this.total = res.data.length
                 let opened = res.data.filter((item) => item.is_available)
                 this.opened = opened.length > 0 ? opened.length : 0
                 this.played = parseInt(this.total - opened.length)
-                // console.log(this.played)
                 let won = res.data.filter((item)=> item.progress === '1')
+
                 let total_won = won.length
                 this.total_won = total_won
                 this.total_lost = this.played - total_won
@@ -176,31 +204,55 @@ export default {
                 let open = res.data.filter((item)=> item.status == 1)
                 this.opened_subs = open.length
                 this.expired_subs = this.total_subs - open.length
-                let earnings = []
-                open.forEach(sub => {
-                    sub.earning.forEach(el =>{
-                        // earnings.push(el.exp_amount)
-                        earnings.push(el)
-                    })
-                })
-                // let sum = earnings.reduce((a, b) => a + b, 0)
-                this.earnings = earnings
-                this.oustanding_earnings = this.earnings.filter((item) => item.is_settled == 0)
-                console.log(this.oustanding_earnings)
-                // get all earnings
-                // get outstanding earnings
+
             })
         },
+        getExpertEarnings(){
+            axios.get(this.api + '/auth-expert/get_expert_earnings', this.expertHeader).then((res) => {
+                this.earnings = res.data
+                this.oustanding_earnings = this.earnings.filter((item) => item.is_settled == 0)
+            })
+        },
+        goToSub(sub){
+            this.$router.push({name: 'ExpertSubscriptionView', params: {id: sub.sub_id}})
+        },
+        getExpertPerformance(){
+            axios.get(this.api + '/auth-expert/get_forecast_performance', this.expertHeader)
+            .then((res) => {
+                console.log(res.data)
+                this.perfs = res.data
+            })
+        },
+        goToFc(fc){
+            this.$router.push({name: 'ExpertForecastShow', params: {id: fc.forecast_id}})
+        }
     },
     created(){
         this.getExpertSubscriptions()
         this.getForecastSummary()
+        this.getExpertEarnings()
+        this.getExpertPerformance()
     }
 }
 </script>
 
 <style lang="css" scoped>
+    v-card{
+        overflow-x: scroll;
+    }
     table tr{
         color: #fff !important;
+    }
+    table tbody tr{
+        cursor: pointer !important;
+    }
+    .latest_sub{
+        background-image: linear-gradient(to bottom right,rgb(8 60 2 / 95%), rgb(10 16 5 / 82%));
+    }
+    .fc_perf{
+        background-image: linear-gradient(to bottom right,rgb(14 2 60 / 95%), rgb(0 60 70 / 80%));
+    }
+    .earnings{
+        background-image: linear-gradient(to bottom right, rgb(243, 19, 122), rgb(162 10 87 / 80%));
     }
 </style>

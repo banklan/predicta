@@ -74,6 +74,14 @@
                                     <th>Users Joined Today:</th>
                                     <td>{{ dailyStats.users }}</td>
                                 </tr>
+                                <tr v-if="unreadFbkCount">
+                                    <th>New Feedback:</th>
+                                    <td>{{ unreadFbkCount }}</td>
+                                </tr>
+                                <tr v-if="unreadEnqCount">
+                                    <th>New Enquiries:</th>
+                                    <td>{{ unreadEnqCount }}</td>
+                                </tr>
                             </tbody>
                         </table>
                     </v-card-text>
@@ -377,7 +385,9 @@ export default {
             dailyTips: [],
             usersCount: [],
             dTipSuccessRate: [],
-            dailyStats: []
+            dailyStats: [],
+            unreadFbkCount: null,
+            unreadEnqCount: null
         }
     },
     computed:{
@@ -501,6 +511,18 @@ export default {
         },
         goToDailyTip(tip){
             this.$router.push({name: 'AdminDailyTipShow', params:{id: tip.id, code: tip.tip_code}})
+        },
+        checkUnreadFeeedback(){
+            axios.get(this.api + '/auth-admin/check_new_feedback', this.adminHeaders)
+            .then((res) => {
+                this.unreadFbkCount = res.data
+            })
+        },
+        checkUnreadEnquiry(){
+            axios.get(this.api + '/auth-admin/check_unread_enquiry', this.adminHeaders)
+            .then((res) => {
+                this.unreadEnqCount = res.data
+            })
         }
     },
     created(){
@@ -515,7 +537,8 @@ export default {
         this.getNewUsers()
         this.getLatestForecasts()
         this.getDailyTips()
-
+        this.checkUnreadFeeedback()
+        this.checkUnreadEnquiry()
     }
 }
 </script>

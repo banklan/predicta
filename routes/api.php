@@ -29,15 +29,16 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::get('get_experts_by_winning_rate', 'TipController@getExpertsByWinningRate');
     Route::get('get_todays_tips', 'TipController@getTodaysTips');
     Route::get('get_won_tips', 'TipController@getWonTips');
+    Route::post('send_enquiry', 'UserController@sendEnquiry');
+    Route::get('get_brief_won_expert_forecasts', 'TipController@getWonExpertForecasts');
+    Route::get('get_won_experts_forecasts', 'TipController@getAllWonExpertForecasts');
+    Route::post('join_mailing_list', 'UserController@joinMailingList');
 });
 
 Route::group(['middleware' => 'api'], function ($router) {
     Route::post('login', 'AuthController@login');
-    Route::post('logout', 'AuthController@logout');
     Route::post('register', 'AuthController@register');
     Route::post('confirm_user_email', 'UserController@confirmEmail');
-    // Route::post('refresh', 'AuthController@refresh');
-    // Route::post('me', 'AuthController@me');
 });
 
 // users protected routes
@@ -66,6 +67,8 @@ Route::group(['middleware' => 'jwt.auth',  'prefix' => 'auth'], function($router
     Route::get('get_feedback_parent/{id}', 'UserController@getFeedbackParent');
     Route::get('get_feedback_thread/{id}', 'UserController@getFeedbackThread');
     Route::get('get_feedback_outbox/{id}', 'UserController@getOutboxMsg');
+    Route::post('reply_feedback', 'UserController@replyFeedback');
+    // Route::get('get_opened_subscription_forecasts', 'UserController@getSubscribedForecasts');
 });
 
 
@@ -118,7 +121,6 @@ Route::group(['prefix' => 'auth-admin', 'middleware' => ['assign.guard:admin-api
     Route::post('delete_team/{id}', 'AdminController@deleteTeam');
     Route::post('update_team/{id}', 'AdminController@updateTeam');
     Route::post('create_new_team', 'AdminController@createNewTeam');
-    // Route::post('admin_filter_models', 'AdminController@filterModels');
     Route::get('admin_filter_teams_by_league/{id}', 'AdminController@filterTeamsByLeague');
     Route::get('admin_get_league/{id}', 'AdminController@getLeague');
     Route::post('admin_search_for_teams', 'AdminController@searchForTeams');
@@ -136,7 +138,6 @@ Route::group(['prefix' => 'auth-admin', 'middleware' => ['assign.guard:admin-api
     Route::post('create_daily_tips', 'AdminController@createDailyTips');
     Route::get('get_pgntd_daily_tips', 'AdminController@getPgntdDailyTips');
     Route::get('admin_get_daily_tip_summary/{id}', 'AdminController@getDailyTipSummary');
-    // Route::post('change_daily_tip_status/{id}', 'AdminController@adminChangeDailyTipsStatus');
     Route::post('remove_event_from_daily_tips/{id}', 'AdminController@removeEventFromDailyTips');
     Route::post('admin_delete_daily_tips/{tc}', 'AdminController@deleteDailyTips');
     Route::post('add_tip_to_daily_tips/{tc}', 'AdminController@addToDailyTips');
@@ -192,6 +193,33 @@ Route::group(['prefix' => 'auth-admin', 'middleware' => ['assign.guard:admin-api
     Route::post('admin_delete_outbox_msg/{id}', 'AdminController@adminDelOutboxMsg');
     Route::post('admin_delete_feedback_thread/{id}', 'AdminController@adminDelFeedbackThread');
     Route::post('get_feedback_search_result', 'AdminController@getFeedbackSearchResult');
+    Route::get('all_enquiries', 'AdminController@getPgntdEnquiries');
+    Route::get('get_unread_enquiry_count', 'AdminController@getUnreadEnquiryCount');
+    Route::post('admin_del_enquiry/{id}', 'AdminController@adminDelEnquiry');
+    Route::get('get_enquiry/{id}', 'AdminController@adminGetEnquiry');
+    Route::post('enquiry_was_read/{id}', 'AdminController@adminReadEnquiry');
+    Route::get('check_new_feedback', 'AdminController@newFbkCount');
+    Route::get('check_unread_enquiry', 'AdminController@unreadEnqCount');
+    Route::post('admin_search_for_daily_tips', 'AdminController@searchForDailyTip');
+    Route::post('admin_search_for_experts', 'AdminController@searchForExperts');
+    Route::post('admin_search_for_users', 'AdminController@searchForUsers');
+    Route::post('admin_search_for_expert_forecasts', 'AdminController@searchForExpertForecasts');
+    Route::post('admin_search_for_subscriptions', 'AdminController@searchForSubscription');
+    Route::get('admin_get_all_subscriptions', 'AdminController@getAllSubscriptions');
+    Route::post('admin_search_for_payments', 'AdminController@searchForPayments');
+    Route::post('admin_search_for_earnings', 'AdminController@searchForEarnings');
+    Route::post('update_admin_profile', 'AdminController@updateAdminProfile');
+    Route::post('confirm_current_pswd', 'AdminController@confirmCurrentPassword');
+    Route::post('update_admin_profile_password', 'AdminController@updateAdminProfilePassword');
+    Route::post('update_admin_profile_picture', 'AdminController@updateAdminProfilePicture');
+    Route::get('get_admin_mailing_list', 'AdminController@getMailingList');
+    Route::post('toggle_mailing_list_status/{user}', 'AdminController@toggleMailingListStatus');
+    Route::post('admin_add_to_mailing_list', 'AdminController@adminAddToMailingList');
+    Route::post('delete_user_from_mailing_list/{user}', 'AdminController@delUserFromMailingList');
+    Route::get('admin_check_daily_tips_mailing/{id}', 'AdminController@checkDailyTipMailing');
+    Route::post('mail_daily_tips/{id}', 'AdminController@mailDailyTips');
+    Route::get('get_admin_mailed_tips', 'AdminController@getMailedTips');
+    Route::post('delete_mailed_daily_tip/{id}', 'AdminController@deleteMailedDailyTip');
 });
 
 
@@ -221,6 +249,7 @@ Route::group(['middleware' => ['assign.guard:expert-api', 'jwt.auth'], 'prefix' 
     Route::get('get_expert_subscription/{id}', 'ExpertController@getExpertSubscription');
     Route::get('get_expert_earnings', 'ExpertController@getExpertEarnings');
     Route::get('get_subscriber_subs/{id}', 'ExpertController@getUserOtherSubscriptions');
+    Route::get('get_forecast_performance', 'ExpertController@getExpertForecastPerformance');
 });
 
 

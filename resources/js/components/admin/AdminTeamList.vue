@@ -263,12 +263,10 @@ export default {
         createTeam(){
             this.$validator.validateAll('new').then((isValid) => {
                 if(isValid) {
-                    // console.log(this.newLg)
                     this.isUpdating = true
                     axios.post(this.api + '/auth-admin/create_new_team', {
                         team: this.newTeam
                     }, this.adminHeaders).then((res)=>{
-                        // console.log(res.data)
                         this.isUpdating = false
                         this.newTeam.team = ''
                         this.newTeam.abbrv = ''

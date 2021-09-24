@@ -39,6 +39,11 @@ const userIsLoggedIn = user_loggedin ? true : false
 const redirect = window.localStorage.getItem('redirOnlogin')
 const redirectOnLogin = redirect ? redirect : null
 
+// const bkmk_code = window.localStorage.getItem('bkmkCode')
+// const bkmkCode = bkmk_code ? JSON.parse(bkmk_code) : []
+
+const bkmkCode = JSON.parse(localStorage.getItem('bkmkCode')) || []
+
 
 export const store = new Vuex.Store({
     state: {
@@ -75,7 +80,10 @@ export const store = new Vuex.Store({
         userProfileUpdated: false,
         adminUpdatedTip: false,
         feedbackPosted: false,
-        adminDeleteFeedbackThread: false
+        adminDeleteFeedbackThread: false,
+        adminDeleteEnquiry: false,
+        adminProfileUpdated: false,
+        bkmkCode: bkmkCode,
     },
     getters: {
         isBusy(state)
@@ -213,7 +221,19 @@ export const store = new Vuex.Store({
         adminDeleteFeedbackThread(state)
         {
             return state.adminDeleteFeedbackThread
-        }
+        },
+        adminDeleteEnquiry(state)
+        {
+            return state.adminDeleteEnquiry
+        },
+        adminProfileUpdated(state)
+        {
+            return state.adminProfileUpdated
+        },
+        bookmakersCode(state)
+        {
+            return state.bkmkCode
+        },
     },
     actions: {},
     mutations: {
@@ -260,6 +280,7 @@ export const store = new Vuex.Store({
             state.adminUpdatedTip = false
             state.feedbackPosted = false
             state.adminDeleteFeedbackThread = false
+            state.adminDeleteEnquiry = false
         },
         adminUserDeleted(state)
         {
@@ -449,10 +470,6 @@ export const store = new Vuex.Store({
         {
             state.newUserCreated = true
         },
-        // userProfileUpdated(state)
-        // {
-        //     state.userProfileUpdated = true
-        // },
         updatedUserProfile(state, payload)
         {
             state.authUser.first_name = payload.first_name
@@ -478,6 +495,31 @@ export const store = new Vuex.Store({
         adminDeletedfeedbackThread(state, payload)
         {
             state.adminDeleteFeedbackThread = true
-        }
+        },
+        adminDeleteEnquiry(state, payload)
+        {
+            state.adminDeleteEnquiry = true
+        },
+        updatedAdminProfile(state, payload)
+        {
+            state.authAdmin.first_name = payload.first_name
+            state.authAdmin.last_name = payload.last_name
+            state.authAdmin.phone = payload.phone
+            state.authAdmin.fullname = payload.first_name + ' '+ payload.last_name
+            window.localStorage.setItem('authAdmin', JSON.stringify(state.authAdmin))
+        },
+        adminProfilePicUpdated(state, payload)
+        {
+            state.authAdmin = Object.assign({}, payload.user, {token: payload.token})
+            window.localStorage.setItem('authAdmin', JSON.stringify(state.authAdmin))
+            state.adminProfileUpdated = true
+        },
+        addBookmakersCode(state, payload)
+        {
+            let code = JSON.parse(localStorage.getItem('bkmkCode'))
+            state.bkmkCode = code
+            // state.bkmkCode.push(payload)
+            // localStorage.setItem('bkmkCode', JSON.stringify(state.bkmkCode))
+        },
     },
 })

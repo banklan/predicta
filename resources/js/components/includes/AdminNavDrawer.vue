@@ -24,6 +24,12 @@
                     <v-list-item-title v-text="link.title" class="body-2">
                     </v-list-item-title>
                 </v-list-item>
+                <v-list-item  @click="logout">
+                    <v-list-item-icon>
+                        <v-icon @click="logout">logout</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title class="body-2">Logout</v-list-item-title>
+                </v-list-item>
             </v-list-item-group>
         </v-list>
     </v-navigation-drawer>
@@ -35,36 +41,55 @@ export default {
         return{
             item: 0,
             items: [
-                {title: "Admins", path: "/admin/super-users", icon:"mdi-account-circle"},
-                {title: "Daily Tips", path: "/admin/daily-tips", icon:"storage"},
-                {title: "Experts", path: "/admin/experts", icon:"mdi-account"},
+                {title: "Admins", path: "/admin/super-users", icon:"supervisor_account"},
+                {title: "Daily Tips", path: "/admin/daily-tips", icon:"today"},
+                {title: "Experts", path: "/admin/experts", icon:"mdi-account-circle"},
                 {title: "Users", path: "/admin/users", icon: "mdi-account"},
-                {title: "Forecasts", path: "/admin/forecasts-by-experts", icon: "mdi-account"},
-                {title: "Subscriptions", path: "/admin/subscriptions", icon: "mdi-account"},
-                {title: "Countries", path: "/admin/countries", icon: "navigation"},
-                {title: "Banks", path: "/admin/banks", icon: "navigation"},
-                {title: "Leagues", path: "/admin/leagues", icon: "comments"},
-                {title: "League Teams", path: "/admin/teams", icon: "storage"},
-                {title: "National Teams", path: "/admin/national-teams", icon: "storage"},
-                {title: "Bookmakers", path: "/admin/bookmakers", icon: "navigation"},
-                {title: "Markets", path: "/admin/markets", icon: "navigation"},
-                {title: "Plans", path: "/admin/plans", icon: "navigation"},
-                {title: "Payments", path: "/admin/payments", icon: "navigation"},
-                {title: "Earnings", path: "/admin/earnings", icon: "navigation"},
-                {title: "Feedbacks", path: "/admin/feedbacks", icon: "navigation"},
+                {title: "Forecasts", path: "/admin/forecasts-by-experts", icon: "view_list"},
+                {title: "Subscriptions", path: "/admin/subscriptions", icon: "receipt"},
+                {title: "Countries", path: "/admin/countries", icon: "flag"},
+                {title: "Banks", path: "/admin/banks", icon: "account_balance"},
+                {title: "Leagues", path: "/admin/leagues", icon: "sports_soccer"},
+                {title: "League Teams", path: "/admin/teams", icon: "sports_soccer"},
+                {title: "National Teams", path: "/admin/national-teams", icon: "flag"},
+                {title: "Bookmakers", path: "/admin/bookmakers", icon: "store"},
+                {title: "Markets", path: "/admin/markets", icon: "toc"},
+                {title: "Plans", path: "/admin/plans", icon: "category"},
+                {title: "Payments", path: "/admin/payments", icon: "credit_card"},
+                {title: "Earnings", path: "/admin/earnings", icon: "account_balance_wallet"},
+                {title: "Feedbacks", path: "/admin/feedbacks", icon: "feedback"},
                 {title: "Enquiries", path: "/admin/enquiries", icon: "email"},
-                {title: "PasswordResets", path: "/admin/reset-logs", icon: "lock"},
+                {title: "Mailing List", path: "/admin/mailing-list", icon: "email"},
+                {title: "Mailed Daily Tips", path: "/admin/mailed-daily-tips", icon: "email"},
+                {title: "Profile", path: "/admin/profile", icon: "lock"},
+                // {title: "Logout", path: "/admin/profile", icon: "exit"},
             ],
             mini: true
         }
     },
     computed:{
+        api(){
+            return this.$store.getters.api
+        },
         authAdmin(){
             return this.$store.getters.authAdmin
-        }
+        },
+        adminHeaders(){
+            let headers = {
+                headers: {
+                    "Authorization": `Bearer ${this.authAdmin.token}`
+                }
+            }
+            return headers
+        },
     },
     methods: {
-
+        logout(){
+            axios.post(this.api + `/auth-admin/logout`, {}, this.adminHeaders).then(() => {
+                this.$store.commit('logOutAdmin')
+                this.$router.push('/')
+            })
+        }
     },
     mounted() {
 

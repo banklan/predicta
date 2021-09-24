@@ -11,39 +11,43 @@
         <v-row justify="center">
             <v-col cols="12" md="7">
                 <v-progress-circular indeterminate color="primary" :width="5" :size="50" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
-                <v-card v-else light raised elevation="8" min-height="100" class="mt-5 scroll">
-                    <v-card-text>
-                        <template v-if="subscription">
-                            <table class="table table-condensed table-hover table-striped sub_table">
-                                <thead>
-                                    <tr>
-                                        <th style="border-top: none">Forecast ID</th>
-                                        <th style="border-top: none">Total Odd</th>
-                                        <th style="border-top: none">No of Events</th>
-                                        <th style="border-top: none">Bet9ja</th>
-                                        <th style="border-top: none">BetKing</th>
-                                        <th style="border-top: none">Merrybet</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="event in subscription.events" :key="event.id" @click="showEvent(event)">
-                                        <td class="primary--text">{{ event.forecast_id }}</td>
-                                        <td>{{ event.total_odds | formatOdds }}</td>
-                                        <td>{{ event.event_count }}</td>
-                                        <td>{{ event.bet9ja }}</td>
-                                        <td>{{ event.betking }}</td>
-                                        <td>{{ event.merrybet }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </template>
-                        <template v-else>
-                            <v-alert type="info" border="left" class="mt-5">
-                                The subscriptions you are trying to view is invalid.
-                            </v-alert>
-                        </template>
-                    </v-card-text>
-                </v-card>
+                <template v-else>
+                    <v-card light raised elevation="8" min-height="100" class="mt-5 scroll">
+                        <v-card-title class="justify-center subtitle-1 primary white--text">Forecasts </v-card-title>
+                        <v-card-text>
+                            <template v-if="subscription">
+                                <template v-if="subscription.expiry_status !== 'Expired'">
+                                    <table class="table table-condensed table-hover table-striped sub_table">
+                                        <thead>
+                                            <tr>
+                                                <th style="border-top: none">Forecast ID</th>
+                                                <th style="border-top: none">Total Odd</th>
+                                                <th style="border-top: none">No of Events</th>
+                                                <th style="border-top: none">Published</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="event in subscription.events" :key="event.id" @click="showEvent(event)">
+                                                <td class="primary--text">{{ event.forecast_id }}</td>
+                                                <td>{{ event.total_odds | formatOdds }}</td>
+                                                <td>{{ event.event_count }}</td>
+                                                <td>{{ event.created_at | moment('DD/MM/YY') }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </template>
+                                <template v-else>
+                                    <div class="mt-5">This subscription has expired.</div>
+                                </template>
+                            </template>
+                            <template v-else>
+                                <v-alert type="info" border="left" class="mt-5">
+                                    The subscriptions you are trying to view is invalid.
+                                </v-alert>
+                            </template>
+                        </v-card-text>
+                    </v-card>
+                </template>
             </v-col>
             <v-col cols="12" md="4">
                 <v-card light raised elevation="8" min-height="100" class="mt-5">
@@ -64,12 +68,16 @@
                                     <th>Odd Cat:</th>
                                     <td>{{ subscription.odd_cat }}</td>
                                 </tr>
+                                <tr v-if="subscription.events">
+                                    <th>Available Forecasts:</th>
+                                    <td>{{ subscription.events.length }}</td>
+                                </tr>
                                 <tr>
-                                    <th>Amount(&#8358;):</th>
+                                    <th>Price(&#8358;):</th>
                                     <td>{{ subscription.amount / 100 | price }}</td>
                                 </tr>
                                 <tr>
-                                    <th>To Expire:</th>
+                                    <th>Expiry Date:</th>
                                     <td>{{ subscription.expiry | moment('DD/MM/YYYY - HH:mma') }}</td>
                                 </tr>
                                 <tr>
@@ -132,9 +140,8 @@ export default {
             })
         },
         showEvent(event){
-            // console.log(event)
             this.$router.push({name: 'SubscriptionTipView', params:{sub_id: this.$route.params.sub_id, pred_id: event.forecast_id}})
-        }
+        },
     },
     created() {
         this.getSubscription()

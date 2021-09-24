@@ -1,20 +1,26 @@
 <template>
     <v-container>
-        <v-row class="mt-4">
-            <v-col cols="8" md="8">
-                <div class="title justify-center">Super Users</div>
+        <admin-top-panel title="Super Users" />
+        <v-row justify="center">
+            <v-col cols="12" md="5">
+                <v-text-field placeholder="Search for Super User" v-model="q" outlined dense append-icon="search" clearable @keypress.enter="filter"></v-text-field>
             </v-col>
-            <v-col cols="4" md="4">
-                <v-btn dark color="primary" :to="{name: 'AdminCreateSuperUser'}"><v-icon left>add</v-icon>New User</v-btn>
+            <v-col cols="12" md="4" offset-md="2">
+                <v-btn dark color="primary" :to="{name: 'AdminCreateSuperUser'}"><v-icon left>add</v-icon>New Admin</v-btn>
             </v-col>
         </v-row>
-        <v-row class="mt-4 ml-n10">
+        <v-row v-if="filterView" justify="center" class="mt-n5">
+            <v-col cols="12">
+                <div class="text-center subtitle-1">Search for <strong>{{ q }}</strong> returns {{ filtered.length }} admin users.</div>
+            </v-col>
+        </v-row>
+        <v-row class="mt-2 ml-n10">
             <v-col cols="12" md="10">
                 <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
-                <v-card v-else light raised elevation="8" min-height="200">
+                <v-card v-else light raised elevation="8" min-height="150">
                     <v-card-title class="sub_title primary white--text justify-center">Super Users</v-card-title>
                     <v-card-text>
-                        <v-simple-table light fixed-header height="400">
+                        <v-simple-table light fixed-header height="300" v-if="!filterView">
                             <template v-slot:default>
                                 <thead>
                                     <tr>
@@ -83,7 +89,10 @@ export default {
             isDeleting: false,
             adminDeleted: false,
             adminDeleteFailed: false,
-            isToggling: false
+            isToggling: false,
+            filterView: false,
+            q: '',
+            filtered: []
         }
     },
     beforeRouteLeave (to, from, next) {
@@ -158,6 +167,12 @@ export default {
                 this.confirmDelDial = false
                 this.adminDeleteFailed = true
             })
+        },
+        filter(){
+            this.filterView = true
+            let query = this.q.toLowerCase()
+            let rez = this.admins.filter((el) => el.first_name.toLowerCase().includes(query) || el.last_name.toLowerCase().includes(query) || el.email.toLowerCase().includes(query))
+            this.filtered = rez
         }
     },
     created(){

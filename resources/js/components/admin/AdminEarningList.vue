@@ -1,7 +1,12 @@
 <template>
     <v-container>
         <admin-top-panel title="Earnings" />
-        <v-row class="mt-4 ml-n10">
+        <v-row justify="end">
+            <v-col cols="12" md="6">
+                <admin-search model="Earning" searchFor="earnings"/>
+            </v-col>
+        </v-row>
+        <v-row class="mt-n4 ml-n10">
             <v-col cols="12" md="10">
                 <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
                 <v-card v-else light raised elevation="8" min-height="200">

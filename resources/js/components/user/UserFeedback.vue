@@ -10,7 +10,7 @@
                 <v-progress-circular indeterminate color="primary" :width="5" :size="50" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
                 <v-card v-else light elevation="8" raised class="mt-5">
                     <v-tabs v-model="tab" grow background-color="primary--text" light>
-                        <v-tab>Inbox</v-tab>
+                        <v-tab>Inbox <span v-if="unread > 0" class="ml-2"><v-chip color="primary lighten-2">{{ unread }}</v-chip></span></v-tab>
                         <v-tab>Outbox</v-tab>
                         <v-tab>New Feedback</v-tab>
                     </v-tabs>
@@ -44,6 +44,17 @@
                                         </v-alert>
                                     </template>
                                 </v-card-text>
+                                <v-card-actions class="my-5" v-if="inboxTotal > 0">
+                                    <span class="pl-4">
+                                        <v-btn color="primary" @click.prevent="getInboxMsgs(pagination.first_link)" :disabled="!pagination.prev_link">&lt;&lt;</v-btn>
+                                        <v-btn color="primary" @click.prevent="getInboxMsgs(pagination.prev_link)" :disabled="!pagination.prev_link">&lt;</v-btn>
+                                        <v-btn color="primary" @click.prevent="getInboxMsgs(pagination.next_link)" :disabled="!pagination.next_link">&gt;</v-btn>
+                                        <v-btn color="primary" @click.prevent="getInboxMsgs(pagination.last_link)" :disabled="!pagination.next_link">&gt;&gt;</v-btn>
+                                    </span>
+                                    <span class="pl-8">
+                                        Page: {{ pagination.current_page }} of {{ pagination.last_page }}
+                                    </span>
+                                </v-card-actions>
                             </v-card>
                         </v-tab-item>
                         <v-tab-item>
@@ -71,6 +82,17 @@
                                         <v-alert type="info" class="mt-5">You currently have no messages in your outbox.</v-alert>
                                     </template>
                                 </v-card-text>
+                                <v-card-actions class="my-5" v-if="outbox.length > 0">
+                                    <span class="pl-4">
+                                        <v-btn color="primary" @click.prevent="getOutboxMsgs(pagination.first_link)" :disabled="!pagination.prev_link">&lt;&lt;</v-btn>
+                                        <v-btn color="primary" @click.prevent="getOutboxMsgs(pagination.prev_link)" :disabled="!pagination.prev_link">&lt;</v-btn>
+                                        <v-btn color="primary" @click.prevent="getOutboxMsgs(pagination.next_link)" :disabled="!pagination.next_link">&gt;</v-btn>
+                                        <v-btn color="primary" @click.prevent="getOutboxMsgs(pagination.last_link)" :disabled="!pagination.next_link">&gt;&gt;</v-btn>
+                                    </span>
+                                    <span class="pl-8">
+                                        Page: {{ pagination.current_page }} of {{ pagination.last_page }}
+                                    </span>
+                                </v-card-actions>
                             </v-card>
                         </v-tab-item>
                         <v-tab-item>
@@ -87,7 +109,7 @@
                 <v-card-title class="subtitle-1 justify-center pt-4 primary white--text">Do you want to delete this message?</v-card-title>
                 <v-card-actions class="mt-8 pb-8 justify-space-around">
                     <v-btn text color="red darken--2" @click="confirmDelInboxDial = false" width="40%">Cancel</v-btn>
-                    <v-btn dark color="primary" :loading="isUpdating" @click="delInboxMsg" width="40%">Yes, Delete</span></v-btn>
+                    <v-btn dark color="primary" :loading="isUpdating" @click="delInboxMsg" width="40%">Yes, Delete</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -96,7 +118,7 @@
                 <v-card-title class="subtitle-1 justify-center pt-4 primary white--text">Do you want to delete this message?</v-card-title>
                 <v-card-actions class="mt-8 pb-8 justify-space-around">
                     <v-btn text color="red darken--2" @click="confirmDelOutboxDial = false" width="40%">Cancel</v-btn>
-                    <v-btn dark color="primary" :loading="isUpdating" @click="delOutboxMsg" width="40%">Yes, Delete</span></v-btn>
+                    <v-btn dark color="primary" :loading="isUpdating" @click="delOutboxMsg" width="40%">Yes, Delete</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -115,9 +137,12 @@
 export default {
     data() {
         return {
+            pagination: {},
             isLoading: false,
             tab: null,
             inbox: [],
+            unread: 0,
+            inboxTotal: null,
             outbox: [],
             isUpdating: false,
             outboxToDel: null,
@@ -147,12 +172,21 @@ export default {
         },
     },
     methods: {
-        getOutboxMsgs(){
+        getOutboxMsgs(pag){
             this.isLoading = true
-            axios.get(this.api + '/auth/get_users_outbox_messages', this.authHeaders)
+            pag = pag || `${this.api}/auth/get_users_outbox_messages`
+            axios.get(pag, this.authHeaders)
             .then((res) => {
                 this.isLoading = false
-                this.outbox = res.data
+                this.outbox = res.data.data
+                this.pagination = {
+                    current_page: res.data.current_page,
+                    last_page: res.data.last_page,
+                    first_link: res.data.first_page_url,
+                    last_link: res.data.last_page_url,
+                    prev_link: res.data.prev_page_url,
+                    next_link: res.data.next_page_url,
+                }
             })
         },
         confirmDelOutbox(msg, ind){
@@ -174,12 +208,24 @@ export default {
                 this.messageDeleteFailed = true
             })
         },
-        getInboxMsgs(){
+        getInboxMsgs(pag){
             this.isLoading = true
-            axios.get(this.api + '/auth/get_users_inbox_messages', this.authHeaders)
+            pag = pag || `${this.api}/auth/get_users_inbox_messages`
+            axios.get(pag, this.authHeaders)
             .then((res) => {
                 this.isLoading = false
-                this.inbox = res.data
+                this.inbox = res.data.data
+                this.inboxTotal = res.data.total
+                let unread = res.data.data.filter((item) => item.is_read == false)
+                this.unread = unread.length
+                this.pagination = {
+                    current_page: res.data.current_page,
+                    last_page: res.data.last_page,
+                    first_link: res.data.first_page_url,
+                    last_link: res.data.last_page_url,
+                    prev_link: res.data.prev_page_url,
+                    next_link: res.data.next_page_url,
+                }
             })
         },
         confirmDelInbox(msg, ind){

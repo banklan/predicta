@@ -187,9 +187,6 @@ export default {
                 this.outstanding = res.data.outstanding / 100
             })
         },
-        // goToSub(sub){
-        //     this.$router.push({name: 'AdminExpertSubscriptionsDetail', params: {id: sub.expert_id}})
-        // }
     },
     created() {
         this.getExpertDetails()

@@ -137,7 +137,6 @@ export default {
         getTeams(){
             this.isLoading = true
             axios.get(this.api + `/auth-admin/admin_filter_teams_by_league/${this.$route.query.league}`, this.adminHeaders).then((res) => {
-                // console.log(res.data)
                 this.isLoading = false
                 this.teams = res.data
             })

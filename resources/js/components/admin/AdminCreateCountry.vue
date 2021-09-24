@@ -1,6 +1,5 @@
 <template>
     <v-container>
-        <!-- <admin-top-panel title="Create Country"></admin-top-panel> -->
         <v-row justify="space-between">
             <v-col cols="12" md="1">
                 <v-btn rounded color="primary lighten--2" dark elevation="4" left @click.prevent="$router.go(-1)"><v-icon left>arrow_left</v-icon> Back</v-btn>
@@ -116,8 +115,4 @@ export default {
     a, .v-btn{
         text-decoration: none !important;
     }
-
-    /* .v-card .v-card__text{
-        overflow: scroll !important;
-    } */
 </style>

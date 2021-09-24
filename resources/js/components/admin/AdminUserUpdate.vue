@@ -11,7 +11,7 @@
                         <v-text-field label="Phone Number" v-model="user.phone" v-validate="'required'" :error-messages="errors.collect('phone')" name="phone"></v-text-field>
                     </v-card-text>
                     <v-card-actions class="justify-center pb-4">
-                        <v-btn width="40%" text large color="red darken-2" @click.prevent="$router.go(-1)">Cancel</v-btn>
+                        <v-btn width="40%" text large color="red darken-2" :to="{name: 'AdminUserShow', params:{id: user.id} }">Cancel</v-btn>
                         <v-btn width="40%" dark large color="primary" @click="updateUser" :loading="isUpdating">Update</v-btn>
                     </v-card-actions>
                 </v-card>

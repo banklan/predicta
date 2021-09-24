@@ -164,4 +164,8 @@ class Expert extends Authenticatable implements JWTSubject
         }
         return $settled;
     }
+
+    public function bookmaker_codes(){
+        return $this->hasMany('App\BookmakerCode');
+    }
 }

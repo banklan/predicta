@@ -24,7 +24,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="(msg, index) in feedbacks" :key="msg.id" :class="msg.is_read == false ? 'font-weight-bold' : ''">
+                                        <tr v-for="msg in feedbacks" :key="msg.id" :class="msg.is_read == false ? 'font-weight-bold' : ''">
                                             <td @click="viewMsg(msg)">{{ msg.created_at | moment('DD/MM/YY - H:ma')}}</td>
                                             <td @click="viewMsg(msg)">{{ msg.user ? msg.user.fullname : 'Admin' }}</td>
                                             <td @click="viewMsg(msg)">{{ msg.user_id === 9999999 ? 'Outbox' : 'Inbox' }}</td>

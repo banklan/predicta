@@ -10,6 +10,7 @@ use App\DailyTip;
 use App\DailyTipsSummary;
 use App\Expert;
 use App\ExpertPredictionSummary;
+use Carbon\Carbon;
 
 
 class TipController extends Controller
@@ -88,5 +89,19 @@ class TipController extends Controller
         $tips = DailyTip::where('status', 2)->take('30')->get();
 
         return response()->json($tips, 200);
+    }
+
+    public function getWonExpertForecasts(){
+        $fcs = ExpertPredictionSummary::where('prog_status', 2)->take(5)->get();
+
+        return response()->json($fcs, 200);
+    }
+
+    public function getAllWonExpertForecasts(){
+        $start = Carbon::now()->subDays(31);
+        $end = Carbon::now();
+        // $fcs = ExpertPredictionSummary::where('prog_status', 2)->whereBetween('created_at', [$start, $end ])->get();
+        $fcs = ExpertPredictionSummary::where('prog_status', 2)->whereDate('created_at', '>', Carbon::now()->subDays(31))->get();
+        return response()->json($fcs, 200);
     }
 }

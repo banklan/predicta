@@ -9,6 +9,8 @@ class Earning extends Model
 {
     protected $fillable = ['subsription_id', 'total', 'exp_amount', 'admin_amount', 'is_settled'];
 
+    // protected $with = ['subscription'];
+
     protected static function boot(){
         parent::boot();
         static::addGlobalScope('order', function(Builder $builder){

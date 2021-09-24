@@ -56,7 +56,6 @@ export default {
                         password: this.cred.password,
                     }).then((res) => {
                         this.isLoading = false
-                        console.log(res.data)
                         this.authError = false
                         this.$store.commit('userLoginSuccess', res.data)
                         // check if there is redirect on login
@@ -69,7 +68,6 @@ export default {
                     }).catch((err) => {
                         this.isLoading = false
                         this.authError = true
-                        console.log(err.response.status)
                         if(err.response.status === 441){
                             this.errorMsg = 'Error! Invalid credentials.'
                         }else if(err.response.status === 551){

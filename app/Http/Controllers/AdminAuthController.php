@@ -23,7 +23,7 @@ class AdminAuthController extends Controller
 
         if (!$token = auth('admin-api')->attempt($credentials)) {
             //create a table and log in failed attempts, when count is >2, lock user
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Unauthorized'], 441);
         }
 
         if(auth('admin-api')->user()->status == 0){
@@ -37,7 +37,7 @@ class AdminAuthController extends Controller
             ]);
             return $this->respondWithToken($token);
         }
-        return response()->json(['error' => 'Unauthorized'], 401);
+        // return response()->json(['error' => 'Unauthorized'], 401);
     }
 
     protected function respondWithToken($token)

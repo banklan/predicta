@@ -108,7 +108,7 @@
                 <v-card-title class="subtitle-1 justify-center pt-4 primary white--text">Do you want to delete this message?</v-card-title>
                 <v-card-actions class="mt-8 pb-8 justify-space-around">
                     <v-btn text color="red darken--2" @click="confirmDelInboxDial = false" width="40%">Cancel</v-btn>
-                    <v-btn dark color="primary" :loading="isUpdating" @click="delInboxMsg" width="40%">Yes, Delete</span></v-btn>
+                    <v-btn dark color="primary" :loading="isUpdating" @click="delInboxMsg" width="40%">Yes, Delete</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -117,7 +117,7 @@
                 <v-card-title class="subtitle-1 justify-center pt-4 primary white--text">Do you want to delete this outbox message?</v-card-title>
                 <v-card-actions class="mt-8 pb-8 justify-center">
                     <v-btn text color="red darken--2" @click="confirmDelOutboxDial = false" width="40%">Cancel</v-btn>
-                    <v-btn dark color="primary" :loading="isUpdating" @click="delOutboxMsg" width="40%">Yes, Delete</span></v-btn>
+                    <v-btn dark color="primary" :loading="isUpdating" @click="delOutboxMsg" width="40%">Yes, Delete</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>

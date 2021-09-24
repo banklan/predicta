@@ -203,7 +203,6 @@ export default {
                         let mkt = this.markets.find((item) => item.id === this.mktToUpdt.id)
                         mkt.tip = res.data.tip
                         mkt.abbrv = res.data.abbrv
-                        // console.log(res.data)
                     }).catch((err)=>{
                         this.isUpdating = false
                         this.updateFailed = true
@@ -247,7 +246,6 @@ export default {
             this.isBusy = true
             axios.post(this.api + `/auth-admin/delete_market/${this.mktTodel.id}`, {}, this.adminHeaders)
             .then((res) => {
-                // console.log(res.data)
                 this.isBusy = false
                 this.confirmDelDial = false
                 this.delSuccess = true

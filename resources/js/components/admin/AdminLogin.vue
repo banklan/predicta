@@ -11,11 +11,11 @@
                     <v-card-actions class="justify-center px-5">
                         <v-btn color="primary" large block @click.prevent="login" :loading="isLoading">Login</v-btn>
                     </v-card-actions>
-                    <template v-if="authError">
-                        <div class="error white--text pa-4 mx-3 mb-5">
-                            Error! Invalid credentials
+                    <div v-if="authError" class="pb-5">
+                        <div class="error white--text pa-4 mx-3">
+                            {{ errorMsg }}
                         </div>
-                    </template>
+                    </div>
                 </v-card>
             </v-col>
         </v-row>
@@ -31,7 +31,8 @@ export default {
                 password: ''
             },
             isLoading: false,
-            authError: false
+            authError: false,
+            errorMsg: ''
         }
     },
     computed: {
@@ -45,7 +46,6 @@ export default {
     methods: {
         login(){
             this.isLoading = true
-            // console.log(this.api)
             axios.post(this.api + '/auth-admin/login', this.cred)
             .then((res) => {
                 this.isLoading = false
@@ -55,6 +55,14 @@ export default {
             }).catch((err) => {
                 this.isLoading = false
                 this.authError = true
+                console.log(err.response.status)
+                if(err.response.status === 441){
+                    this.errorMsg = 'Error! Invalid login credentials.'
+                }else if(err.response.status === 501){
+                    this.errorMsg = 'You cannot login into your account now. Kindly contact the admin.'
+                }else{
+                    this.errorMsg = 'Error! Invalid login credentials.'
+                }
             })
         }
     }

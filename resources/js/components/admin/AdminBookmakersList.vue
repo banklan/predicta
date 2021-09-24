@@ -1,5 +1,6 @@
 <template>
     <v-container>
+        <admin-top-panel title="Bookmakers" />
         <v-row class="mt-4">
             <v-col cols="4" md="4" offset-md=8>
                 <v-btn dark color="primary" @click="addNewDial = true"><v-icon left>add</v-icon>New Bookmaker</v-btn>

@@ -2,7 +2,10 @@
    <v-container>
         <admin-top-panel title="Daily Tips" />
         <v-row>
-           <v-col cols="12" md="3" offset-md="9">
+           <v-col cols="12" md="5">
+               <admin-search model="DailyTips" searchFor="daily tips"/>
+           </v-col>
+           <v-col cols="12" md="4" offset-md="3">
                <v-btn small dark color="primary darken-2" :to="{name: 'AdminCreateDailyTips'}"><v-icon left>add</v-icon>New Daily Tip</v-btn>
             </v-col>
         </v-row>
@@ -122,7 +125,6 @@ export default {
                 this.isLoading = false
                 this.dailyTips = res.data.data
                 this.total = res.data.total
-                console.log(this.dailyTips)
                 this.pagination = {
                     current_page: res.data.current_page,
                     last_page: res.data.last_page,
@@ -145,7 +147,6 @@ export default {
             this.isUpdating = true
             axios.post(this.api + `/auth-admin/admin_delete_daily_tip_summary/${this.tipToDel.tip_code}`, {}, this.adminHeaders)
             .then((res) => {
-                console.log(res.data)
                 this.isUpdating = false
                 this.confirmDelDial = false
                 this.dailyTips.splice(this.tipIndexToDel, 1)

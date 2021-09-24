@@ -1,11 +1,17 @@
 import NotFound from './components/NotFound';
 import Welcome from './components/Welcome';
+import AboutUs from './components/AboutUs';
+import ContactUs from './components/ContactUs';
+import FreqAskedQstns from './components/FreqAskedQstns';
+import TermsAndConditions from './components/TermsAndConditions';
+import PrivacyPolicy from './components/PrivacyPolicy';
 import TodaysTips from './components/TodaysTips';
-// import TomorrowsTips from './components/TomorrowsTips';
 import DailyWonTips from './components/WonTips';
 import AllExperts from './components/AllExperts';
 import TipExpertView from './components/TipExpertView';
+import WonExpertsForecasts from './components/WonExpertsForecasts';
 import TipOddView from './components/user/TipOddView';
+import JoinMailingList from './components/JoinMailingList';
 import AdminLogin from './components/admin/AdminLogin';
 import AdminDashboard from './components/admin/AdminDashboard';
 import AdminSuperUsersList from './components/admin/AdminSuperUsersList';
@@ -18,9 +24,10 @@ import AdminCreateExpert from './components/admin/AdminCreateExpert';
 import AdminExpertUpdate from './components/admin/AdminExpertUpdate';
 import AdminExpertForecasts from './components/admin/AdminExpertForecasts';
 import AdminExpertForecast from './components/admin/AdminExpertForecast';
+import AdminSearchExpertRes from './components/admin/AdminSearchExpertRes';
 import AdminSingleExpertEvent from './components/admin/AdminSingleExpertEvent';
 import AdminForecastsByExperts from './components/admin/AdminForecastsByExperts';
-// import AdminForecastsByExpertsShow from './components/admin/AdminForecastsByExpertsShow';
+import AdminSearchForecastsRes from './components/admin/AdminSearchForecastsRes';
 import AdminCountryList from './components/admin/AdminCountryList';
 import AdminCreateCountry from './components/admin/AdminCreateCountry';
 import AdminBanksList from './components/admin/AdminBanksList';
@@ -36,6 +43,7 @@ import AdminCreateDailyTips from './components/admin/AdminCreateDailyTips';
 import AdminDailyTipShow from './components/admin/AdminDailyTipShow';
 import AdminDailyTipUpdate from './components/admin/AdminDailyTipUpdate';
 import AdminDailyTipAddNew from './components/admin/AdminDailyTipAddNew';
+import AdminSearchDailyTipsRes from './components/admin/AdminSearchDailyTipsRes';
 import AdminSubscriptionsList from './components/admin/AdminSubscriptionList';
 import AdminSubscriptionShow from './components/admin/AdminSubscriptionShow';
 import AdminPlanList from './components/admin/AdminPlanList';
@@ -43,15 +51,24 @@ import AdminUsersList from './components/admin/AdminUsersList';
 import AdminUserShow from './components/admin/AdminUserShow';
 import AdminUserUpdate from './components/admin/AdminUserUpdate';
 import AdminCreateUser from './components/admin/AdminCreateUser';
+import AdminSearchUserRes from './components/admin/AdminSearchUserRes';
 import AdminPaymentList from './components/admin/AdminPaymentList';
 import AdminPaymentDetail from './components/admin/AdminPaymentDetail';
+import AdminSearchPaymentRes from './components/admin/AdminSearchPaymentRes';
 import AdminEarningList from './components/admin/AdminEarningList';
 import AdminEarningDetail from './components/admin/AdminEarningDetail';
+import AdminSearchEarningRes from './components/admin/AdminSearchEarningRes';
 import AdminExpertSubscriptionsDetail from './components/admin/AdminExpertSubscriptionsDetail';
+import AdminSearchSubscriptionRes from './components/admin/AdminSearchSubscriptionRes';
 import AdminFeedbacks from './components/admin/AdminFeedbacks';
 import AdminFeedbackInboxShow from './components/admin/AdminFeedbackInboxShow';
 import AdminFeedbackOutboxShow from './components/admin/AdminFeedbackOutboxShow';
 import AdminSearchFeedbackRes from './components/admin/AdminSearchFeedbackRes';
+import AdminEnquiries from './components/admin/AdminEnquiries';
+import AdminEnquiryShow from './components/admin/AdminEnquiryShow';
+import AdminMailingList from './components/admin/AdminMailingList';
+import AdminMailedDailyTips from './components/admin/AdminMailedDailyTips';
+import AdminProfile from './components/admin/AdminProfile';
 import ExpertRegister from './components/expert/ExpertRegister';
 import ExpertLogin from './components/expert/ExpertLogin';
 import ExpertEmailConfirmation from './components/expert/ExpertEmailConfirmation';
@@ -80,11 +97,17 @@ import UserFeedbackOutboxShow from './components/user/UserFeedbackOutboxShow.vue
 export default [
     {path: '*', name: 'NotFound', component: NotFound},
     { path: '/', name: 'Welcome', component: Welcome },
+    { path: '/about-us', name: 'AboutUs', component: AboutUs },
+    { path: '/contact-us', name: 'ContactUs', component: ContactUs },
+    { path: '/faq', name: 'FreqAskedQstns', component: FreqAskedQstns },
+    { path: '/terms-conditions', name: 'TermsAndConditions', component: TermsAndConditions },
+    { path: '/privacy-policy', name: 'PrivacyPolicy', component: PrivacyPolicy },
     { path: '/todays-tips', name: 'TodaysTips', component: TodaysTips },
-    // { path: '/tomorrows-tips', name: 'TomorrowsTips', component: TomorrowsTips },
+    { path: '/join-mailing-list', name: 'JoinMailingList', component: JoinMailingList },
     { path: '/won-tips', name: 'DailyWonTips', component: DailyWonTips },
     { path: '/tip-experts', name: 'AllTipExperts', component: AllExperts },
     { path: '/tip-expert/:id', name: 'TipExpertView', component: TipExpertView },
+    { path: '/won-experts-forecasts', name: 'WonExpertsForecasts', component: WonExpertsForecasts },
     {
         path: '/tip-detail/:odd/:expert', name: 'TipOddView', component: TipOddView,
         meta: {
@@ -216,6 +239,12 @@ export default [
         }
     },
     {
+        path: '/admin/experts/search', name: 'AdminSearchExpertRes', component: AdminSearchExpertRes, props: true,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
         path: '/admin/forecast/event/:fc', name: 'AdminSingleExpertEvent', component: AdminSingleExpertEvent,
         meta: {
             requireAdminsAuth: true
@@ -229,6 +258,12 @@ export default [
     },
     {
         path: '/admin/forecasts-by-experts/:fc', name: 'AdminForecastsByExpertsShow', component: AdminExpertForecast,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
+        path: '/admin/forecasts-by-expert/search', name: 'AdminSearchForecastsRes', component: AdminSearchForecastsRes, props: true,
         meta: {
             requireAdminsAuth: true
         }
@@ -324,7 +359,19 @@ export default [
         }
     },
     {
+        path: '/admin/daily-tip/search', name: 'AdminSearchDailyTipsRes', component: AdminSearchDailyTipsRes, props: true,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
         path: '/admin/subscriptions', name: 'AdminSubscriptionsList', component: AdminSubscriptionsList,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
+        path: '/admin/subscription/search', name: 'AdminSearchSubscriptionRes', component: AdminSearchSubscriptionRes, props: true,
         meta: {
             requireAdminsAuth: true
         }
@@ -335,6 +382,7 @@ export default [
             requireAdminsAuth: true
         }
     },
+
     {
         path: '/admin/plans', name: 'AdminPlanList', component: AdminPlanList,
         meta: {
@@ -366,7 +414,19 @@ export default [
         }
     },
     {
+        path: '/admin/users/search', name: 'AdminSearchUserRes', component: AdminSearchUserRes, props: true,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
         path: '/admin/payments', name: 'AdminPaymentList', component: AdminPaymentList,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
+        path: '/admin/payments/search', name: 'AdminSearchPaymentRes', component: AdminSearchPaymentRes, props: true,
         meta: {
             requireAdminsAuth: true
         }
@@ -379,6 +439,12 @@ export default [
     },
     {
         path: '/admin/earnings', name: 'AdminEarningList', component: AdminEarningList,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
+        path: '/admin/earnings/search', name: 'AdminSearchEarningRes', component: AdminSearchEarningRes, props: true,
         meta: {
             requireAdminsAuth: true
         }
@@ -419,12 +485,36 @@ export default [
             requireAdminsAuth: true
         }
     },
-    // {
-    //     path: '/admin/national-teams', name: 'AdminNationalTeams', component: AdminNationalTeams,
-    //     meta: {
-    //         requireAdminsAuth: true
-    //     }
-    // },
+    {
+        path: '/admin/enquiries', name: 'AdminEnquiries', component: AdminEnquiries,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
+        path: '/admin/enquiry/:id', name: 'AdminEnquiryShow', component: AdminEnquiryShow,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
+        path: '/admin/mailing-list', name: 'AdminMailingList', component: AdminMailingList,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
+        path: '/admin/mailed-daily-tips', name: 'AdminMailedDailyTips', component: AdminMailedDailyTips,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
+        path: '/admin/profile', name: 'AdminProfile', component: AdminProfile,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
     {
         path: '/expert-register', name: 'ExpertRegister', component: ExpertRegister,
     },
@@ -482,10 +572,4 @@ export default [
             requireExpertAuth: true
         }
     },
-    // {
-    //     path: '/expert/update-bank-details', name: 'ExpertUpdateBankDetails', component: ExpertUpdateBankDetails,
-    //     meta: {
-    //         requireExpertAuth: true
-    //     }
-    // },
 ]

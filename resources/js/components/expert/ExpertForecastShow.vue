@@ -15,7 +15,7 @@
                     <v-card raised elevation="10" min-height="300">
                         <v-card-title class="sub_title primary white--text justify-center">Forecast Details</v-card-title>
                         <v-card-text class="mt-5">
-                            <table class="table table-condensed table-hover">
+                            <table class="table table-condensed table-hover" v-if="summary">
                                 <thead></thead>
                                 <tbody>
                                     <tr>
@@ -40,18 +40,12 @@
                                         <td v-if="summary.progress == '1'" ><v-icon color="green darken-1">mdi-check-all</v-icon> </td>
                                         <td v-if="summary.progress == '2'"><v-icon color="orange darken-2">mdi-minus</v-icon> </td>
                                     </tr>
-                                    <tr v-if="summary.bet9ja">
-                                        <th>Bet9ja</th>
-                                        <td>{{ summary.bet9ja }}</td>
-                                    </tr>
-                                    <tr v-if="summary.betking">
-                                        <th>BetKing</th>
-                                        <td>{{ summary.betking }}</td>
-                                    </tr>
-                                    <tr v-if="summary.merrybet">
-                                        <th>Merrybet</th>
-                                        <td>{{ summary.merrybet }}</td>
-                                    </tr>
+                                    <template v-if="bookmakers.length > 0">
+                                        <tr v-for="bkm in bookmakers" :key="bkm.id">
+                                            <th>{{ bkm.bookmaker.name }}</th>
+                                            <td>{{ bkm.bookmaker_code }}</td>
+                                        </tr>
+                                    </template>
                                     <tr>
                                         <th>Published:</th>
                                         <td>{{ summary.created_at | moment("DD/MM/YY") }}</td>
@@ -62,12 +56,6 @@
                                     </tr>
                                 </tbody>
                             </table>
-                        </v-card-text>
-                    </v-card>
-                    <v-card raised elevation="10" min-height="200">
-                        <v-card-title class="primary white--text sub_title justify-center mt-5">Subscribers</v-card-title>
-                        <v-card-text>
-
                         </v-card-text>
                     </v-card>
                 </template>
@@ -105,7 +93,8 @@ export default {
             isLoading: false,
             summary: null,
             forecasts: [],
-            totalOdds: 0
+            totalOdds: 0,
+            bookmakers: []
         }
     },
     computed:{
@@ -134,6 +123,7 @@ export default {
                 let odds = res.data.total_odds
                 let total_odds = parseFloat(odds / 100).toFixed(2)
                 this.totalOdds = total_odds
+                this.bookmakers = res.data.bookmaker_code
                 console.log(res.data)
             })
         },
@@ -143,7 +133,6 @@ export default {
             .then((res) => {
                 this.isLoading = false
                 this.forecasts = res.data
-                console.log(res.data)
             })
         }
     },

@@ -54,40 +54,6 @@
                                 </tbody>
                             </template>
                         </v-simple-table>
-                        <!-- <table class="table table-condensed table-striped table-hover">
-                            <tr>
-                                <th width="40%">First Name:</th>
-                                <td>{{ user.first_name }}</td>
-                            </tr>
-                            <tr>
-                                <th>Last Name:</th>
-                                <td>{{ user.last_name }}</td>
-                            </tr>
-                            <tr>
-                                <th>Email Address:</th>
-                                <td>{{ user.email }}</td>
-                            </tr>
-                            <tr>
-                                <th>Role:</th>
-                                <td>{{ user.admin_role }}</td>
-                            </tr>
-                            <tr>
-                                <th>Status:</th>
-                                <td>{{ user.admin_status }}</td>
-                            </tr>
-                            <tr>
-                                <th>Phone Number:</th>
-                                <td>{{ user.phone }}</td>
-                            </tr>
-                            <tr>
-                                <th>Created:</th>
-                                <td> {{ user.created }}</td>
-                            </tr>
-                            <tr>
-                                <th>Updated:</th>
-                                <td> {{ user.updated_at }}</td>
-                            </tr>
-                        </table> -->
                     </v-card-text>
                     <v-card-actions class="justify-space-around pb-8">
                         <v-btn dark small text color="blue darken-2" @click="statusDialog = true">{{ user.status == 1 ? 'Disable' : 'Enable' }}</v-btn>

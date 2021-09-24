@@ -4,7 +4,7 @@
         <v-row justify="center" class="mt-3">
             <v-col cols="12" md="6">
                 <v-card raised flat elevation="6" light min-height="150">
-                    <v-card-title class="justify-center primary white--text sub_title">New Forecast</v-card-title>
+                    <v-card-title class="justify-center primary white--text subtitle-1">New Forecast</v-card-title>
                     <v-card-text class="mt-5">
                         <v-select :items="odds" item-text="odd" item-value="odd" label="Odd Category" v-model="forecastOdd" persistent-hint required @change="setOdd"></v-select>
                         <v-alert type="info">
@@ -54,21 +54,40 @@
                         </template>
                         <template v-else>
                             <div class="pt-5 mb-3">
-                                <div class="sub_title text-center">Bookmaker's codes</div>
-                                <v-text-field label="Bet9ja" v-model="bm_codes.bet9ja"></v-text-field>
-                                <v-text-field label="BetKing" v-model="bm_codes.betking"></v-text-field>
-                                <v-text-field label="Merrybet" v-model="bm_codes.merrybet"></v-text-field>
+                                <v-select :items="bookmakers" item-text="name" return-object label="Select Bookmaker" v-model="bm.bkm" required></v-select>
+                                <v-text-field label="Bookmaker's code" required v-model="bm.code"></v-text-field>
+                                <v-card-actions class="justify-center">
+                                    <v-btn color="primary" dark @click="addBkmCode" :loading="isSaving">Add Code</v-btn>
+                                </v-card-actions>
                             </div>
                         </template>
+                        <div class="" v-if="bookmakersCode.length > 0">
+                            <table class="table table-condensed table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Bookmaker</th>
+                                        <th>Code</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(bk, index) in bookmakersCode" :key="index">
+                                        <td>{{ bk.bkm.name }}</td>
+                                        <td>{{ bk.code }}</td>
+                                        <td><v-btn text color="red darken-2" @click="delBkm(index)"><v-icon>delete_forever</v-icon></v-btn></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </v-card-text>
-                    <v-card-actions v-if="forecasts.length > 0" class="justify-center pb-8">
+                    <v-card-actions v-if="forecasts.length > 0 && bookmakersCode.length > 0" class="justify-center pb-8">
                         <v-btn large width="60%" dark color="primary darken-2" elevation="12" :loading="isSaving" @click="submitPrediction">Submit Prediction</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-col>
             <v-col cols="12" md="6">
                 <v-card raised flat elevation="6" light min-height="200">
-                    <v-card-title class="justify-center primary white--text sub_title">New Forecast</v-card-title>
+                    <v-card-title class="justify-center primary white--text subtitle-1">New Forecast</v-card-title>
                     <v-card-text class="mt-7 px-10">
                         <v-row>
                             <v-col cols="12" md="8">
@@ -77,6 +96,55 @@
                         </v-row>
                         <club-competition-forecast v-if="event.id == 1"/>
                         <intnl-competition-forecast v-else :forecastOdd="forecastOdd" />
+                    </v-card-text>
+                </v-card>
+                <v-card raised flat elevation="6" light min-height="200" class="mt-5">
+                    <v-card-title class="justify-center primary white--text subtitle-1">Important!! Please Note</v-card-title>
+                    <v-card-text class="">
+                        <v-list>
+                            <v-list-item-group class="">
+                                <v-list-item>
+                                    <v-list-item-content>Kindly note that the acca for 3 odds category must not exceed 5 games, while 5 odds and 10 odds must not exceed 6 and 7 games respectively.</v-list-item-content>
+                                </v-list-item>
+                                <v-divider></v-divider>
+                                <v-list-item>
+                                    <v-list-item-content>For every forecast created, experts must provide at least one bookmaker's betting code to ease the placing of the bets by users. </v-list-item-content>
+                                </v-list-item>
+                                <v-divider></v-divider>
+                                <v-list-item>
+                                    <v-list-item-content>For tips on markets not provided, experts are expected to enter the markets personally. However, experts must use a descriptive acronymn to enable users understand.
+                                        Check the list of our example acronymns
+                                    </v-list-item-content>
+                                </v-list-item>
+                                <v-divider></v-divider>
+                                <v-list-item>
+                                    <v-list-item-content>
+                                        Experts can publish as many forecasts as they like daily, however, they are expected to publish at least 5 forecasts in a 7-day(weekly) period.
+                                    </v-list-item-content>
+                                </v-list-item>
+                                <v-divider></v-divider>
+                                <v-list-item>
+                                    <v-list-item-content>
+                                        For predictions to be eligible for ranking, they must be published on or before 10am on match days.
+                                    </v-list-item-content>
+                                </v-list-item>
+                                <v-divider></v-divider>
+                                <v-list-item>
+                                    <v-list-item-content>
+                                        Experts earn 50% of total weekly subscriptions to their forecasts, irrespective of the results.
+                                        Payments are made on Tuesdays and Wednesdays for the previous week's subscriptions.
+                                    </v-list-item-content>
+                                </v-list-item>
+                                <v-divider></v-divider>
+                                <v-list-item>
+                                    <v-list-item-content>
+                                        While ensuring that they publish as many forecasts as they would like, experts must understand that they are rated according to their success rate.
+                                        <strong>The emphasis is on quality and not quantity,</strong> so an expert who published just 5 forecasts in a week and won 4 of them (80% success rate) had performed better
+                                        than one who published 20 forecasts and won 10(50% success rate) even though the latter won more forecasts.
+                                    </v-list-item-content>
+                                </v-list-item>
+                            </v-list-item-group>
+                        </v-list>
                     </v-card-text>
                 </v-card>
             </v-col>
@@ -92,6 +160,10 @@
         <v-snackbar v-model="cantSubmitForecast" :timeout="6000" top color="red darken-1 white--text">
             There was an error while trying to submit your predictions. Your accumulator odds must be equal or greater than the odd category you choose.
             <v-btn text color="white--text" @click="cantSubmitForecast = false">Close</v-btn>
+        </v-snackbar>
+        <v-snackbar v-model="mustIncludeABkCode" :timeout="6000" top color="red darken-1 white--text">
+            There was an error while trying to submit your predictions. You must include at least one bookmaker's betting code to submit your predictions.
+            <v-btn text color="white--text" @click="mustIncludeABkCode = false">Close</v-btn>
         </v-snackbar>
     </v-container>
 </template>
@@ -116,11 +188,11 @@ export default {
             cantSubmitForecast: false,
             showBookmakers: false,
             bookmakers: [],
-            bm_codes: {
-                bet9ja: '',
-                betking: '',
-                merrybet: ''
-            }
+            bm: {
+                code: '',
+                bkm: null
+            },
+            mustIncludeABkCode: false
         }
     },
     computed: {
@@ -147,6 +219,9 @@ export default {
             }
             return headers
         },
+        bookmakersCode(){
+            return this.$store.getters.bookmakersCode
+        }
     },
     methods: {
         getOddTypes(){
@@ -155,35 +230,41 @@ export default {
             })
         },
         setOdd(){
-            // console.log(parseInt(this.forecastOdd))
             this.$store.commit('setForecastOdd', parseInt(this.forecastOdd))
+            let bm = []
+            localStorage.setItem('bkmkCode', JSON.stringify(bm))
         },
         del(index){
             this.$store.commit('removeTip', index)
         },
         submitPrediction(){
             if(this.totalOdds >= this.foreCastOdd){
-                this.isSaving = true
-                let predictions = JSON.parse(localStorage.getItem('forecast'))
-                console.log(this.bm_codes)
-                axios.post(this.api + '/auth-expert/submit_expert_prediction', {
-                    predictions: predictions,
-                    forecastOdd: parseFloat(this.foreCastOdd),
-                    totalOdds: parseFloat(this.totalOdds),
-                    codes: this.bm_codes
-                }, this.expertHeader)
-                .then((res) =>{
-                    this.isSaving = false
-                    console.log(res.data)
-                    this.$store.commit('newForecastCreated')
-                    this.$store.commit('clearForecast')
-                    this.$router.push({name: 'MyForecasts'})
-                }).catch((err) =>{
-                    this.isSaving = false
-                    if(err.response.status === 401){
-                        this.$router.push('/')
-                    }
-                })
+                if(this.bookmakersCode.length > 0){
+                    this.isSaving = true
+                    let predictions = JSON.parse(localStorage.getItem('forecast'))
+                    console.log(this.bm_codes)
+                    axios.post(this.api + '/auth-expert/submit_expert_prediction', {
+                        predictions: predictions,
+                        forecastOdd: parseFloat(this.foreCastOdd),
+                        totalOdds: parseFloat(this.totalOdds),
+                        cds: this.bookmakersCode
+                    }, this.expertHeader)
+                    .then((res) =>{
+                        this.isSaving = false
+                        console.log(res.data)
+                        this.$store.commit('newForecastCreated')
+                        this.$store.commit('clearForecast')
+                        this.$router.push({name: 'MyForecasts'})
+                        localStorage.removeItem('bkmkCode')
+                    }).catch((err) =>{
+                        this.isSaving = false
+                        if(err.response.status === 401){
+                            this.$router.push('/')
+                        }
+                    })
+                }else{
+                    this.mustIncludeABkCode = true
+                }
             }else{
                 this.cantSubmitForecast = true
             }
@@ -193,6 +274,23 @@ export default {
             .then((res) => {
                 this.bookmakers = res.data
             })
+        },
+        addBkmCode(){
+            this.isSaving = true
+            let bcm = JSON.parse(localStorage.getItem('bkmkCode')) || []
+            let itms = bcm.filter((item) => item.bkm.id !== this.bm.bkm.id)
+            itms.unshift(this.bm)
+            localStorage.setItem('bkmkCode', JSON.stringify(itms))
+            this.$store.commit('addBookmakersCode')
+            this.bm.code = ''
+            this.bm.bkm = null
+            this.isSaving = false
+        },
+        delBkm(index){
+            let bcm = JSON.parse(localStorage.getItem('bkmkCode'))
+            bcm.splice(index, 1)
+            localStorage.setItem('bkmkCode', JSON.stringify(bcm))
+            this.$store.commit('addBookmakersCode')
         }
     },
     created(){

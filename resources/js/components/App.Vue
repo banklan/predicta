@@ -18,15 +18,17 @@
         <template v-else>
             <router-view></router-view>
         </template>
+        <Footer />
     </v-app>
 </template>
 
 <script>
 import Navbar from './includes/Navbar'
 import AdminNavDrawer from './includes/AdminNavDrawer'
+import Footer from './includes/Footer'
 export default {
     components: {
-        Navbar, AdminNavDrawer
+        Navbar, AdminNavDrawer, Footer
     },
     data() {
         return {

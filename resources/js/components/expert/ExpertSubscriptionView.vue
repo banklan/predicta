@@ -38,6 +38,14 @@
                                         <th>Status</th>
                                         <td>{{ sub.expiry_status }}</td>
                                     </tr>
+                                    <tr>
+                                        <th>Earning(&#8358;)</th>
+                                        <td v-if="sub.earning">{{ sub.earning.exp_amount / 100 | price }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Payment Status</th>
+                                        <td v-if="sub.earning" :class="sub.earning.is_settled ? 'settled' : 'not_settled'">{{ sub.earning.is_settled ? 'Settled' : 'Not Settled'}}</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </template>
@@ -129,6 +137,7 @@ export default {
                 this.isLoading = false
                 this.sub = res.data
                 let sub = res.data
+                // console.log(res.data)
             })
         },
         getOtherSubs(){
@@ -156,5 +165,13 @@ export default {
     }
     table tbody tr{
         cursor: pointer;
+    }
+    table tbody tr .settled{
+        color:#029002;
+        font-weight: bold;
+    }
+    table tbody tr .not_settled{
+        color: rgb(209, 0, 0);
+        font-weight: bold;
     }
 </style>

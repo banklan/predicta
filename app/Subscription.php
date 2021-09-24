@@ -38,7 +38,7 @@ class Subscription extends Model
         $odd_cat = $this->odd_cat;
         $events = ExpertPredictionSummary::where('expert_id', $expert)
                                             ->where('forecast_odd', $odd_cat)
-                                            // ->where('prog_status', 0)
+                                            ->where('is_available', true)
                                             ->get();
         return $events;
     }
@@ -54,7 +54,7 @@ class Subscription extends Model
     }
 
     public function earning(){
-        return $this->hasMany('App\Earning');
+        return $this->hasOne('App\Earning');
     }
 
     public function payment(){

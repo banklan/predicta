@@ -62,16 +62,6 @@
                                             </tbody>
                                         </table>
                                     </v-card-text>
-                                    <!-- <v-card-text class="d-flex text-center mt-n5">
-                                        <v-row class="justify-center">
-                                            <v-col cols="6">
-                                                <v-select solo dense small label="Change Status" :items="statuses" item-text="status" item-value="id" v-model="updateEvent.newStatus"></v-select>
-                                            </v-col>
-                                            <v-col cols="6">
-                                                <v-btn block dark color="primary rounded darken-2" class="ml-2" @click="changeStatus(fc)" :loading="isBusy">Save</v-btn>
-                                            </v-col>
-                                        </v-row>
-                                    </v-card-text> -->
                                     <v-card-actions class="justify-space-around mt-n3 pb-6">
                                         <v-btn dark color="primary darken-2" width="40%" :to="{name: 'AdminDailyTipUpdate', params: {code:$route.params.code, tip: fc.id}}">Update Event</v-btn>
                                         <v-btn text color="red darken-3" width="40%" @click="confirmRemoveEvent(fc, index)"><v-icon>delete_forever</v-icon>Remove Event</v-btn>
@@ -92,6 +82,7 @@
                     <admin-dailytip-summary :summary="tipSummary" showBtns="true" />
                 </template>
                 <admin-update-dailytip-summary :summary="tipSummary" />
+                <admin-daily-tips-mailing v-if="tipSummary" :summary="tipSummary" />
             </v-col>
         </v-row>
         <v-dialog v-model="removeDial" max-width="480">
@@ -106,14 +97,6 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-        <!-- <v-snackbar v-model="changeStatusFail" :timeout="6000" top color="red darken-1 white--text">
-            There was an error while trying to change event status. Please try again.
-            <v-btn text color="white--text" @click="changeStatusFail = false">Close</v-btn>
-        </v-snackbar>
-        <v-snackbar v-model="statusChanged" :timeout="4000" top color="green darken-1 white--text">
-            Status of event has been changed.
-            <v-btn text color="white--text" @click="statusChanged = false">Close</v-btn>
-        </v-snackbar> -->
         <v-snackbar v-model="eventRemoved" :timeout="4000" top color="green darken-1 white--text">
             An event has been removed from the list.
             <v-btn text color="white--text" @click="eventRemoved = false">Close</v-btn>
@@ -128,7 +111,6 @@
         </v-snackbar>
     </v-container>
 </template>
-
 
 <script>
 export default {
@@ -147,8 +129,6 @@ export default {
                 newStatus: null,
                 isFeatured: null
             },
-            // changeStatusFail: false,
-            // statusChanged: false,
             eventToRemove: null,
             eventToRmvindex: null,
             removeDial: false,
@@ -191,34 +171,12 @@ export default {
                 console.log(res.data)
             })
         },
-        // changeStatus(fc){
-        //     if(this.updateEvent.newStatus == null){
-        //         this.updateEvent.newStatus = fc.status
-        //     }
-        //     this.updateEvent.isFeatured = fc.is_featured
-        //     this.isBusy = true
-        //     axios.post(this.api + `/auth-admin/change_daily_tip_status/${fc.id}`, {
-        //         status: this.updateEvent
-        //     }, this.adminHeaders)
-        //     .then((res) => {
-        //         this.isBusy = false
-        //         let event = this.tips.filter((item)=>item.id == fc.id)
-        //         fc.status = res.data.status
-        //         this.updateEvent.newStatus = null
-        //         this.updateEvent.isFeatured = null
-        //         this.statusChanged = true
-        //     }).catch(() => {
-        //         this.isBusy = false
-        //         this.changeStatusFail = true
-        //     })
-        // },
         confirmRemoveEvent(fc, index){
             this.eventToRemove = fc
             this.eventToRmvindex = index
             this.removeDial = true
         },
         removeEvent(){
-            // console.log()
             this.isUpdating = true
             axios.post(this.api + `/auth-admin/remove_event_from_daily_tips/${this.eventToRemove.id}`, {}, this.adminHeaders)
             .then((res)=>{

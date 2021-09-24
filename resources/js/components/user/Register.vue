@@ -78,14 +78,11 @@ export default {
                         user: this.user
                     }).then((res) => {
                         this.isLoading = false
-                        console.log(res.data)
-                        // this.createError = ''
                         this.userCreated = true
                     }).catch((err) =>{
                         this.isLoading = false
                         if(err.response.status === 422){
                             this.createFail = true
-                            // this.createError = Object.values(err.response.data.errors).flat()
                             this.createError = "The email you are trying to register with is already taken. please try another email."
                         }else{
                             this.createError = 'There was an error while trying to register. Please ensure you are connected to the internet and try again.'

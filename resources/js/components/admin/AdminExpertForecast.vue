@@ -49,7 +49,6 @@
                                                 <td v-if="fc.status == 0"><div class="status nyd"></div></td>
                                                 <td v-if="fc.status == 1"><div class="status lost"></div></td>
                                                 <td v-if="fc.status == 2"><div class="status won"></div></td>
-                                                <!-- <td><v-select label="Change" dense :items="statuses" item-text="status" item-value="id"></v-select></td> -->
                                             </tr>
                                         </tbody>
                                     </table>
@@ -225,7 +224,6 @@ export default {
             this.isUpdating = true
             axios.post(this.api + `/auth-admin/admin_toggle_forecast_availability/${this.$route.params.fc}`, {}, this.adminHeaders)
             .then((res) => {
-                // console.log(res.data)
                 this.isUpdating = false
                 this.toggleAvailDial = false
                 this.availUpdated = true

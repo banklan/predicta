@@ -108,7 +108,7 @@ export default {
             axios.get(this.api + '/auth/get_my_subscriptions', this.authHeaders).then((res)=>{
                 this.isLoading = false
                 this.subscriptions = res.data
-                console.log(res.data)
+                // console.log(res.data)
             })
         },
         goToSub(sub){
@@ -119,7 +119,7 @@ export default {
             axios.get(this.api + '/auth/get_hot_tip_experts', this.authHeaders).then((res) => {
                 this.isLoading = false
                 this.hotExperts = res.data
-                console.log(res.data)
+                // console.log(res.data)
             })
         },
         goToTipExpert(exp){

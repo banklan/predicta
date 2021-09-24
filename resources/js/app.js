@@ -111,6 +111,7 @@ Vue.component('sure-odds', require('./components/children/SureOdds.vue').default
 Vue.component('won-tips', require('./components/children/WonTips.vue').default);
 // Vue.component('tip-bundles', require('./components/children/TipBundles.vue').default);
 Vue.component('top-experts', require('./components/children/TopExpertsBrief.vue').default);
+Vue.component('won-expert-forecasts', require('./components/children/WonExpertForecasts.vue').default);
 Vue.component('expert-navbar', require('./components/includes/ExpertNavbar.vue').default);
 Vue.component('auth-navbar', require('./components/includes/AuthUserNavbar.vue').default);
 Vue.component('expert-top-panel', require('./components/children/ExpertTopPanel.vue').default);
@@ -131,6 +132,8 @@ Vue.component('experts-premium-tips', require('./components/children/ExpertsPrem
 Vue.component('authuser-top-panel', require('./components/children/AuthUserTopPanel.vue').default);
 Vue.component('expert-outstanding-earnings', require('./components/children/AdminExpertOutstandingEarning.vue').default);
 Vue.component('newuser-feedback', require('./components/children/NewUserFeedback.vue').default);
+Vue.component('toggle-mail-user-status', require('./components/children/AdminToggleMailListUserStatus.vue').default);
+Vue.component('admin-daily-tips-mailing', require('./components/children/AdminDailyTipsMailing.vue').default);
 
 const app = new Vue({
     el: '#app',

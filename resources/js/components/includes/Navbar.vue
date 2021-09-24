@@ -72,7 +72,6 @@ export default {
             ],
             adminMenu: [
                 {title: 'Dashboard', path: '/admin'},
-                {title: "Account", path: "/admin/account"},
             ],
             nonAuthMenu: [
                 { title: "Login", path: "/login"},

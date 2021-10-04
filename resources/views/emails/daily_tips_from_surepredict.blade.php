@@ -1,5 +1,5 @@
 @component('mail::message')
-#Daily tips for {{ $tip_summary->published }} from surepredict.com
+#Daily tips for {{ $tip_summary->published }} from tipexpats.com
 
 Dear **{{ $user->f_name }}**,<br/>
 Please find below our daily tips for today, {{ $tip_summary->published }}.

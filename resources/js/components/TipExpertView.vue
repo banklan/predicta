@@ -43,6 +43,10 @@
                             </v-alert>
                         </template>
                     </v-card-text>
+                    <v-card-actions class="justify-center pb-6" v-if="authUser">
+                        <v-btn v-if="!followedExpert" elevation="6" rounded color="primary darken-2" :loading="isAdding" @click="followExpert"><v-icon left>person_add</v-icon>Follow {{ expert.username }}</v-btn>
+                        <v-btn v-else elevation="6" rounded disabled>Following {{ expert.username }}</v-btn>
+                    </v-card-actions>
                 </v-card>
             </v-col>
             <v-col cols="12" md="5">
@@ -52,6 +56,14 @@
                 </template>
             </v-col>
         </v-row>
+        <v-snackbar v-model="followSuccess" :timeout="4000" top color="green darken-1 white--text">
+            You have successfully followed {{ expert ? expert.username : 'the expert' }}.
+            <v-btn text color="white--text" @click="followSuccess = false">Close</v-btn>
+        </v-snackbar>
+        <v-snackbar v-model="followFailed" :timeout="5000" top color="red darken-1 white--text">
+            An error occured! Please try again later.
+            <v-btn text color="white--text" @click="followFailed = false">Close</v-btn>
+        </v-snackbar>
     </v-container>
 </template>
 
@@ -64,11 +76,26 @@ export default {
             opened3: [],
             opened5: [],
             opened10: [],
+            isAdding: false,
+            followedExpert: false,
+            followSuccess: false,
+            followFailed: false
         }
     },
     computed:{
         api(){
             return this.$store.getters.api
+        },
+        authUser(){
+            return this.$store.getters.authUser
+        },
+        authHeaders(){
+            let headers = {
+                headers: {
+                    "Authorization": `Bearer ${this.authUser.token}`
+                }
+            }
+            return headers
         },
     },
     methods: {
@@ -94,10 +121,35 @@ export default {
                 this.openEvents = res.data
             })
         },
+        followExpert(){
+            this.isAdding = true
+            axios.post(this.api + `/auth/follow_expert/${this.$route.params.id}`, {}, this.authHeaders)
+            .then((res) => {
+                this.isAdding = false
+                this.followedExpert = true
+                this.followSuccess = true
+                console.log(res.data)
+            }).catch(() => {
+                this.isAdding = false
+                this.followFailed = true
+            })
+        },
+        checkIfFollowed(){
+            if(this.authUser){
+                axios.get(this.api + `/auth/check_if_followed/${this.$route.params.id}`, this.authHeaders)
+                .then((res) => {
+                    if(res.data.message == true){
+                        this.followedExpert = true
+                    }else{
+                        this.followedExpert = false
+                    }
+                })
+            }
+        }
     },
     created(){
         this.getExperts()
-        // this.getOpenedEvents()
+        this.checkIfFollowed()
     }
 }
 </script>

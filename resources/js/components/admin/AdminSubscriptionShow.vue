@@ -15,7 +15,7 @@
                     <template v-if="subscription">
                         <v-card-title class="subtitle-1 primary white--text justify-center">Subscription </v-card-title>
                         <v-card-text class="subtitle-2 mt-1">
-                            <table class="table table-condensed table-hover">
+                            <table class="table table-hover table-striped">
                                 <thead></thead>
                                 <tbody>
                                     <tr>

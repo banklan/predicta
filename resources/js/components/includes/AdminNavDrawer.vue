@@ -57,6 +57,7 @@ export default {
                 {title: "Plans", path: "/admin/plans", icon: "category"},
                 {title: "Payments", path: "/admin/payments", icon: "credit_card"},
                 {title: "Earnings", path: "/admin/earnings", icon: "account_balance_wallet"},
+                {title: "Follows", path: "/admin/follows", icon: "person_add"},
                 {title: "Feedbacks", path: "/admin/feedbacks", icon: "feedback"},
                 {title: "Enquiries", path: "/admin/enquiries", icon: "email"},
                 {title: "Mailing List", path: "/admin/mailing-list", icon: "email"},

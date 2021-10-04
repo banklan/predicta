@@ -23,11 +23,18 @@ import App from './components/App'
 import Moment from 'vue-moment'
 import './filters'
 
+// import VueCreditCard from '@fracto/vue-credit-card';
+// import VueCreditCard from '@fracto/vue-credit-card';
+// import Flutterwave from 'flutterwave-vue-v3'
+// import Rave from 'vue-ravepayment'
+
 
 Vue.use(VueRouter)
-// Vue.use(axios)
 Vue.use(VeeValidate)
 Vue.use(Moment)
+// Vue.use(VueCreditCard)
+// Vue.use(Flutterwave, { publicKey: 'FLWPUBK-7c356af6b5e9e45798328a1e188909d2-X' })
+// Vue.use(Rave)
 
 const router = new VueRouter({
     routes: Routes,
@@ -50,7 +57,7 @@ router.beforeEach((to, from, next) => {
 router.beforeEach((to, from, next) => {
     const requireExpertAuth = to.matched.some(rec => rec.meta.requireExpertAuth);
     const authExpert = store.state.authExpert
-    // console.log(authAdmin)
+
     if (requireExpertAuth && authExpert == null) {
         next('/expert-login')
     }else if(to.path == '/expert-login' && authExpert){
@@ -109,7 +116,6 @@ axios.interceptors.response.use(null, (err) =>
 Vue.component('tips-route', require('./components/children/TipsRoute.vue').default);
 Vue.component('sure-odds', require('./components/children/SureOdds.vue').default);
 Vue.component('won-tips', require('./components/children/WonTips.vue').default);
-// Vue.component('tip-bundles', require('./components/children/TipBundles.vue').default);
 Vue.component('top-experts', require('./components/children/TopExpertsBrief.vue').default);
 Vue.component('won-expert-forecasts', require('./components/children/WonExpertForecasts.vue').default);
 Vue.component('expert-navbar', require('./components/includes/ExpertNavbar.vue').default);

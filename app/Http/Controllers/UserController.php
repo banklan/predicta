@@ -6,8 +6,13 @@ use Illuminate\Http\Request;
 use App\UserEmailConfirmation;
 use App\User;
 use App\Enquiry;
+use App\Plan;
 use App\Mail\EnquirySent;
 use App\Mail\EnquiryMail;
+use App\Payment;
+use App\Subscription;
+use App\Expert;
+use App\ExpertFollow;
 use Image;
 use App\MailingList;
 use Illuminate\Support\Facades\Hash;
@@ -308,5 +313,51 @@ class UserController extends Controller
         $ml->save();
 
         return response()->json($ml, 200);
+    }
+
+    public function getOddPrice($odd){
+        $plan = Plan::where('odd', $odd)->first();
+
+        return response()->json($plan, 200);
+    }
+
+    public function getSubsrPaymentDetails($sub){
+        $subscr = Subscription::where('sub_id', $sub)->first();
+        $payment = Payment::where('subscription_id', $subscr->id)->first();
+
+        return response()->json($payment, 200);
+    }
+
+    public function followExpert($expert){
+        $expert = Expert::where('expert_id', $expert)->first();
+        $user = auth('api')->user()->id;
+        $follow = ExpertFollow::where('user_id', $user)->where('expert_id', $expert)->first();
+        if($follow){
+            return response()->json(['message' => 'Already followed'], 555);
+        }else{
+            $newFollow = new ExpertFollow;
+            $newFollow->user_id = $user;
+            $newFollow->expert_id = $expert->id;
+            $newFollow->save();
+            return response()->json(['message' => 'Success'], 201);
+        }
+    }
+
+    public function checkFollow($expert){
+        $expert = Expert::where('expert_id', $expert)->first();
+        $user = auth('api')->user()->id;
+
+        $is_followed = ExpertFollow::where('user_id', $user)->where('expert_id', $expert->id)->first();
+        if($is_followed){
+            return response()->json(['message' => true], 200);
+        }else{
+            return response()->json(['message' => false], 200);
+        }
+    }
+
+    public function getFollowedExperts(){
+        $user = auth('api')->user()->id;
+        $follows = ExpertFollow::where('user_id', $user)->get();
+        return response()->json($follows, 200);
     }
 }

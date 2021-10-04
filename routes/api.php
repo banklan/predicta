@@ -68,7 +68,11 @@ Route::group(['middleware' => 'jwt.auth',  'prefix' => 'auth'], function($router
     Route::get('get_feedback_thread/{id}', 'UserController@getFeedbackThread');
     Route::get('get_feedback_outbox/{id}', 'UserController@getOutboxMsg');
     Route::post('reply_feedback', 'UserController@replyFeedback');
-    // Route::get('get_opened_subscription_forecasts', 'UserController@getSubscribedForecasts');
+    Route::get('get_odd_price/{odd}', 'UserController@getOddPrice');
+    Route::get('get_sub_payment_details/{sub}', 'UserController@getSubsrPaymentDetails');
+    Route::post('follow_expert/{expert}', 'UserController@followExpert');
+    Route::get('check_if_followed/{expert}', 'UserController@checkFollow');
+    Route::get('get_followed_experts', 'UserController@getFollowedExperts');
 });
 
 
@@ -220,6 +224,14 @@ Route::group(['prefix' => 'auth-admin', 'middleware' => ['assign.guard:admin-api
     Route::post('mail_daily_tips/{id}', 'AdminController@mailDailyTips');
     Route::get('get_admin_mailed_tips', 'AdminController@getMailedTips');
     Route::post('delete_mailed_daily_tip/{id}', 'AdminController@deleteMailedDailyTip');
+    Route::post('admin_create_bulk_markets', 'AdminController@createBulkMarkets');
+    Route::post('admin_create_bulk_teams', 'AdminController@createBulkTeams');
+    Route::get('get_pgntd_follows', 'AdminController@getPaginatedFollows');
+    Route::get('admin_get_users_follows/{user}', 'AdminController@getUserFollows');
+    Route::get('admin_get_expert_follows/{expert}', 'AdminController@getExpertFollows');
+    Route::post('admin_delete_follow/{follow}', 'AdminController@delFollow');
+    Route::get('admin_get_all_experts', 'AdminController@getAllExperts');
+    Route::get('filter_follows_by_experts/{exp}', 'AdminController@filterFollowsByExpert');
 });
 
 
@@ -250,6 +262,8 @@ Route::group(['middleware' => ['assign.guard:expert-api', 'jwt.auth'], 'prefix' 
     Route::get('get_expert_earnings', 'ExpertController@getExpertEarnings');
     Route::get('get_subscriber_subs/{id}', 'ExpertController@getUserOtherSubscriptions');
     Route::get('get_forecast_performance', 'ExpertController@getExpertForecastPerformance');
+    Route::get('get_expert_followers', 'ExpertController@getExpertFollowers');
+    Route::get('get_all_expert_followers', 'ExpertController@getAllExpertFollowers');
 });
 
 

@@ -45,7 +45,7 @@
                 </v-btn>
             </v-col>
             <v-col cols="6" class="text-center">
-                <div class="body-2 pt-2 white--text">&copy; {{ new Date().getFullYear() }} surepredict.com All rights reserved </div>
+                <div class="body-2 pt-2 white--text">&copy; {{ new Date().getFullYear() }} tipexpats.com All rights reserved </div>
             </v-col>
         </v-row>
     </div>
@@ -56,9 +56,9 @@ export default {
     data(){
         return{
             icons: [
-                {name: 'mdi-facebook', color:'#1877f2', link:'https://www.facebook.com/ejika'},
-                {name: 'mdi-twitter', color: '#1da1f2', link: 'https://www.twitter.com/ejika'},
-                {name: 'mdi-instagram', color: '#c32aa3', link: 'https://www.instagram.com/ejika'}
+                {name: 'mdi-facebook', color:'#1877f2', link:'https://www.facebook.com/tipexpats'},
+                {name: 'mdi-twitter', color: '#1da1f2', link: 'https://www.twitter.com/tipexpats'},
+                {name: 'mdi-instagram', color: '#c32aa3', link: 'https://www.instagram.com/tipexpats'}
             ],
         }
     }
@@ -78,8 +78,6 @@ export default {
             padding: 10px;
 
             p{
-                // text-align: left;
-                // justify-content: center;
                 align-self: center;
                 margin-left: 15px;
                 font-size: 17px;

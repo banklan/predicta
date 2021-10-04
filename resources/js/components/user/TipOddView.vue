@@ -31,7 +31,20 @@
                     </v-card-text>
                     <v-card-actions class="justify-center pb-6 mt-n5">
                         <v-btn v-if="isSubscribed" text large color="primary darken-2" disabled>Already Subscribed</v-btn>
-                        <v-btn v-else text large color="primary darken-2" @click="makePaymentDial = true">Subscribe</v-btn>
+                        <!-- <v-btn v-else text large color="primary darken-2" @click="makePaymentDial = true">Subscribe</v-btn> -->
+                        <!-- <v-btn v-else text large color="primary darken-2" @click="makePayment">Subscribe</v-btn> -->
+                        <!-- <v-btn v-else text large color="primary darken-2" @click="payNow == true">Subscribe</v-btn> -->
+                        <paystack v-else
+                            :amount="amount"
+                            :email="authUser.email"
+                            :paystackkey="pstPkey"
+                            :reference="reference"
+                            :callback="processPayment"
+                            :close="close"
+                        >
+                           <v-icon color="primary darken-2">payments</v-icon> Make Payment
+                        </paystack>
+
                     </v-card-actions>
                 </v-card>
             </v-col>
@@ -98,23 +111,16 @@
                 </v-card>
             </v-col>
         </v-row>
-        <v-dialog v-model="makePaymentDial" max-width="480">
-            <v-card min-height="150">
-                <v-card-title class="subtitle-1 primary white--text justify-center">Make Payment</v-card-title>
-                <v-card-text class="text-center subtitle-1 mt-5">
-                    Make payment before subscribing?
-                </v-card-text>
-                <v-card-actions class="pb-8 justify-center">
-                    <v-btn text color="red darken--2" @click="makePaymentDial = false" width="30%">Cancel</v-btn>
-                    <v-btn dark color="primary" :loading="isBusy" @click="subscribe" width="50%">Make Payment</v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
     </v-container>
 </template>
 
 <script>
+import paystack from 'vue-paystack';
+
 export default {
+    components: {
+        paystack
+    },
     data() {
         return {
             isLoading: false,
@@ -125,7 +131,10 @@ export default {
             makePaymentDial: false,
             isBusy: false,
             isSubscribed: false,
-            subCount: null
+            subCount: null,
+            sub_id: null,
+            amount: 0,
+            payNow: false,
         }
     },
     computed:{
@@ -143,6 +152,20 @@ export default {
             }
             return headers
         },
+        pstPkey(){
+            return this.$store.getters.pstPkey
+        },
+        pstSecKey(){
+            return this.$store.getters.pstSecKey
+        },
+        reference() {
+            let text = "";
+            let possible =
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
+            for (let i = 0; i < 8; i++)
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+            return text;
+        }
     },
     methods: {
         getExperts(){
@@ -163,11 +186,12 @@ export default {
                 this.winnings = res.data
             })
         },
-        subscribe(){
+        subscribe(resp){
             this.isBusy = true
             axios.post(this.api + `/auth/subscribe_to_expert_tips`, {
                 odd: this.$route.params.odd,
-                expert: this.$route.params.expert
+                expert: this.$route.params.expert,
+                resp: resp
             }, this.authHeaders).then((res)=>{
                 this.isBusy = false
                 this.makePaymentDial = false
@@ -186,6 +210,41 @@ export default {
             .then((res) => {
                 this.subCount = res.data
             })
+        },
+        generateTrxRef(len){
+            var ref = ''
+            let characters = '0123456789ABCDEFGHIJKLMNPQRSTUVWXYZ'
+            let charLent = characters.length
+            for(var i=0; i<length; i++){
+                ref += characters.charAt(Math.floor(Math.random() * charLent))
+            }
+            return ref;
+        },
+        getOddPrice(){
+            axios.get(this.api + `/auth/get_odd_price/${this.$route.params.odd}`, this.authHeaders)
+            .then((res) => {
+                let price = res.data.price
+                this.amount = parseFloat(price)
+                // console.log(this.amount)
+            })
+        },
+        processPayment(resp){
+            this.subscribe(resp)
+            this.verifyTransaction(resp)
+        },
+        verifyTransaction(res){
+            let header = {
+                headers: {
+                    "Authorization": `Bearer ${this.pstSecKey}`
+                }
+            }
+            axios.get(`https://api.paystack.co/transaction/verify/${res.reference}`, header)
+            .then((res) => {
+                console.log(res.data)
+            })
+        },
+        close: () => {
+            console.log("You closed checkout page")
         }
     },
     created(){
@@ -193,6 +252,7 @@ export default {
         this.getWinningForecasts()
         this.checkIfSubscribed()
         this.getSubscriptionCount()
+        this.getOddPrice()
     }
 }
 </script>

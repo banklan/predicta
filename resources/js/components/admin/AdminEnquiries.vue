@@ -7,7 +7,7 @@
                     <v-card-text class="mt-5">
                         <div class="my-3 px-2 subtitle-1" v-if="enquiries.length > 0">Enquiries ({{ total }}) &nbsp; &nbsp; Unread({{ unreadCount }})</div>
                         <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
-                        <table v-else class="table table-hover table-condensed table-bordered table-striped">
+                        <table v-else class="table table-hover table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>Date</th>

@@ -33,7 +33,7 @@ use App\Mail\DailyTipMail;
 use App\Mail\DailyTipsFromSurePredict;
 use App\MailingList;
 use App\DailyTipsMailing;
-
+use App\ExpertFollow;
 
 class AdminController extends Controller
 {
@@ -382,10 +382,7 @@ class AdminController extends Controller
         $country = new Country;
         $country->country = $request->country;
         $country->abbrv = $request->abbrv;
-        // if($filename){
-            $country->flag = $filename ? $filename : null;
-        // }
-        //  ? $filename : null;
+        $country->flag = $filename ? $filename : null;
         $country->save();
 
         return response()->json($country, 200);
@@ -649,8 +646,8 @@ class AdminController extends Controller
 
     public function updateMarket(Request $request, $id){
         $this->validate($request, [
-            'mkt.tip' => 'required|min:3|max:20',
-            'mkt.abbrv' => 'required|min:3|max:8',
+            'mkt.tip' => 'required|min:3|max:30',
+            'mkt.abbrv' => 'required|min:3|max:15',
         ]);
 
         $mkt = Tip::findOrFail($id);
@@ -674,8 +671,8 @@ class AdminController extends Controller
 
     public function createNewMarket(Request $request){
         $this->validate($request, [
-            'mkt.tip' => 'required|min:3|max:20|unique:tips,tip',
-            'mkt.abbrv' => 'required|min:3|max:8|unique:tips,abbrv',
+            'mkt.tip' => 'required|min:3|max:30|unique:tips,tip',
+            'mkt.abbrv' => 'required|min:3|max:15|unique:tips,abbrv',
         ]);
 
         $mkt = new Tip;
@@ -767,18 +764,6 @@ class AdminController extends Controller
 
         return response()->json($summ, 201);
     }
-
-    // public function adminChangeDailyTipsStatus(Request $request, $id){
-    //     $event = DailyTip::findOrFail($id);
-    //     $newStatus = $request->status['newStatus'];
-    //     $isFeatured = $request->status['isFeatured'];
-
-    //     $event->update([
-    //         $event->status = $newStatus,
-    //         $event->is_featured = $isFeatured,
-    //     ]);
-    //     return response()->json($event, 200);
-    // }
 
     public function removeEventFromDailyTips($id){
         // print_r($id);
@@ -1638,5 +1623,87 @@ class AdminController extends Controller
 
         $mail->delete();
         return response()->json(['message' => 'Deleted'], 200);
+    }
+
+    public function createBulkMarkets(Request $request){
+        $mkts = $request->markets;
+
+        $data = ['data' => $mkts];
+        $validator = Validator::make($data, [
+            'data.*.tip' => 'required|min:3|max:30|unique:tips,tip',
+            'data.*.abbrv' => 'required|min:3|max:15|unique:tips,abbrv',
+        ]);
+
+        if($validator->fails()){
+            return response()->json(['message' => 'validation failed'], 500);
+        }else{
+            foreach($mkts as $mkt){
+                $tip = new Tip;
+                $tip->tip = $mkt['tip'];
+                $tip->abbrv = $mkt['abbrv'];
+                $tip->save();
+            }
+            return response()->json(['message' => 'Created successfully'], 201);
+        }
+    }
+
+    public function createBulkTeams(Request $request){
+        $teams = $request->teams;
+
+        $data = ['data' => $teams];
+        $validator = Validator::make($data, [
+            'data.*.team' => 'required|min:3|max:20|unique:teams,team',
+            'data.*.abbrv' => 'required|min:3|max:8|unique:teams,abbrv',
+        ]);
+
+        if($validator->fails()){
+            return response()->json(['message' => 'validation failed'], 500);
+        }else{
+            foreach($teams as $team){
+                $tm = New Team;
+                $tm->league_id = $team['league']['id'];
+                $tm->team = $team['team'];
+                $tm->abbrv = $team['abbrv'];
+                $tm->save();
+            }
+            return response()->json(['message' => 'Teams created successfully'], 201);
+        }
+    }
+
+    public function getPaginatedFollows(){
+        $follows = ExpertFollow::latest()->paginate(10);
+
+        return response()->json($follows, 200);
+    }
+
+    public function getUserFollows($user){
+        $follows = ExpertFollow::where('user_id', $user)->count();
+
+        return response()->json($follows, 200);
+    }
+
+    public function getExpertFollows($expert){
+        $follows = ExpertFollow::where('expert_id', $expert)->count();
+
+        return response()->json($follows, 200);
+    }
+
+    public function delFollow($id){
+        $follow = ExpertFollow::findOrFail($id);
+        if($follow){
+            $follow->delete();
+            return response()->json(['message' => 'Follow deleted!'], 200);
+        }
+    }
+
+    public function getAllExperts(){
+        $experts = Expert::all();
+
+        return response()->json($experts, 200);
+    }
+
+    public function filterFollowsByExpert($exp){
+        $follows = ExpertFollow::where('expert_id', $exp)->paginate(10);
+        return response()->json($follows, 200);
     }
 }

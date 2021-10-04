@@ -26,4 +26,4 @@
 <p>We wish you best of luck as you stake responsibly.</p>
 <p>Sincerely,</p>
 <p>Steve</p>
-<p><a href="#">www.surepredict.com</a></p>
+<p><a href="#">www.tipexpats.com</a></p>

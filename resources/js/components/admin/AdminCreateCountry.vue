@@ -115,4 +115,7 @@ export default {
     a, .v-btn{
         text-decoration: none !important;
     }
+    .v-card.scroll{
+        overflow-x: scroll !important;
+    }
 </style>

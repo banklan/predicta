@@ -68,6 +68,16 @@ class SubscriptionController extends Controller
         $payment->subscription_id = $sub->id;
         $payment->amount = $sub->amount;
         $payment->tx_id = $payment_id;
+        if($request->resp['status'] == 'success'){
+            $payment->status = true;
+        }else{
+            $payment->status = false;
+        }
+        $payment->message = $request->resp['message'];
+        $payment->ref_id = $request->resp['reference'];
+        $payment->trans = $request->resp['trans'];
+        $payment->trx_ref = $request->resp['trxref'];
+        $payment->mode = 'Paystack';
         $payment->save();
 
         return response()->json($sub, 200);

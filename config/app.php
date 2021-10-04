@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'SurePredict'),
+    'name' => env('APP_NAME', 'Tipexpats'),
 
     /*
     |--------------------------------------------------------------------------

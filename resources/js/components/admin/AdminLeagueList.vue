@@ -1,7 +1,8 @@
 <template>
     <v-container>
+        <admin-top-panel title="Leagues" />
         <v-row class="mt-4">
-            <v-col cols="4" md="4" offset-md=8>
+            <v-col cols="4" md="4" offset-md="8">
                 <v-btn dark color="primary" @click="newLgDial = true"><v-icon left>add</v-icon>New League</v-btn>
             </v-col>
         </v-row>

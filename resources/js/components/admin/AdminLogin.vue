@@ -49,13 +49,11 @@ export default {
             axios.post(this.api + '/auth-admin/login', this.cred)
             .then((res) => {
                 this.isLoading = false
-                console.log(res.data)
                 this.$store.commit('adminLoginSuccess', res.data)
                 this.$router.push({name: 'AdminDashboard'})
             }).catch((err) => {
                 this.isLoading = false
                 this.authError = true
-                console.log(err.response.status)
                 if(err.response.status === 441){
                     this.errorMsg = 'Error! Invalid login credentials.'
                 }else if(err.response.status === 501){

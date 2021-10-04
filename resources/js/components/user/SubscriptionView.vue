@@ -81,8 +81,16 @@
                                     <td>{{ subscription.expiry | moment('DD/MM/YYYY - HH:mma') }}</td>
                                 </tr>
                                 <tr>
-                                    <th>Sub Status:</th>
+                                    <th>Subscription Status:</th>
                                     <td><span :class="subscription.expiry_status == 'Active' ? 'active' : 'expired'">{{ subscription.expiry_status }}</span></td>
+                                </tr>
+                                <tr v-if="paymentInfo">
+                                    <th>Payment Status:</th>
+                                    <td>{{ paymentInfo.status ? 'Successful' : 'Failed' }}</td>
+                                </tr>
+                                <tr v-if="paymentInfo">
+                                    <th>Payment Reference:</th>
+                                    <td>{{ paymentInfo.ref_id }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -104,6 +112,7 @@ export default {
             sub_id: this.$route.params.sub_id,
             isLoading: false,
             subscription: null,
+            paymentInfo: null,
         }
     },
     computed:{
@@ -139,12 +148,20 @@ export default {
                 console.log(res.data)
             })
         },
+        getPaymentDetails(){
+            axios.get(this.api + `/auth/get_sub_payment_details/${this.$route.params.sub_id}`, this.authHeaders)
+            .then((res) => {
+                this.paymentInfo = res.data
+                console.log(res.data)
+            })
+        },
         showEvent(event){
             this.$router.push({name: 'SubscriptionTipView', params:{sub_id: this.$route.params.sub_id, pred_id: event.forecast_id}})
         },
     },
     created() {
         this.getSubscription()
+        this.getPaymentDetails()
     },
 }
 </script>

@@ -15,9 +15,7 @@
                         <div class="sub_title my-3 text-center">Admin</div>
                         <v-simple-table light>
                             <template v-slot:default>
-                                <thead>
-
-                                </thead>
+                                <thead></thead>
                                 <tbody>
                                     <tr>
                                         <th width="30%">First Name:</th>

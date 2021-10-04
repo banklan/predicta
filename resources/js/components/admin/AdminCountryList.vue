@@ -1,5 +1,6 @@
 <template>
     <v-container>
+        <admin-top-panel title="Countries" />
         <v-row class="mt-4">
             <v-col cols="4" md="4" offset-md=8>
                 <v-btn dark color="primary" :to="{name: 'AdminCreateCountry'}"><v-icon left>add</v-icon>New Country</v-btn>
@@ -12,7 +13,7 @@
                     <v-card-title class="sub_title primary white--text justify-center">Countries <v-chip color="primary lighten-2" v-if="countries.length > 0">{{ total }}</v-chip></v-card-title>
                     <v-card-text>
                         <template v-if="total > 0">
-                            <table class="table table-condensed table-striped table-hover">
+                            <table class="table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>ID</th>

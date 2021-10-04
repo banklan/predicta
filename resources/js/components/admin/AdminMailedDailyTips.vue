@@ -8,7 +8,7 @@
                     <v-card-title class="subtitle-1 primary white--text justify-center">Mailed tips <span class="ml-2"><v-chip color="primary lighten-2" v-if="mails.length > 0">{{ total }}</v-chip></span></v-card-title>
                     <v-card-text>
                         <template v-if="mails.length > 0">
-                            <table class="table table-condensed table-striped table-hover">
+                            <table class="table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>ID</th>

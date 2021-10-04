@@ -29,6 +29,6 @@ class FeedbackPostedEmail extends Mailable
      */
     public function build()
     {
-        return $this->from('admin@surepredict.com')->view('emails.feedback_posted');
+        return $this->from('admin@tipexpats.com')->view('emails.feedback_posted');
     }
 }

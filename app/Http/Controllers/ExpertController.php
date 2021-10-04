@@ -14,6 +14,7 @@ use App\Bank;
 use App\BookmakerCode;
 use App\Subscription;
 use App\Earning;
+use App\ExpertFollow;
 
 class ExpertController extends Controller
 {
@@ -54,7 +55,7 @@ class ExpertController extends Controller
             'data.*.odd' => 'required|numeric|between:1,100',
             'data.*.teamA' => 'required|min:3|max:20',
             'data.*.teamB' => 'required|min:3|max:20',
-            'data.*.tip' => 'required|max:10',
+            'data.*.tip' => 'required|max:12',
         ]);
         if($validator->fails()){
             return response()->json(['message' => 'validation failed'], 500);
@@ -83,9 +84,6 @@ class ExpertController extends Controller
             $summary->prog_status = 0;
             $summary->forecast_odd = $request->forecastOdd;
             $summary->total_odds = intval($request->totalOdds * 100);
-            // $summary->bet9ja = $request->codes['bet9ja'];
-            // $summary->betking = $request->codes['betking'];
-            // $summary->merrybet = $request->codes['merrybet'];
             $summary->result = 'O';
             $summary->save();
 
@@ -305,4 +303,15 @@ class ExpertController extends Controller
         $fcs = ExpertPredictionSummary::where('prog_status', '!=', 0)->where('expert_id', $auth)->latest()->take(5)->get();
         return response()->json($fcs, 200);
     }
+
+    public function getExpertFollowers(){
+        $expert = auth('expert-api')->user()->id;
+        $follows = ExpertFollow::where('expert_id', $expert)->get();
+        return response()->json($follows, 200);
+    }
+
+    // public function getAllExpertFollowers(){
+    //     $expert = auth('expert-api')->user()->id;
+    //     $follows = ExpertFollow::where('expert_id', $expert)->get();
+    // }
 }

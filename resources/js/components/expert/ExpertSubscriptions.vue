@@ -3,7 +3,7 @@
         <expert-top-panel title="Subscriptions"/>
         <v-row justify="space-around" class="mt-5">
             <v-progress-circular indeterminate color="primary" :width="5" :size="50" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
-            <v-col v-else cols="12" md="8">
+            <v-col v-else cols="12" md="10">
                 <v-card raised elevation="10" min-height="150">
                     <v-card-title class="justify-center subtitle-1 primary white--text">Subscriptions to my forecasts </v-card-title>
                     <template v-if="subscriptions.length > 0">

@@ -13,7 +13,7 @@
                     <v-card-title class="sub_title primary white--text justify-center">Payments</v-card-title>
                     <v-card-text>
                         <template v-if="payments.length > 0">
-                            <table class="table table-condensed table-striped table-hover">
+                            <table class="table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>Date</th>

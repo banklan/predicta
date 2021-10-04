@@ -48,12 +48,12 @@
                     <v-card-text class="info_text">
                         Our premium service is created for investors who would rather make consistent profits from low-odd accumulators.
                         Our odd categories range from about 3 to 10 odds.
-                        We carefully select from a crop of talented tipsters who have a demonstrable and proven track of consistent success. They are rated
+                        We carefully select from a crop of talented tipsters who have a demonstrable and proven track of consistent success. They are ranked
                         according to their success rates within a period of time.
                         This is done intentionally to help potential subscribers make informed decisions on which tipster to subscribe to.
                         <p>We have implemented a process where the tipsters are required and motivated to put out their best tips everyday.
                         We also have a process that seeks to ensure that our tipsters publish their tips early enough.</p>
-                        <p>Users can report or give us feedback relating to any of our tip experts or any other issues through the feedback page in users login.</p>
+                        <p>Users can give us feedback relating to any of our tip experts or any other issues through the feedback page in users login.</p>
                     </v-card-text>
                     <v-card-title class="justify-center title">How our premium service works</v-card-title>
                     <v-card-text class="info_text">

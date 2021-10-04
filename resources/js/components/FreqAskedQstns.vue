@@ -11,7 +11,7 @@
                         </div>
                         <div class="">
                              <div class="font-weight-bold subtitle-1">
-                                14: I can predict result of football games. How can i join surepredict as a tip expert?
+                                14: I can predict result of football games. How can i join tipexpats.com as a tip expert?
                              </div>
                              <div class="subtitle-1">
                                  A: Easy. Register <router-link :to="{name: 'ExpertRegister'}">here</router-link> and we will get back to you.
@@ -19,7 +19,7 @@
                         </div>
                         <div class="mt-4">
                              <div class="font-weight-bold subtitle-1">
-                                15: I have a concern or enquiry. How can i contact surepredict?
+                                15: I have a concern or enquiry. How can i contact tipexpats?
                              </div>
                              <div class="subtitle-1">
                                  A: You can reach us through any means on our <router-link :to="{name: 'ContactUs'}">contact page</router-link> and we will get back to you shortly after.
@@ -37,7 +37,7 @@ export default {
     data() {
         return {
             faqs: [
-                {i: 1, q: 'Does surepredict offer free football predictions', a: 'Yes. Our daily tips are absolutely free.'},
+                {i: 1, q: 'Does tipexpats offer free football predictions', a: 'Yes. Our daily tips are absolutely free.'},
                 {i:2, q: 'How does your premium service work',
                     a: 'We have a group of talented tipsters who has a track record of success in football prediction over time. Through a process of careful analysis of the teams past games, present forms and other factors, they predict the likely outcomes of matches. They are rated according to their performances over a period of time. Users can select any of the experts and subscribe to an odd category. This gives them access to all predictions made by the expert for 7 days.'},
                 {i:3, q: 'How much does our expert tip premium services cost',

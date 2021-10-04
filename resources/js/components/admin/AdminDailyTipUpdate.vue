@@ -15,7 +15,7 @@
                     <template v-if="tip">
                         <v-card-title class="sub_title primary white--text justify-center">Daily Tip Update</v-card-title>
                         <v-card-text class="subtitle-2 mb-n8">
-                            <table class="table table-condensed table-hover">
+                            <table class="table table-striped table-hover">
                                 <thead></thead>
                                 <tbody>
                                     <tr>

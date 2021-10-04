@@ -35,6 +35,6 @@ class UserWelcomeEmail extends Mailable
      */
     public function build()
     {
-        return $this->from('admin@surepredict.com')->view('emails.user_welcome_mail');
+        return $this->from('admin@tipexpats.com')->view('emails.user_welcome_mail');
     }
 }

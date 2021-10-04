@@ -68,14 +68,14 @@ export default {
     data(){
         return{
             contacts: [
-                {icon: 'email', text: 'info@surepredict.com'},
+                {icon: 'email', text: 'info@tipexpats.com'},
                 {icon: 'phone', text: '08023456789'},
                 {icon: 'place', text: 'Some Address Here'},
             ],
             socials: [
-                {icon: 'mdi-facebook', color: '#1877f2', link: 'https://www.facebook.com/surepredict'},
-                {icon: 'mdi-twitter', color: '#1da1f2', link: 'https://www.twitter.com/surepredict'},
-                {icon: 'mdi-instagram', color: '#c32aa3', link: 'https://www.instagram.com/surepredict'},
+                {icon: 'mdi-facebook', color: '#1877f2', link: 'https://www.facebook.com/tipexpats'},
+                {icon: 'mdi-twitter', color: '#1da1f2', link: 'https://www.twitter.com/tipexpats'},
+                {icon: 'mdi-instagram', color: '#c32aa3', link: 'https://www.instagram.com/tipexpats'},
             ],
             loading: false,
             enquiry: {

@@ -1,5 +1,5 @@
-<h2>Enquiries on surepredict.com </h2>
-<h3>An enquiry has been received on surepredict.com, sent by {{ $enquiry->fullname }}.</h3><br/>
+<h2>Enquiries on tipexpats.com </h2>
+<h3>An enquiry has been received on tipexpats.com, sent by {{ $enquiry->fullname }}.</h3><br/>
 <p style="font-size: 20"><strong>Name: </strong> {{ $enquiry->fullname }}</p>
 <p style="font-size: 20"><strong>Organization: </strong> {{ $enquiry->organization }}</p>
 <p style="font-size: 20"><strong>Position: </strong> {{ $enquiry->position }}</p>

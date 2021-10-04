@@ -8,9 +8,12 @@
         </template>
         <template v-if="!expertIsLoggedIn && !userIsLoggedIn">
             <v-app-bar flat light color="primary">
+                <span class="hidden-md-and-up" v-if="!expertIsLoggedIn && !userIsLoggedIn && !adminIsLoggedIn">
+                    <v-app-bar-nav-icon class="secondary--text hidden-md-and-up" @click="notLoggedInDrawer = true"></v-app-bar-nav-icon>
+                </span>
                 <v-toolbar-title class="ml-5 my-2 white--text">
                     <router-link to="/" style="cursor:pointer" exact>
-                        <span class="font-weight-thin headline headline secondary--text">Surepredict</span>
+                        <span class="font-weight-thin headline headline secondary--text">TipExpats</span>
                     </router-link>
                 </v-toolbar-title>
                 <v-spacer></v-spacer>
@@ -29,7 +32,7 @@
                     </template>
                 </v-toolbar-items>
             </v-app-bar>
-            <v-navigation-drawer absolute v-model="expertDrawer" color="primary white--text" class="hidden-md-and-up" disable-resize-watcher>
+            <v-navigation-drawer absolute v-model="notLoggedInDrawer" color="primary white--text" class="hidden-md-and-up" disable-resize-watcher>
                 <v-toolbar-title class="white--text ml-4 mt-3 pb-4">
                     <router-link to="/" style="cursor: pointer" exact>
                         <span>surePredict</span>
@@ -37,23 +40,13 @@
                 </v-toolbar-title>
                 <v-divider></v-divider>
                 <v-list class="ml-4">
-                    <template v-if="expertIsLoggedIn">
-                        <v-list-item dark class="white--text" v-for="item in expertAuthMenuItems" :key="item.title" link :to="item.path">
+                    <template v-if="!expertIsLoggedIn && !userIsLoggedIn && !adminIsLoggedIn">
+                        <v-list-item dark class="white--text" v-for="item in menus" :key="item.title" link :to="item.path">
                             <v-list-item-content>
                                 <v-list-item-title>{{ item.title }}</v-list-item-title>
                             </v-list-item-content>
                         </v-list-item>
-                        <v-list-item dark class="white--text">
-                            <button type="button" class="white--text" @click="logout">Logout</button>
-                        </v-list-item>
                     </template>
-            <!-- <template v-if>
-                <v-list-item dark class="white--text" v-for="item in nonAuthMenuItems" :key="item.title" link :to="item.path">
-                    <v-list-item-content>
-                        <v-list-item-title>{{ item.title }}</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-            </template> -->
                 </v-list>
             </v-navigation-drawer>
         </template>
@@ -67,6 +60,7 @@ export default {
             menus: [
                 { title: "About Us", path: "/about-us"},
                 { title: "Contact Us", path: "/contact-us"},
+                { title: "Experts", path: "/expert-login"},
                 { title: "Login", path: "/login"},
                 { title: "Register", path: "/register"},
             ],
@@ -81,7 +75,8 @@ export default {
                 {title: 'Dashboard', path: '/admin'},
                 {title: "Account", path: "/admin/account"},
             ],
-            expertDrawer: false
+            expertDrawer: false,
+            notLoggedInDrawer: false
         }
     },
     computed: {

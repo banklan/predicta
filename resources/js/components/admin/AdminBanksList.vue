@@ -1,5 +1,6 @@
 <template>
     <v-container>
+        <admin-top-panel title="Banks" />
         <v-row class="mt-4">
             <v-col cols="4" md="4" offset-md=8>
                 <v-btn dark color="primary" @click="newBankDial = true"><v-icon left>add</v-icon>New Bank</v-btn>
@@ -12,7 +13,7 @@
                     <v-card-title class="subtitle-1 primary white--text justify-center">Banks <span class="ml-2"><v-chip color="primary lighten-2" v-if="banks.length > 0">{{ banks.length }}</v-chip></span></v-card-title>
                     <v-card-text>
                         <template v-if="banks.length > 0">
-                            <table class="table table-condensed table-striped table-hover">
+                            <table class="table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>ID</th>

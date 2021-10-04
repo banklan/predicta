@@ -69,6 +69,29 @@
                         </table>
                     </v-card-text>
                 </v-card>
+                <v-card elevation="8" dark raised min-height="100" class="follows">
+                    <v-card-title class="white--text sub_title justify-center">Follows <v-chip v-if="follows.length > 0" class="ml-2" color="#006075">{{ follows.length }}</v-chip></v-card-title>
+                    <v-card-text class="my-5 pl-7 pr-7">
+                        <template v-if="follows.length > 0">
+                            <table class="table table-hover table-condensed">
+                                <thead></thead>
+                                <tbody>
+                                    <tr v-for="follow in follows.slice(0,5)" :key="follow.id">
+                                        <td v-if="follow.user">{{ follow.user.fullname }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </template>
+                        <template v-else>
+                            <v-alert type="info" border="left">
+                                You have no followers at the moment.
+                            </v-alert>
+                        </template>
+                    </v-card-text>
+                    <v-card-actions class="justify-center pb-6" v-if="follows.length < 5">
+                        <v-btn outlined elevation="3" large color="white" :to="{name: 'ExpertFollows'}">All Followers</v-btn>
+                    </v-card-actions>
+                </v-card>
             </v-col>
             <v-col cols="12" md="5">
                 <v-card elevation="8" dark raised color="#047149" min-height="100" class="mb-5 latest_sub">
@@ -151,7 +174,8 @@ export default {
             earnings: [],
             oustanding_earnings: [],
             subscriptions: [],
-            perfs: []
+            perfs: [],
+            follows: []
         }
     },
     computed: {
@@ -219,12 +243,16 @@ export default {
         getExpertPerformance(){
             axios.get(this.api + '/auth-expert/get_forecast_performance', this.expertHeader)
             .then((res) => {
-                console.log(res.data)
                 this.perfs = res.data
             })
         },
         goToFc(fc){
             this.$router.push({name: 'ExpertForecastShow', params: {id: fc.forecast_id}})
+        },
+        getFollowers(){
+            axios.get(this.api + '/auth-expert/get_expert_followers', this.expertHeader).then((res) => {
+                this.follows = res.data
+            })
         }
     },
     created(){
@@ -232,6 +260,7 @@ export default {
         this.getForecastSummary()
         this.getExpertEarnings()
         this.getExpertPerformance()
+        this.getFollowers()
     }
 }
 </script>
@@ -254,5 +283,8 @@ export default {
     }
     .earnings{
         background-image: linear-gradient(to bottom right, rgb(243, 19, 122), rgb(162 10 87 / 80%));
+    }
+    .follows{
+        background-image: linear-gradient(to bottom right, rgb(19 202 243), rgb(10 107 103 / 80%));
     }
 </style>

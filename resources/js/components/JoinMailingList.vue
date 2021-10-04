@@ -20,7 +20,7 @@
                     <template v-else>
                         <v-card-text class="mt-8 caption_text">
                             <v-alert type="success" border="left">
-                                Thank you for joining our email list. You will receive daily sure tips from surepredict.com henceforth.
+                                Thank you for joining our email list. You will receive daily sure tips from tipexpats.com henceforth.
                             </v-alert>
                         </v-card-text>
                     </template>

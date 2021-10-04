@@ -5,7 +5,7 @@
                 <v-card shaped light class="mx-auto px-8">
                     <v-card-title class="headline justify-center">About Us</v-card-title>
                     <v-card-text>
-                        <p>Surepredict is a platform that was created to help bettors minimize risks by predicting the most likely outcomes of football matches.</p>
+                        <p>TipExpats is a platform that was created to help bettors minimize risks by predicting the most likely outcomes of football matches.</p>
                         <p>We employ talented experts who are very familiar with each football league and tournament, and whose accuracy over time is very high.</p>
                         <p>Our daily tips offer list of daily matches and their likely outcomes for free. Users are free to choose matches and tips from these.</p>
                         <p>However, our premium service offers users who want to invest in football betting at safer low-odds of 3, 5 and 10 odds, with the objective of making profits at the long run. While we cannot always fully guarantee the result of

@@ -39,11 +39,7 @@ const userIsLoggedIn = user_loggedin ? true : false
 const redirect = window.localStorage.getItem('redirOnlogin')
 const redirectOnLogin = redirect ? redirect : null
 
-// const bkmk_code = window.localStorage.getItem('bkmkCode')
-// const bkmkCode = bkmk_code ? JSON.parse(bkmk_code) : []
-
 const bkmkCode = JSON.parse(localStorage.getItem('bkmkCode')) || []
-
 
 export const store = new Vuex.Store({
     state: {
@@ -84,6 +80,11 @@ export const store = new Vuex.Store({
         adminDeleteEnquiry: false,
         adminProfileUpdated: false,
         bkmkCode: bkmkCode,
+        fwPK: 'FLWPUBK-7c356af6b5e9e45798328a1e188909d2-X',
+        fwSK: 'FLWSECK-0e812c83cdff83b45c098c0a1d7fbe5f-X',
+        fwEK: '0e812c83cdff8a42bde6902a',
+        pstPkey: 'pk_test_27753e86c032bcdd6758c5bf79e1048f1e7efbe8',
+        pstSecKey: 'sk_test_ca4f805874f7dfa0640646e947b8e11725f5bb06'
     },
     getters: {
         isBusy(state)
@@ -234,15 +235,31 @@ export const store = new Vuex.Store({
         {
             return state.bkmkCode
         },
+        fwpk(state)
+        {
+            return state.fwPK
+        },
+        fwsk(state)
+        {
+            return state.fwSK
+        },
+        fwek(state)
+        {
+            return state.fwEK
+        },
+        pstPkey(state)
+        {
+            return state.pstPkey
+        },
+        pstSecKey(state)
+        {
+            return state.pstSecKey
+        },
     },
     actions: {},
     mutations: {
         adminLoginSuccess(state, payload)
         {
-            // localStorage.removeItem('authUser')
-            // localStorage.removeItem('isLoggedIn')
-            // state.isLoggedIn = false
-            // state.authUser = null
             state.adminIsLoggedIn = true
             state.authAdmin = Object.assign({}, payload.user, {token: payload.access_token})
             window.localStorage.setItem('authAdmin', JSON.stringify(state.authAdmin))
@@ -518,8 +535,6 @@ export const store = new Vuex.Store({
         {
             let code = JSON.parse(localStorage.getItem('bkmkCode'))
             state.bkmkCode = code
-            // state.bkmkCode.push(payload)
-            // localStorage.setItem('bkmkCode', JSON.stringify(state.bkmkCode))
         },
     },
 })

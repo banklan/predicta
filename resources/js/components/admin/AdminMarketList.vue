@@ -1,8 +1,12 @@
 <template>
     <v-container>
+        <admin-top-panel title="Markets" />
         <v-row class="mt-4">
-            <v-col cols="4" md="4" offset-md=8>
+            <v-col cols="6" md="3" offset-md="6">
                 <v-btn dark color="primary" @click="addNewDial = true"><v-icon left>add</v-icon>New Market</v-btn>
+            </v-col>
+            <v-col cols="6" md="3">
+                <v-btn dark color="primary" :to="{name: 'AdminCreateMarketsBulk'}"><v-icon left>add</v-icon>New (Bulk)</v-btn>
             </v-col>
         </v-row>
         <v-row class="mt-4 ml-n10">
@@ -12,7 +16,7 @@
                     <v-card-title class="sub_title primary white--text justify-center">Markets <v-chip color="primary lighten-2" v-if="total > 0" class="ml-2">{{ total }}</v-chip></v-card-title>
                     <v-card-text>
                         <template v-if="total > 0">
-                            <table class="table table-condensed table-striped table-hover">
+                            <table class="table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -55,8 +59,8 @@
             <v-card min-height="150">
                 <v-card-title class="sub_title primary white--text justify-center">Add Market</v-card-title>
                 <v-card-text class="text-center mt-5 subtitle-1">
-                    <v-text-field label="Market" v-model="add.tip" required v-validate="'required|min:3|max:20'" :error-messages="errors.collect('add.tip')" name="tip" data-vv-scope="add"></v-text-field>
-                    <v-text-field label="Abbreviation" v-model="add.abbrv" required v-validate="'required|min:3|max:20'" :error-messages="errors.collect('add.abbrv')" name="abbrv" data-vv-scope="add"></v-text-field>
+                    <v-text-field label="Market" v-model="add.tip" required v-validate="'required|min:3|max:30'" :error-messages="errors.collect('add.tip')" name="tip" data-vv-scope="add"></v-text-field>
+                    <v-text-field label="Abbreviation" v-model="add.abbrv" required v-validate="'required|min:3|max:15'" :error-messages="errors.collect('add.abbrv')" name="abbrv" data-vv-scope="add"></v-text-field>
                 </v-card-text>
                 <v-card-actions class="pb-8 mt-2 justify-center">
                     <v-btn text color="red darken--2" @click="addNewDial = false" width="30%">Cancel</v-btn>

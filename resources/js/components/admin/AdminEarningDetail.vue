@@ -15,7 +15,7 @@
                     <v-card-title class="justify-center subtitle-1 primary white--text">Earning ID <span v-if="earning" class="ml-2">{{ earning.id }}</span></v-card-title>
                     <v-card-text>
                         <template v-if="earning">
-                            <table class="table table-condensed table-hover table-striped">
+                            <table class="table table-hover table-striped">
                                 <thead></thead>
                                 <tbody>
                                     <tr>

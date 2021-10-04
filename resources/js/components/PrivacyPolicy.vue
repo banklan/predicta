@@ -5,9 +5,9 @@
                 <v-card shaped light class="mx-auto pa-8">
                     <v-card-title class="headline justify-center">Privacy Policy</v-card-title>
                     <v-card-text class="mt-5 body_text">
-                        <div class="font-weight-bold">This privacy policy sets out how Surepredict Services Limited (hereon referred to as Surepredict) uses and protects any information that you give Surepredict when you use this website.</div>
-                         <div class="mt-3">1. Surepredict is committed to ensuring that your privacy is protected. Should we ask you to provide certain information by which you can be identified when using this website, then you can be assured that it will only be used in accordance with this privacy statement.</div>
-                        <div class="mt-3">2. Surepredict may change this policy from time to time by updating this page. You should check this page from time to time to ensure that you are happy with any changes. This policy is effective from 1st October, 2021.</div>
+                        <div class="font-weight-bold">This privacy policy sets out how Tipexpats Services Limited (hereon referred to as Tipexpats) uses and protects any information that you give Tipexpats when you use this website.</div>
+                         <div class="mt-3">1. Tipexpats is committed to ensuring that your privacy is protected. Should we ask you to provide certain information by which you can be identified when using this website, then you can be assured that it will only be used in accordance with this privacy statement.</div>
+                        <div class="mt-3">2. Tipexpats may change this policy from time to time by updating this page. You should check this page from time to time to ensure that you are happy with any changes. This policy is effective from 1st October, 2021.</div>
                         <div class="mt-3">3. <span class="font-weight-bold">What we collect:</span><br>
                             We may collect the following information:<br>
                             Your name, your contact information including email address, Phone number and Date of Birth. Other information relevant to customer surveys, offers, improvement of user experience and our services.

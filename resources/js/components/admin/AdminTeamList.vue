@@ -1,11 +1,12 @@
 <template>
     <v-container>
+        <admin-top-panel title="Teams" />
         <v-row class="mb-n3 mt-1" justify="space-around">
-            <v-col cols="3" md="4">
-                <v-btn dark small rounded color="primary darken-2" elevation="4" left @click.prevent="$router.go(-1)"><v-icon left>arrow_left</v-icon>Back</v-btn>
-            </v-col>
-            <v-col cols="8" md="4" offset-md="4" class="">
+            <v-col cols="6" md="2" offset-md="6">
                 <v-btn dark color="primary" @click="newTeamDial = true" class="align-self-end"><v-icon left>add</v-icon>New</v-btn>
+            </v-col>
+            <v-col cols="6" md="3">
+                <v-btn dark color="primary" :to="{name: 'AdminCreateTeamBulk'}" class="align-self-end"><v-icon left>add</v-icon>New (Bulk)</v-btn>
             </v-col>
         </v-row>
         <v-row>
@@ -23,7 +24,7 @@
                     <v-card-title class="sub_title primary white--text justify-center">Teams <span class="ml-2"><v-chip color="primary lighten-2" v-if="total > 0">{{ total }}</v-chip></span></v-card-title>
                     <v-card-text>
                         <template v-if="total > 0">
-                            <table class="table table-condensed table-striped table-hover">
+                            <table class="table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>ID</th>

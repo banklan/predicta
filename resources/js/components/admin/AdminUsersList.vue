@@ -16,7 +16,7 @@
                     <v-card-title class="sub_title primary white--text justify-center">Users</v-card-title>
                     <v-card-text>
                         <template v-if="users.length > 0">
-                            <table class="table table-condensed table-striped table-hover">
+                            <table class="table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>ID</th>

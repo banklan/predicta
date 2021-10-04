@@ -100,7 +100,6 @@ class TipController extends Controller
     public function getAllWonExpertForecasts(){
         $start = Carbon::now()->subDays(31);
         $end = Carbon::now();
-        // $fcs = ExpertPredictionSummary::where('prog_status', 2)->whereBetween('created_at', [$start, $end ])->get();
         $fcs = ExpertPredictionSummary::where('prog_status', 2)->whereDate('created_at', '>', Carbon::now()->subDays(31))->get();
         return response()->json($fcs, 200);
     }

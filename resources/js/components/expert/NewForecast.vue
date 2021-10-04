@@ -56,7 +56,7 @@
                             <div class="pt-5 mb-3">
                                 <v-select :items="bookmakers" item-text="name" return-object label="Select Bookmaker" v-model="bm.bkm" required></v-select>
                                 <v-text-field label="Bookmaker's code" required v-model="bm.code"></v-text-field>
-                                <v-card-actions class="justify-center">
+                                <v-card-actions class="justify-center" v-if="bm.code !== ''">
                                     <v-btn color="primary" dark @click="addBkmCode" :loading="isSaving">Add Code</v-btn>
                                 </v-card-actions>
                             </div>
@@ -81,7 +81,7 @@
                         </div>
                     </v-card-text>
                     <v-card-actions v-if="forecasts.length > 0 && bookmakersCode.length > 0" class="justify-center pb-8">
-                        <v-btn large width="60%" dark color="primary darken-2" elevation="12" :loading="isSaving" @click="submitPrediction">Submit Prediction</v-btn>
+                        <v-btn large width="60%" dark color="primary darken-2" elevation="12" :loading="isBusy" @click="submitPrediction">Submit Prediction</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-col>
@@ -99,7 +99,7 @@
                     </v-card-text>
                 </v-card>
                 <v-card raised flat elevation="6" light min-height="200" class="mt-5">
-                    <v-card-title class="justify-center primary white--text subtitle-1">Important!! Please Note</v-card-title>
+                    <v-card-title class="justify-center primary white--text subtitle-1">Important Notice</v-card-title>
                     <v-card-text class="">
                         <v-list>
                             <v-list-item-group class="">
@@ -113,7 +113,8 @@
                                 <v-divider></v-divider>
                                 <v-list-item>
                                     <v-list-item-content>For tips on markets not provided, experts are expected to enter the markets personally. However, experts must use a descriptive acronymn to enable users understand.
-                                        Check the list of our example acronymns
+                                        For a list of betting codes/markets and acronymns, check <span class="ext_links"><a :href="`https://www.goalballlive.com/betking-codes-and-meaning/`" target="_blank" link class="mr-2">here</a>
+                                        or <a class="ml-2" :href="`https://www.goalballlive.com/bet9ja-betting-codes-meaning/`" target="_blank" link>here</a></span>
                                     </v-list-item-content>
                                 </v-list-item>
                                 <v-divider></v-divider>
@@ -139,7 +140,7 @@
                                 <v-list-item>
                                     <v-list-item-content>
                                         While ensuring that they publish as many forecasts as they would like, experts must understand that they are rated according to their success rate.
-                                        <strong>The emphasis is on quality and not quantity,</strong> so an expert who published just 5 forecasts in a week and won 4 of them (80% success rate) had performed better
+                                        <span class="info--text my-1">The emphasis is on quality and not quantity, </span>so an expert who published just 5 forecasts in a week and won 4 of them (80% success rate) had performed better
                                         than one who published 20 forecasts and won 10(50% success rate) even though the latter won more forecasts.
                                     </v-list-item-content>
                                 </v-list-item>
@@ -168,6 +169,7 @@
     </v-container>
 </template>
 
+
 <script>
 export default {
     data() {
@@ -192,7 +194,8 @@ export default {
                 code: '',
                 bkm: null
             },
-            mustIncludeABkCode: false
+            mustIncludeABkCode: false,
+            isBusy: false
         }
     },
     computed: {
@@ -240,7 +243,7 @@ export default {
         submitPrediction(){
             if(this.totalOdds >= this.foreCastOdd){
                 if(this.bookmakersCode.length > 0){
-                    this.isSaving = true
+                    this.isBusy = true
                     let predictions = JSON.parse(localStorage.getItem('forecast'))
                     console.log(this.bm_codes)
                     axios.post(this.api + '/auth-expert/submit_expert_prediction', {
@@ -250,14 +253,14 @@ export default {
                         cds: this.bookmakersCode
                     }, this.expertHeader)
                     .then((res) =>{
-                        this.isSaving = false
-                        console.log(res.data)
+                        this.isBusy = false
+                        // console.log(res.data)
                         this.$store.commit('newForecastCreated')
                         this.$store.commit('clearForecast')
                         this.$router.push({name: 'MyForecasts'})
                         localStorage.removeItem('bkmkCode')
                     }).catch((err) =>{
-                        this.isSaving = false
+                        this.isBusy = false
                         if(err.response.status === 401){
                             this.$router.push('/')
                         }
@@ -299,3 +302,12 @@ export default {
     }
 }
 </script>
+
+<style lang="css" scoped>
+    .ext_links{
+        display: flex;
+    }
+    .v-list-item__content{
+        line-height: 1.8 !important;
+    }
+</style>

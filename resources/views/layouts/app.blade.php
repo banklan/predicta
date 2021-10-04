@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'SurePredict') }}</title>
+    <title>{{ config('app.name', 'Tipexpats') }}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -33,9 +33,8 @@
 
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <script>
+    <!-- <script src="https://checkout.flutterwave.com/v3.js"></script> -->
 
-    </script>
 
 </head>
 <body class="body_wrap">

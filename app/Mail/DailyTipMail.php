@@ -32,6 +32,6 @@ class DailyTipMail extends Mailable
      */
     public function build()
     {
-        return $this->from('admin@surepredict.com')->view('emails.daily_tips_mail')->with(['tips'=> $this->tips]);
+        return $this->from('admin@tipexpats.com')->view('emails.daily_tips_mail')->with(['tips'=> $this->tips]);
     }
 }

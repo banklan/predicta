@@ -23,7 +23,7 @@
                     <v-card-title class="sub_title primary white--text justify-center">Subscriptions</v-card-title>
                     <v-card-text class="list">
                         <template v-if="subscriptions.length > 0">
-                            <table class="table table-condensed table-striped table-hover" v-if="!filterView">
+                            <table class="table table-striped table-hover" v-if="!filterView">
                                 <thead>
                                     <tr>
                                         <th>Date</th>

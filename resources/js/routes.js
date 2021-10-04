@@ -33,11 +33,13 @@ import AdminCreateCountry from './components/admin/AdminCreateCountry';
 import AdminBanksList from './components/admin/AdminBanksList';
 import AdminLeaguesList from './components/admin/AdminLeagueList';
 import AdminTeamList from './components/admin/AdminTeamList';
+import AdminCreateTeamBulk from './components/admin/AdminCreateTeamBulk';
 import AdminFilterTeams from './components/admin/AdminFilterTeamsResult';
 import AdminFilterResult from './components/admin/AdminFilterResult';
 import AdminSearchTeamRes from './components/admin/AdminSearchTeamRes';
 import AdminBookmakersList from './components/admin/AdminBookmakersList';
 import AdminMarketList from './components/admin/AdminMarketList';
+import AdminCreateMarketsBulk from './components/admin/AdminCreateMarketsBulk';
 import AdminDailyTips from './components/admin/AdminDailyTips';
 import AdminCreateDailyTips from './components/admin/AdminCreateDailyTips';
 import AdminDailyTipShow from './components/admin/AdminDailyTipShow';
@@ -69,6 +71,7 @@ import AdminEnquiryShow from './components/admin/AdminEnquiryShow';
 import AdminMailingList from './components/admin/AdminMailingList';
 import AdminMailedDailyTips from './components/admin/AdminMailedDailyTips';
 import AdminProfile from './components/admin/AdminProfile';
+import AdminFollows from './components/admin/AdminFollows';
 import ExpertRegister from './components/expert/ExpertRegister';
 import ExpertLogin from './components/expert/ExpertLogin';
 import ExpertEmailConfirmation from './components/expert/ExpertEmailConfirmation';
@@ -80,6 +83,7 @@ import ExpertAccount from './components/expert/Account';
 import ExpertSubscriptions from './components/expert/ExpertSubscriptions';
 import ExpertSubscriptionView from './components/expert/ExpertSubscriptionView';
 import ExpertEarnings from './components/expert/ExpertEarnings';
+import ExpertFollows from './components/expert/ExpertFollows';
 import UserLogin from './components/user/UserLogin.vue';
 import UserRegister from './components/user/Register.vue';
 import UserEmailConfirmation from './components/user/EmailConfirmation.vue';
@@ -87,6 +91,7 @@ import UserDashboard from './components/user/Dashboard.vue';
 import SubscriptionView from './components/user/SubscriptionView.vue';
 import SubscriptionTipView from './components/user/SubscriptionTipView.vue';
 import Subscriptions from './components/user/Subscriptions.vue';
+import SubscriptionPaymentPage from './components/user/SubscriptionPaymentPage.vue';
 import UserAccount from './components/user/UserAccount.vue';
 import UserFeedback from './components/user/UserFeedback.vue';
 import NewUserfeedback from './components/user/NewUserfeedback.vue';
@@ -128,6 +133,12 @@ export default [
     },
     {
         path: '/subscriptions', name: 'Subscriptions', component: Subscriptions,
+        meta: {
+            requireUsersAuth: true
+        }
+    },
+    {
+        path: '/subscription-payment/:odd/:expert', name: 'SubscriptionPaymentPage', component: SubscriptionPaymentPage,
         meta: {
             requireUsersAuth: true
         }
@@ -299,6 +310,12 @@ export default [
         }
     },
     {
+        path: '/admin/teams/create-bulk', name: 'AdminCreateTeamBulk', component: AdminCreateTeamBulk,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
         path: '/admin/filter-result', name: 'AdminFilterResult', component: AdminFilterResult, props: true,
         meta: {
             requireAdminsAuth: true
@@ -324,6 +341,12 @@ export default [
     },
     {
         path: '/admin/markets', name: 'AdminMarketList', component: AdminMarketList,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
+        path: '/admin/markets/create-bulk', name: 'AdminCreateMarketsBulk', component: AdminCreateMarketsBulk,
         meta: {
             requireAdminsAuth: true
         }
@@ -516,6 +539,12 @@ export default [
         }
     },
     {
+        path: '/admin/follows', name: 'AdminFollows', component: AdminFollows,
+        meta: {
+            requireAdminsAuth: true
+        }
+    },
+    {
         path: '/expert-register', name: 'ExpertRegister', component: ExpertRegister,
     },
     {
@@ -568,6 +597,12 @@ export default [
     },
     {
         path: '/expert/earnings', name: 'ExpertEarnings', component: ExpertEarnings,
+        meta: {
+            requireExpertAuth: true
+        }
+    },
+    {
+        path: '/expert/followers', name: 'ExpertFollows', component: ExpertFollows,
         meta: {
             requireExpertAuth: true
         }

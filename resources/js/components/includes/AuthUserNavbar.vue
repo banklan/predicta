@@ -31,6 +31,9 @@
                         <v-list-item-title>{{ item.title }}</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
+                <v-list-item dark class="white--text"  @click="logout">
+                    <v-list-item-title>Logout</v-list-item-title>
+                </v-list-item>
             </v-list>
         </v-navigation-drawer>
     </nav>
@@ -71,8 +74,6 @@ export default {
     methods: {
         logout(){
             if(this.userIsLoggedIn){
-                // this.$store.commit('logOutAuthUser')
-                // this.$router.push('/')
                 axios.post(this.api + `/auth/logout`, {}, this.authHeaders).then(() =>{
                     this.$store.commit('logOutAuthUser')
                     this.$router.push('/')

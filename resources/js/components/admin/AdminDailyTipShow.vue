@@ -18,7 +18,7 @@
                             <template v-if="tips.length > 0">
                                 <v-card flat min-height="100" v-for="(fc, index) in tips" :key="fc.id" :class="index == 0 ? '' : 'mt-2'">
                                     <v-card-text>
-                                        <table class="table table-condensed table-hover">
+                                        <table class="table table-striped table-hover">
                                             <thead></thead>
                                             <tbody>
                                                 <tr>

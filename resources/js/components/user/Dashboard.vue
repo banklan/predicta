@@ -69,6 +69,34 @@
                         <v-btn text large color="primary darken-2" :to="{name: 'AllTipExperts'}">View All</v-btn>
                     </v-card-actions>
                 </v-card>
+                <v-card elevation="6" light raised min-height="150" class="mt-8">
+                    <v-card-title class="justify-center primary white--text subtitle-1">Favourite Experts</v-card-title>
+                    <v-card-text>
+                        <template v-if="follows.length > 0">
+                            <table class="table table-condensed table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Expert</th>
+                                        <th>Win Rate(%)</th>
+                                        <th>Events</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="follow in follows" :key="follow.id" @click="goToTipExpert(follow.expert)">
+                                        <td>{{ follow.expert.username }}</td>
+                                        <td align="center">{{ follow.expert.winning_rate }}</td>
+                                        <td align="center">{{ follow.expert.open_events_count }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </template>
+                        <template v-else>
+                            <v-alert type="info" border="left" class="mt-5">
+                                You have not followed any expert.
+                            </v-alert>
+                        </template>
+                    </v-card-text>
+                </v-card>
             </v-col>
         </v-row>
     </v-container>
@@ -80,7 +108,8 @@ export default {
         return{
             subscriptions: [],
             hotExperts: [],
-            isLoading: false
+            isLoading: false,
+            follows: []
         }
     },
     computed: {
@@ -108,7 +137,6 @@ export default {
             axios.get(this.api + '/auth/get_my_subscriptions', this.authHeaders).then((res)=>{
                 this.isLoading = false
                 this.subscriptions = res.data
-                // console.log(res.data)
             })
         },
         goToSub(sub){
@@ -119,16 +147,25 @@ export default {
             axios.get(this.api + '/auth/get_hot_tip_experts', this.authHeaders).then((res) => {
                 this.isLoading = false
                 this.hotExperts = res.data
-                // console.log(res.data)
             })
         },
         goToTipExpert(exp){
             this.$router.push({name: 'TipExpertView', params:{id: exp.expert_id}})
+        },
+        getFollowedExperts(){
+            this.isLoading = true
+            axios.get(this.api + '/auth/get_followed_experts', this.authHeaders)
+            .then((res) => {
+                // console.log(res.data)
+                this.isLoading = false
+                this.follows = res.data
+            })
         }
     },
     created() {
         this.getSubscriptions()
         this.getHopTipExperts()
+        this.getFollowedExperts()
     },
 }
 </script>

@@ -26,6 +26,6 @@ class EnquirySent extends Mailable
      */
     public function build()
     {
-        return $this->from('steve@surepredict.com')->view('emails.enquiry_sent');
+        return $this->from('steve@tipexpats.com')->view('emails.enquiry_sent');
     }
 }

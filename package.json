@@ -39,5 +39,8 @@
         "vue-router": "^3.5.1",
         "vuetify": "^2.4.9",
         "vuex": "^3.6.2"
-    }
+    },
+    "engines": {
+        "node": "12.x"
+      },
 }

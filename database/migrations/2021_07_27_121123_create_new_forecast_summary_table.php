@@ -15,7 +15,7 @@ class CreateNewForecastSummaryTable extends Migration
     {
         Schema::create('forecast_summary', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('expert_id');
+            $table->integer('expert_id')->unsigned();
             $table->string('forecast_id');
             $table->timestamps();
 

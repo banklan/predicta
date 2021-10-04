@@ -15,7 +15,7 @@ class CreateBookmakersCodesTable extends Migration
     {
         Schema::create('bookmakers_codes', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('forecast_summary_id');
+            $table->integer('forecast_summary_id')->unsigned();
             $table->integer('expert_id');
             $table->integer('bookmaker_id');
             $table->string('bookmaker_code');

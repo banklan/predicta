@@ -80,9 +80,6 @@ export const store = new Vuex.Store({
         adminDeleteEnquiry: false,
         adminProfileUpdated: false,
         bkmkCode: bkmkCode,
-        fwPK: 'FLWPUBK-7c356af6b5e9e45798328a1e188909d2-X',
-        fwSK: 'FLWSECK-0e812c83cdff83b45c098c0a1d7fbe5f-X',
-        fwEK: '0e812c83cdff8a42bde6902a',
         pstPkey: 'pk_test_27753e86c032bcdd6758c5bf79e1048f1e7efbe8',
         pstSecKey: 'sk_test_ca4f805874f7dfa0640646e947b8e11725f5bb06'
     },
@@ -234,18 +231,6 @@ export const store = new Vuex.Store({
         bookmakersCode(state)
         {
             return state.bkmkCode
-        },
-        fwpk(state)
-        {
-            return state.fwPK
-        },
-        fwsk(state)
-        {
-            return state.fwSK
-        },
-        fwek(state)
-        {
-            return state.fwEK
         },
         pstPkey(state)
         {

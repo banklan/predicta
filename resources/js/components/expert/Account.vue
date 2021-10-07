@@ -394,7 +394,7 @@ export default {
         getBankDetails(){
             axios.get(this.api + '/auth-expert/get_expert_bank_details', this.expertHeader)
             .then((res) => {
-                console.log(res.data)
+                // console.log(res.data)
                 if(res.data.bank_id){
                     this.expertBankDetailsStatus = true
                     this.bankInfo.bank_id = res.data.bank_id
@@ -415,7 +415,6 @@ export default {
             this.$validator.validateAll('bank').then((isValid) => {
                 if (isValid) {
                     this.isUpdating = true
-                    console.log(this.newBankDetails)
                     axios.post(this.api + '/auth-expert/add_bank_details', {
                         details: this.newBankDetails
                     }, this.expertHeader).then((res) => {
@@ -423,7 +422,6 @@ export default {
                         this.expertBankDetailsStatus = true
                         this.bankDetailsCreated = true
                         this.getBankDetails()
-                        console.log(res.data)
                     }).catch(() => {
                         this.isUpdating = false
                         this.bankDetailsCreateFailed = true
@@ -435,8 +433,7 @@ export default {
             this.$validator.validateAll('bank-update').then((isValid) => {
                 if (isValid) {
                     this.isUpdating = true
-                    // console.log(this.bankInfo)
-                    axios.post(this.api + `/auth-expert/update_expert_bank_details`, {
+                     axios.post(this.api + `/auth-expert/update_expert_bank_details`, {
                         details: this.bankInfo
                     }, this.expertHeader).then((res)=>{
                         this.isUpdating = false

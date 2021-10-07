@@ -230,15 +230,17 @@ class ExpertController extends Controller
 
     public function getBankDetails(){
         $user = auth('expert-api')->user();
-        $bank = Bank::findOrFail($user->bank_id);
-        if($user->bank_id){
+        $bank = Bank::where('id', $user->bank_id)->first();
+        if($bank){
             return response()->json([
                 'bank_id' => $user->bank_id,
                 'bank' => $bank,
                 'account_type' => $user->account_type,
                 'account_no' => $user->account_no,
                 'account_name' => $user->account_name
-            ]);
+            ], 200);
+        }else{
+            return response()->json(['message' => 'No bank details for user'], 404);
         }
     }
 

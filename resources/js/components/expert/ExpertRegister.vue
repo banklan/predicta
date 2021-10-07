@@ -87,7 +87,7 @@ export default {
                         console.log(err.response)
                         if(err.response.status === 422){
                             this.createFail = true
-                            this.createError = "The email you are trying to register with is already taken. please try another email."
+                            this.createError = "The email/username you are trying to register with is already taken. please try another email."
                         }else{
                             this.createFail = true
                             this.createError = 'There was an error while trying to register. Please ensure you are connected to the internet and try again.'

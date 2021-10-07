@@ -2,9 +2,9 @@
     <v-container>
         <admin-top-panel title="Admin Profile" />
         <v-progress-circular indeterminate color="primary" :width="4" :size="40" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
-        <v-row v-else class="mt-4" justify="space-around">
+        <v-row v-else class="mt-4" justify="center" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="5">
-                <v-card light raised outlined elevation="4" min-height="400" class="ml-n6">
+                <v-card light raised outlined elevation="4" min-height="400" class="scroll" width="100%">
                     <template v-if="!changePic">
                         <v-img :src="`/images/profiles/admins/${ authAdmin.picture ? authAdmin.picture : 'avatar.jpg'}`" width="100%" height="350" transition="scale-transition"></v-img>
                         <v-card-actions class="justify-center">
@@ -25,8 +25,8 @@
                         </div>
                     </template>
                     <template v-if="!openEdit">
-                        <v-card-text class="mt-5">
-                            <table class="table table-condensed table-hover table-striped">
+                        <v-card-text>
+                            <table class="table table-hover table-striped">
                                 <thead></thead>
                                 <tbody>
                                     <tr>
@@ -52,7 +52,7 @@
                                 </tbody>
                             </table>
                         </v-card-text>
-                        <v-card-actions class="justify-center pb-6">
+                        <v-card-actions class="justify-center mt-n3 pb-6">
                             <v-btn text color="primary" @click="openEditForm"><v-icon>edit</v-icon></v-btn>
                         </v-card-actions>
                     </template>
@@ -70,7 +70,7 @@
                 </v-card>
             </v-col>
             <v-col cols="12" md="5">
-                <v-card light raised outlined elevation="4" min-height="150" class="ml-n6">
+                <v-card light raised outlined elevation="4" min-height="150">
                     <v-card-title class="justify-center subtitle-1 primary white--text">
                         Change Account Password
                     </v-card-title>
@@ -271,3 +271,12 @@ export default {
     },
 }
 </script>
+
+<style lang="css" scoped>
+    .v-card.scroll .v-card__text{
+        overflow-x: scroll !important;
+    }
+    table tbody tr td{
+        white-space: nowrap !important;
+    }
+</style>

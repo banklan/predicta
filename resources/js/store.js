@@ -44,8 +44,8 @@ const bkmkCode = JSON.parse(localStorage.getItem('bkmkCode')) || []
 export const store = new Vuex.Store({
     state: {
         isBusy: false,
-        // api: 'http://localhost:8000/api',
-        api: 'https://surepredict.herokuapp.com/api',
+        api: 'http://localhost:8000/api',
+        // api: 'https://surepredict.herokuapp.com/api',
         adminIsLoggedIn: adminIsLoggedIn,
         authAdmin: authAdmin,
         adminUpdatedSuperUser: false,
@@ -82,7 +82,7 @@ export const store = new Vuex.Store({
         adminProfileUpdated: false,
         bkmkCode: bkmkCode,
         pstPkey: 'pk_test_27753e86c032bcdd6758c5bf79e1048f1e7efbe8',
-        pstSecKey: 'sk_test_ca4f805874f7dfa0640646e947b8e11725f5bb06'
+        pstSecKey: 'sk_test_ca4f805874f7dfa0640646e947b8e11725f5bb06',
     },
     getters: {
         isBusy(state)

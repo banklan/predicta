@@ -55,7 +55,7 @@ class ExpertController extends Controller
             'data.*.odd' => 'required|numeric|between:1,100',
             'data.*.teamA' => 'required|min:3|max:20',
             'data.*.teamB' => 'required|min:3|max:20',
-            'data.*.tip' => 'required|max:12',
+            'data.*.tip' => 'required|max:15',
         ]);
         if($validator->fails()){
             return response()->json(['message' => 'validation failed'], 500);

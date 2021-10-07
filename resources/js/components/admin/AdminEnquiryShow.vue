@@ -50,7 +50,7 @@
                                 </div>
                             </template>
                             <template v-else>
-                                <v-alert type="warning" border="left">
+                                <v-alert type="warning" border="left" class="mt-5">
                                     The enquiry you are trying to view does not exist.
                                 </v-alert>
                             </template>

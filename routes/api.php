@@ -232,6 +232,7 @@ Route::group(['prefix' => 'auth-admin', 'middleware' => ['assign.guard:admin-api
     Route::post('admin_delete_follow/{follow}', 'AdminController@delFollow');
     Route::get('admin_get_all_experts', 'AdminController@getAllExperts');
     Route::get('filter_follows_by_experts/{exp}', 'AdminController@filterFollowsByExpert');
+    Route::post('create_new_bookmaker_without_logo', 'AdminController@createBookmakerWithoutLogo');
 });
 
 

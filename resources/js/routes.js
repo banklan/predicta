@@ -73,6 +73,7 @@ import AdminMailedDailyTips from './components/admin/AdminMailedDailyTips';
 import AdminProfile from './components/admin/AdminProfile';
 import AdminFollows from './components/admin/AdminFollows';
 import ExpertRegister from './components/expert/ExpertRegister';
+import ExpertCreated from './components/expert/ExpertCreated';
 import ExpertLogin from './components/expert/ExpertLogin';
 import ExpertEmailConfirmation from './components/expert/ExpertEmailConfirmation';
 import ExpertDashboard from './components/expert/ExpertDashboard';
@@ -546,6 +547,9 @@ export default [
     },
     {
         path: '/expert-register', name: 'ExpertRegister', component: ExpertRegister,
+    },
+    {
+        path: '/expert-created', name: 'ExpertCreated', component: ExpertCreated,
     },
     {
         path: '/expert-login', name: 'ExpertLogin', component: ExpertLogin,

@@ -64,7 +64,6 @@ export default {
                 this.isLoading = false
                 this.tips = res.data.tips
                 this.tipDate = res.data.tipDate
-                // console.log(res.data)
             }).catch(() =>{
 
             })

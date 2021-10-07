@@ -48,25 +48,32 @@
                 <v-card elevation="8" dark raised min-height="300" class="fc_perf mt-5">
                     <v-card-title class="white--text sub_title justify-center">Forecast Performance</v-card-title>
                     <v-card-text class="my-5 pl-7 pr-7">
-                        <table class="table table-condensed table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Forecast ID</th>
-                                    <th>Cat</th>
-                                    <th>Result</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="fc in perfs" :key="fc.id" @click="goToFc(fc)">
-                                    <td>{{ fc.created_at | moment('D/M/YY') }}</td>
-                                    <td>{{ fc.forecast_id }}</td>
-                                    <td>{{ fc.forecast_odd }}</td>
-                                    <td v-if="fc.prog_status == 2"><v-icon color="green darken-1">mdi-check-all</v-icon></td>
-                                    <td v-if="fc.prog_status == 1"><v-icon color="red darken-2">mdi-close</v-icon></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <template v-if="perfs.length > 0">
+                            <table class="table table-condensed table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Forecast ID</th>
+                                        <th>Cat</th>
+                                        <th>Result</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="fc in perfs" :key="fc.id" @click="goToFc(fc)">
+                                        <td>{{ fc.created_at | moment('D/M/YY') }}</td>
+                                        <td>{{ fc.forecast_id }}</td>
+                                        <td>{{ fc.forecast_odd }}</td>
+                                        <td v-if="fc.prog_status == 2"><v-icon color="green darken-1">mdi-check-all</v-icon></td>
+                                        <td v-if="fc.prog_status == 1"><v-icon color="red darken-2">mdi-close</v-icon></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </template>
+                        <template v-else>
+                            <v-alert border="left" type="info" color="rgb(14 2 60 / 80%)" class="mt-5">
+                                There are no forecasts to show at the moment.
+                            </v-alert>
+                        </template>
                     </v-card-text>
                 </v-card>
                 <v-card elevation="8" dark raised min-height="100" class="follows">
@@ -83,12 +90,12 @@
                             </table>
                         </template>
                         <template v-else>
-                            <v-alert type="info" border="left">
+                            <v-alert type="info" border="left" color="rgb(19 202 243 / 90%)" class="mt-5">
                                 You have no followers at the moment.
                             </v-alert>
                         </template>
                     </v-card-text>
-                    <v-card-actions class="justify-center pb-6" v-if="follows.length < 5">
+                    <v-card-actions class="justify-center pb-6" v-if="follows.length > 5">
                         <v-btn outlined elevation="3" large color="white" :to="{name: 'ExpertFollows'}">All Followers</v-btn>
                     </v-card-actions>
                 </v-card>
@@ -97,26 +104,33 @@
                 <v-card elevation="8" dark raised color="#047149" min-height="100" class="mb-5 latest_sub">
                     <v-card-title class="white--text sub_title justify-center">Latest Subscriptions</v-card-title>
                     <v-card-text class="">
-                        <table class="table table-condensed table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Sub ID</th>
-                                    <th>Cat</th>
-                                    <th>Subscriber</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="sub in subscriptions.slice(0, 5)" :key="sub.id">
-                                    <td>{{ sub.created_at | moment('D/M/YY') }}</td>
-                                    <td @click="goToSub(sub)">{{ sub.sub_id }}</td>
-                                    <td>{{ sub.odd_cat }}</td>
-                                    <td v-if="sub.user">{{ sub.user.fullname }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <template v-if="subscriptions.length > 0">
+                            <table class="table table-condensed table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Sub ID</th>
+                                        <th>Cat</th>
+                                        <th>Subscriber</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="sub in subscriptions.slice(0, 5)" :key="sub.id">
+                                        <td>{{ sub.created_at | moment('D/M/YY') }}</td>
+                                        <td @click="goToSub(sub)">{{ sub.sub_id }}</td>
+                                        <td>{{ sub.odd_cat }}</td>
+                                        <td v-if="sub.user">{{ sub.user.fullname }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </template>
+                        <template v-else>
+                            <v-alert type="info" color="rgb(8 60 2 / 95%)" class="mt-5">
+                                There are no subsriptions to show at the moment.
+                            </v-alert>
+                        </template>
                     </v-card-text>
-                    <v-card-actions class="justify-center pb-6">
+                    <v-card-actions class="justify-center pb-6" v-if="subscriptions.length > 0">
                         <v-btn outlined color="white--text" :to="{name: 'ExpertSubscriptions' }">All Subscriptions</v-btn>
                     </v-card-actions>
                 </v-card>
@@ -144,7 +158,7 @@
                             </table>
                         </template>
                         <template v-else>
-                            <v-alert type="info" border="left" class="mt-5">
+                            <v-alert type="info" color="#f3137a" border="left" class="mt-5">
                                 You have no outstanding earnings.
                             </v-alert>
                         </template>

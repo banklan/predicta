@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <admin-top-panel title="Subscriptions" />
-        <v-row justify="center">
+        <v-row justify="center" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="6">
                 <v-row justify="space-around">
                     <v-col cols="6">
@@ -12,22 +12,22 @@
                     </v-col>
                 </v-row>
             </v-col>
-            <v-col cols="12" md="5">
+            <v-col cols="12" md="5" :class="$vuetify.breakpoint.smAndDown ? 'mt-n7':''">
                <admin-search model="Subscription" searchFor="subscriptions"/>
             </v-col>
         </v-row>
-        <v-row class="mt-2 ml-n10">
+        <v-row class="mt-2 ml-n10" :class="$vuetify.breakpoint.smAndDown ? 'mt-n5':''">
             <v-col cols="12" md="10">
                 <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
                 <v-card v-else light raised elevation="8" min-height="200" class="scroll">
-                    <v-card-title class="sub_title primary white--text justify-center">Subscriptions</v-card-title>
+                    <v-card-title class="subtitle-1 primary white--text justify-center">Subscriptions</v-card-title>
                     <v-card-text class="list">
                         <template v-if="subscriptions.length > 0">
                             <table class="table table-striped table-hover" v-if="!filterView">
                                 <thead>
                                     <tr>
                                         <th>Date</th>
-                                        <th>Subscription ID</th>
+                                        <th>Subscr ID</th>
                                         <th>User</th>
                                         <th>Cat</th>
                                         <th>Status</th>
@@ -47,7 +47,7 @@
                                 <thead>
                                     <tr>
                                         <th>Date</th>
-                                        <th>Subscription ID</th>
+                                        <th>Subscr ID</th>
                                         <th>User</th>
                                         <th>Cat</th>
                                         <th>Status</th>
@@ -196,5 +196,8 @@ export default {
     }
     .scroll .v-card__text{
         overflow-x: scroll !important;
+    }
+    table tbody tr td{
+        white-space: nowrap !important;
     }
 </style>

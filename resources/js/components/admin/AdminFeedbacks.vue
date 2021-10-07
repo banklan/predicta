@@ -1,12 +1,12 @@
 <template>
     <v-container>
         <admin-top-panel title="Daily Tips" />
-        <v-row class="mt-n3">
+        <v-row class="mt-n3" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="5" offset-md="6">
                 <admin-search model="Feedback" searchFor="feedbacks" />
             </v-col>
         </v-row>
-        <v-row class="ml-n10 mt-n5">
+        <v-row class="ml-n10 mt-n5" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="10">
                 <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
                 <v-card v-else light elevation="8" raised class="mt-5">
@@ -16,11 +16,11 @@
                     </v-tabs>
                     <v-tabs-items v-model="tab">
                         <v-tab-item>
-                            <v-card flat class="mt-8" light>
+                            <v-card flat class="mt-8 scroll" light>
                                 <v-card-text class="ml-5 mr-5">
                                     <template v-if="inbox.length > 0">
                                         <v-row>
-                                            <table class="table table-condensed table-hover">
+                                            <table class="table table-hover">
                                                 <thead>
                                                     <tr>
                                                         <th width="20%">Date</th>
@@ -34,14 +34,14 @@
                                                         <td @click="showInbox(msg)">{{ msg.created_at | moment('DD/MM/YY - H:ma')}}</td>
                                                         <td @click="showInbox(msg)" v-if="msg.user">{{ msg.user.fullname }}</td>
                                                         <td @click="showInbox(msg)">{{ msg.subject | truncate(60) }}</td>
-                                                        <td><v-btn  class="mt-n3" small color="red" text @click="confirmDelInbox(msg, index)"><v-icon color="red darken-2">delete_forever</v-icon></v-btn></td>
+                                                        <td><v-btn class="mt-n3" small color="red" icon @click="confirmDelInbox(msg, index)"><v-icon color="red darken-2">delete_forever</v-icon></v-btn></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                         </v-row>
                                     </template>
                                     <template v-else>
-                                        <v-alert type="info" class="mt-5">
+                                        <v-alert type="info" border="left" class="mt-5">
                                             There are no inbox feedbacks to show.
                                         </v-alert>
                                     </template>
@@ -60,7 +60,7 @@
                             </v-card>
                         </v-tab-item>
                         <v-tab-item>
-                            <v-card flat>
+                            <v-card flat class="scroll">
                                 <v-card-text class="mx-3 mt-3">
                                     <template v-if="outbox.length > 0">
                                         <table class="table table-condensed table-hover">
@@ -77,7 +77,7 @@
                                                     <td @click="showOutbox(msg)">{{ msg.created_at | moment('DD/MM/YY - H:ma')}}</td>
                                                     <td @click="showOutbox(msg)" v-if="msg.receiver">{{ msg.receiver.fullname }}</td>
                                                     <td @click="showOutbox(msg)">{{ msg.subject | truncate(60) }}</td>
-                                                    <td><v-btn color="red" text @click="confirmDelOutbox(msg, index)"><v-icon color="red darken-2">delete_forever</v-icon></v-btn></td>
+                                                    <td><v-btn color="red" icon @click="confirmDelOutbox(msg, index)"><v-icon color="red darken-2">delete_forever</v-icon></v-btn></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -279,6 +279,9 @@ export default {
 <style lang="css" scoped>
     table tbody tr{
         cursor: pointer;
+    }
+    table tbody tr td{
+        white-space: nowrap !important;
     }
     .v-card.scroll .v-card__text{
         overflow-x: scroll !important;

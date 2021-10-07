@@ -1,7 +1,7 @@
 <template>
     <v-container class="">
         <admin-top-panel title="Enquiries" />
-        <v-row justify="start" class="mt-5 mr-10">
+        <v-row justify="start" class="mt-5 ml-n10" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12">
                 <v-card light raised outlined elevation="4" min-height="200" class="scroll">
                     <v-card-text class="mt-5">
@@ -23,7 +23,7 @@
                                     <td @click="showEnquiry(enquiry)" :class="!enquiry.is_read ? 'font-weight-bold' : ''">{{ enquiry.email }} </td>
                                     <td @click="showEnquiry(enquiry)" :class="!enquiry.is_read ? 'font-weight-bold' : ''">{{ enquiry.fullname }} </td>
                                     <td @click="showEnquiry(enquiry)" :class="!enquiry.is_read ? 'font-weight-bold' : ''">{{ enquiry.subject | truncate(50) }} </td>
-                                    <td><v-btn small text color="red darken-2" @click="delConfirm(enquiry, i)"><v-icon>delete_forever</v-icon></v-btn></td>
+                                    <td><v-btn small icon color="red darken-2" @click="delConfirm(enquiry, i)"><v-icon>delete_forever</v-icon></v-btn></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -165,5 +165,8 @@ export default {
     }
     .v-btn, a{
         text-transform: none !important;
+    }
+    table tbody tr td{
+        white-space: nowrap !important;
     }
 </style>

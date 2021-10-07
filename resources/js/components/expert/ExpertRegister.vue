@@ -39,7 +39,7 @@
             <template v-else>
                 <v-col cols="12" md="8">
                     <v-alert type="success" border="left" class="mt-10 pa-4">
-                        Thank you for registering as an expert (forecaster) with surepredict. We have sent a mail to your email address <strong>{{ expert.email }}</strong> for email verification.
+                        Thank you for registering as an expert (forecaster) with tipexpats. We have sent a mail to your email address <strong>{{ expert.email }}</strong> for email verification.
                     </v-alert>
                 </v-col>
             </template>
@@ -80,15 +80,14 @@ export default {
                         expert: this.expert
                     }).then((res) => {
                         this.isLoading = false
-                        console.log(res.data)
                         this.createFail = false
-                        this.createError = ''
                         this.expertCreated = true
+                        this.createError = ''
+                        this.$router.push({name: 'ExpertCreated'})
                     }).catch((err) =>{
                         this.isLoading = false
                         if(err.response.status === 422){
                             this.createFail = true
-                            // this.createError = Object.values(err.response.data.errors).flat()
                             this.createError = "The email you are trying to register with is already taken. please try another email."
                         }else{
                             this.createError = 'There was an error while trying to register. Please ensure you are connected to the internet and try again.'

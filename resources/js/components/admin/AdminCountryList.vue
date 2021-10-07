@@ -2,15 +2,15 @@
     <v-container>
         <admin-top-panel title="Countries" />
         <v-row class="mt-4">
-            <v-col cols="4" md="4" offset-md=8>
+            <v-col cols="4" md="4" offset-md="8">
                 <v-btn dark color="primary" :to="{name: 'AdminCreateCountry'}"><v-icon left>add</v-icon>New Country</v-btn>
             </v-col>
         </v-row>
-        <v-row class="mt-4 ml-n10">
+        <v-row class="mt-4 ml-n10" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="10">
                 <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
                 <v-card v-else light raised elevation="8" min-height="200" class="scroll">
-                    <v-card-title class="sub_title primary white--text justify-center">Countries <v-chip color="primary lighten-2" v-if="countries.length > 0">{{ total }}</v-chip></v-card-title>
+                    <v-card-title class="subtitle-1 primary white--text justify-center">Countries <v-chip color="primary lighten-2" class="ml-1" v-if="countries.length > 0">{{ total }}</v-chip></v-card-title>
                     <v-card-text>
                         <template v-if="total > 0">
                             <table class="table table-striped table-hover">
@@ -29,7 +29,7 @@
                                         <td>{{ country.country }}</td>
                                         <td>{{ country.abbrv }}</td>
                                         <td><v-img v-if="country.flag" :src="`/images/countries/${country.flag}`" width="15" transition="scale-transition" class="mt-2"></v-img></td>
-                                        <td><v-btn small text color="primary" @click="openUpdate(country)"><v-icon>edit</v-icon></v-btn> &nbsp; <v-btn small text color="red darken-2" @click="confirmDel(country, i)"><v-icon>delete_forever</v-icon></v-btn></td>
+                                        <td><v-btn small icon color="primary" @click="openUpdate(country)"><v-icon>edit</v-icon></v-btn> &nbsp; <v-btn small icon color="red darken-2" @click="confirmDel(country, i)"><v-icon>delete_forever</v-icon></v-btn></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -225,8 +225,9 @@ export default {
 <style lang="css" scoped>
     table .table_list tr td{
         cursor: pointer;
+        white-space: nowrap;
     }
     .v-card.scroll .v-card__text{
-        overflow: scroll !important;
+        overflow-x: scroll !important;
     }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <v-row justify="center" class="text-center">
-            <v-col cols="10" md="10">
+            <v-col cols="12" md="10">
                 <v-card v-if="!enquiryMailSent" elevation="12" light min-height="400" class="mx-auto pt-3">
                     <v-card-title class="headline justify-center mt-3 pb-5">Drop us a line</v-card-title>
                     <v-card-text class="mt-3">
@@ -11,15 +11,15 @@
                                 <v-text-field label="Organization" v-model="enquiry.organization" placeholder="Your Organization"  solo dense name="organization" v-validate="'required|min:3|max:50'" :error-messages="errors.collect('organization')" data-vv-as="organization"></v-text-field>
                                 <v-text-field label="Position" v-model="enquiry.position" placeholder="Your position"  solo dense name="position" v-validate="'min:2|max:30'" :error-messages="errors.collect('position')" data-vv-as="position"></v-text-field>
                                 <v-row wrap>
-                                    <v-col cols="6">
+                                    <v-col cols="12" md="6">
                                         <v-text-field label="Email Address" v-model="enquiry.email" solo dense name="email" required v-validate="'required|email'" :error-messages="errors.collect('email')"></v-text-field>
                                     </v-col>
-                                    <v-col cols="6">
+                                    <v-col cols="12" md="6">
                                         <v-text-field label="Phone No" v-model="enquiry.phone" solo dense name="phone" required v-validate="'required|numeric|max:14'" :error-messages="errors.collect('phone')"></v-text-field>
                                     </v-col>
                                 </v-row>
                                 <v-text-field label="Subject" v-model="enquiry.subject" solo dense name="subject" required v-validate="'required|min:3|max:100'" :error-messages="errors.collect('subject')"></v-text-field>
-                                <v-textarea label="Message" v-model="enquiry.message" rows="4" auto-grow solo dense name="message" required v-validate="'required|min:5|max:300'" :error-messages="errors.collect('message')"></v-textarea>
+                                <v-textarea label="Message" v-model="enquiry.message" rows="4" auto-grow solo dense name="message" required v-validate="'required|min:5|max:500'" :error-messages="errors.collect('message')"></v-textarea>
                                 <v-btn block dark large color="primary darken-2" class="my-3" @click="sendEnquiry" :loading="loading">Send Enquiry</v-btn>
                             </v-col>
                             <v-col cols="12" md="5">
@@ -39,7 +39,7 @@
                                 <div class="socials mt-8 pa-2">
                                     <div class="subtitle-1 mb-4 font-weight-bold">Follow us on our social media accounts.</div>
                                     <div class="d-flex justify-space-around">
-                                        <v-btn v-for="item in socials" :key="item.icon" icon :href="`${item.link}`" target="_blank" link>
+                                        <v-btn v-for="item in socials" :key="item.icon" icon :href="`${item.link}`" target="_blank" link large>
                                             <v-icon :color="item.color" v-text="item.icon"></v-icon>
                                         </v-btn>
                                     </div>
@@ -61,7 +61,6 @@
         </v-snackbar>
     </v-container>
 </template>
-
 
 <script>
 export default {
@@ -107,10 +106,9 @@ export default {
                     axios.post(this.api + '/send_enquiry', {
                         enquiry: this.enquiry
                     }).then(() => {
-                        this.enquiryMailSent = true
-                        this.clearEnquiryForm()
                         this.loading = false
-                        console.log(res.data)
+                        this.clearEnquiryForm()
+                        this.enquiryMailSent = true
                     }).catch(() =>{
                         this.loading = false
                         this.sendFail = true
@@ -119,8 +117,6 @@ export default {
             })
         },
         clearEnquiryForm(){
-            this.$validator.pause()
-            this.$validator.errors.clear()
             this.enquiry.fullname = ''
             this.enquiry.organization = ''
             this.enquiry.position = ''
@@ -128,6 +124,9 @@ export default {
             this.enquiry.phone = ''
             this.enquiry.subject = ''
             this.enquiry.message = ''
+            this.$validator.pause()
+            this.$validator.fields.items.forEach(field => field.reset())
+            this.$validator.errors.clear()
         }
     }
 }

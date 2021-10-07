@@ -6,7 +6,7 @@
                 <v-btn dark color="primary" @click="newBankDial = true"><v-icon left>add</v-icon>New Bank</v-btn>
             </v-col>
         </v-row>
-        <v-row class="mt-4 ml-n10">
+        <v-row class="mt-4 ml-n10" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="10">
                 <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
                 <v-card v-else light raised elevation="8" min-height="200" class="scroll">
@@ -31,7 +31,7 @@
                             </table>
                         </template>
                         <template v-else>
-                            <v-alert type="info" border="left">
+                            <v-alert type="info" border="left" class="mt-5">
                                 There are currently no banks in the database.
                             </v-alert>
                         </template>
@@ -225,8 +225,9 @@ export default {
 <style lang="css" scoped>
     table .table_list tr td{
         cursor: pointer;
+        white-space: nowrap !important;
     }
-    .v-card.scroll .v-card__text{
+    .v-card.scroll{
         overflow-x: scroll !important;
     }
 </style>

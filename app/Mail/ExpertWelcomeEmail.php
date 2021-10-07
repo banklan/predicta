@@ -29,6 +29,6 @@ class ExpertWelcomeEmail extends Mailable
      */
     public function build()
     {
-        return $this->from('admin@tipexpats.com')->view('emails.expert_welcome_mail');
+        return $this->from('steve@tipexpats.com')->view('emails.expert_welcome_mail');
     }
 }

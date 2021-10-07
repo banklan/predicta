@@ -1,13 +1,13 @@
  <template>
     <v-container>
         <admin-top-panel title="Mailing List" />
-        <v-row class="mt-4">
+        <v-row class="mt-4" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="4" md="4" offset-md=8>
                 <v-btn dark color="primary" @click="newMailingListDial = true"><v-icon left>add</v-icon>Add To Mailing List</v-btn>
             </v-col>
         </v-row>
         <v-progress-circular indeterminate color="primary" :width="4" :size="40" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
-        <v-row v-else class="mt-4 ml-n10" justify="start">
+        <v-row v-else class="mt-4 ml-n10" justify="start" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="10">
                 <v-card light raised elevation="8" min-height="200" class="scroll">
                     <v-card-title class="subtitle-1 primary white--text justify-center">Mailing List <span class="ml-2"><v-chip color="primary lighten-2" v-if="mailList.length > 0">{{ mailList.length }}</v-chip></span></v-card-title>
@@ -29,7 +29,7 @@
                                         <td>{{ user.fullname }}</td>
                                         <td>{{ user.email }}</td>
                                         <td>{{ user.created_at | moment('DD/MM/YY') }}</td>
-                                        <td>{{ user.user_status }}  <toggle-mail-user-status :user="user" />&nbsp; <v-btn small text color="red darken-2" @click="openConfirmDelDial(user, index)"><v-icon>delete_forever</v-icon></v-btn></td>
+                                        <td>{{ user.user_status }}  <toggle-mail-user-status :user="user" />&nbsp; <v-btn small icon color="red darken-2" @click="openConfirmDelDial(user, index)"><v-icon>delete_forever</v-icon></v-btn></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -199,7 +199,10 @@ export default {
 </script>
 
 <style lang="css" scoped>
-    .v-card{
+    .v-card .v-card__text{
         overflow-x: scroll !important;
+    }
+    table tbody tr td{
+        white-space: nowrap !important;
     }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <admin-top-panel title="Teams" />
-        <v-row class="mb-n3 mt-1" justify="space-around">
+        <v-row class="mb-n3 mt-1" justify="space-around" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="6" md="2" offset-md="6">
                 <v-btn dark color="primary" @click="newTeamDial = true" class="align-self-end"><v-icon left>add</v-icon>New</v-btn>
             </v-col>
@@ -9,19 +9,19 @@
                 <v-btn dark color="primary" :to="{name: 'AdminCreateTeamBulk'}" class="align-self-end"><v-icon left>add</v-icon>New (Bulk)</v-btn>
             </v-col>
         </v-row>
-        <v-row>
+        <v-row :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="4">
                 <admin-team-filter :leagues="leagues" />
             </v-col>
-            <v-col cols="12" md="5">
+            <v-col cols="12" md="5" :class="$vuetify.breakpoint.smAndDown ? 'mt-n7':''">
                 <admin-search model="Team" searchFor="teams" />
             </v-col>
         </v-row>
-        <v-row class="ml-n10">
+        <v-row class="ml-n10 mt-n5" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="10">
                 <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
                 <v-card v-else light raised elevation="8" min-height="200" class="scroll">
-                    <v-card-title class="sub_title primary white--text justify-center">Teams <span class="ml-2"><v-chip color="primary lighten-2" v-if="total > 0">{{ total }}</v-chip></span></v-card-title>
+                    <v-card-title class="subtitle-1 primary white--text justify-center">Teams <span class="ml-1"><v-chip color="primary lighten-2" v-if="total > 0">{{ total }}</v-chip></span></v-card-title>
                     <v-card-text>
                         <template v-if="total > 0">
                             <table class="table table-striped table-hover">
@@ -40,13 +40,13 @@
                                         <td v-if="team.league">{{ team.league.league }}</td>
                                         <td>{{ team.team }}</td>
                                         <td>{{ team.abbrv }}</td>
-                                        <td><v-btn small text color="primary" @click="openUpdate(team)"><v-icon>edit</v-icon></v-btn> &nbsp; <v-btn small text color="red darken-2" @click="confirmDel(team, i)"><v-icon>delete_forever</v-icon></v-btn></td>
+                                        <td><v-btn small icon color="primary" @click="openUpdate(team)"><v-icon>edit</v-icon></v-btn> &nbsp; <v-btn small icon color="red darken-2" @click="confirmDel(team, i)"><v-icon>delete_forever</v-icon></v-btn></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </template>
                         <template v-else>
-                            <v-alert type="info" border="left" class="mt-8">
+                            <v-alert type="info" border="left" class="mt-5">
                                 There are currently no teams in the database.
                             </v-alert>
                         </template>
@@ -73,7 +73,7 @@
                     <v-text-field label="Abbreviation" v-model="edit.abbrv" required v-validate="'required|min:3|max:8'" :error-messages="errors.collect('update.abbreviation')" data-vv-scope="update" name="abbreviation"></v-text-field>
                     <v-select label="Select League" v-model="edit.league" :items="leagues" item-text="league" item-value="id" required v-validate="'required'" :error-messages="errors.collect('update.league')" data-vv-scope="update" name="league"></v-select>
                 </v-card-text>
-                <v-card-actions class="pb-8 space-around">
+                <v-card-actions class="pb-8 justify-space-around">
                     <v-btn text color="red darken--2" @click="updateDial = false" width="30%">Cancel</v-btn>
                     <v-btn dark color="primary" :loading="isUpdating" @click="updateTeam" width="50%">Update</v-btn>
                 </v-card-actions>
@@ -295,6 +295,7 @@ export default {
 <style lang="css" scoped>
     table .table_list tr td{
         cursor: pointer;
+        white-space: nowrap !important;
     }
     .v-card.scroll .v-card__text{
         overflow: scroll !important;

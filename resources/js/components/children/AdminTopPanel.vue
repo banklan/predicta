@@ -1,6 +1,6 @@
 <template>
     <!-- <v-container> -->
-        <v-row class="justify-content-end" wrap>
+        <v-row class="justify-content-end" wrap :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="6">
                 <v-card elevation="4" light raised>
                     <v-card-title class="primary darken-2 secondary--text subtitle-2 justify-center">

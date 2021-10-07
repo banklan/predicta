@@ -78,7 +78,7 @@
                             </table>
                         </template>
                         <template v-else>
-                            <v-alert type="info" class="mt-5">
+                            <v-alert type="info" border="left" class="mt-5">
                                 There are no earnings for this expert yet.
                             </v-alert>
                         </template>

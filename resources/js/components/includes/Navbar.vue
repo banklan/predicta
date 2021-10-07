@@ -11,6 +11,9 @@
                 <span class="hidden-md-and-up" v-if="!expertIsLoggedIn && !userIsLoggedIn && !adminIsLoggedIn">
                     <v-app-bar-nav-icon class="secondary--text hidden-md-and-up" @click="notLoggedInDrawer = true"></v-app-bar-nav-icon>
                 </span>
+                <span class="hidden-md-and-up" v-if="adminIsLoggedIn">
+                    <v-app-bar-nav-icon class="secondary--text hidden-md-and-up" @click="adminLoggedInHomeDrawer = true"></v-app-bar-nav-icon>
+                </span>
                 <v-toolbar-title class="ml-5 my-2 white--text">
                     <router-link to="/" style="cursor:pointer" exact>
                         <span class="font-weight-thin headline headline secondary--text">TipExpats</span>
@@ -32,23 +35,47 @@
                     </template>
                 </v-toolbar-items>
             </v-app-bar>
-            <v-navigation-drawer absolute v-model="notLoggedInDrawer" color="primary white--text" class="hidden-md-and-up" disable-resize-watcher>
-                <v-toolbar-title class="white--text ml-4 mt-3 pb-4">
-                    <router-link to="/" style="cursor: pointer" exact>
-                        <span>surePredict</span>
-                    </router-link>
-                </v-toolbar-title>
-                <v-divider></v-divider>
-                <v-list class="ml-4">
-                    <template v-if="!expertIsLoggedIn && !userIsLoggedIn && !adminIsLoggedIn">
-                        <v-list-item dark class="white--text" v-for="item in menus" :key="item.title" link :to="item.path">
-                            <v-list-item-content>
-                                <v-list-item-title>{{ item.title }}</v-list-item-title>
-                            </v-list-item-content>
-                        </v-list-item>
-                    </template>
-                </v-list>
-            </v-navigation-drawer>
+            <template v-if="adminIsLoggedIn">
+                <v-navigation-drawer absolute v-model="adminLoggedInHomeDrawer" color="primary white--text" class="hidden-md-and-up" disable-resize-watcher>
+                    <v-toolbar-title class="white--text ml-4 mt-3 pb-4">
+                        <router-link to="/" style="cursor: pointer" exact>
+                            <span>TipExpats</span>
+                        </router-link>
+                    </v-toolbar-title>
+                    <v-divider></v-divider>
+                    <v-list class="ml-4">
+                        <template>
+                            <v-list-item dark class="white--text" v-for="item in adminMenu" :key="item.title" link :to="item.path">
+                                <v-list-item-content>
+                                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                            <v-list-item dark class="white--text"  @click="adminLogout">
+                                <v-list-item-title>Logout</v-list-item-title>
+                            </v-list-item>
+                        </template>
+                    </v-list>
+                </v-navigation-drawer>
+            </template>
+            <template v-else>
+                <v-navigation-drawer absolute v-model="notLoggedInDrawer" color="primary white--text" class="hidden-md-and-up" disable-resize-watcher>
+                    <v-toolbar-title class="white--text ml-4 mt-3 pb-4">
+                        <router-link to="/" style="cursor: pointer" exact>
+                            <span>TipExpats</span>
+                        </router-link>
+                    </v-toolbar-title>
+                    <v-divider></v-divider>
+                    <v-list class="ml-4">
+                        <template v-if="!expertIsLoggedIn && !userIsLoggedIn && !adminIsLoggedIn">
+                            <v-list-item dark class="white--text" v-for="item in menus" :key="item.title" link :to="item.path">
+                                <v-list-item-content>
+                                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </template>
+                    </v-list>
+                </v-navigation-drawer>
+            </template>
         </template>
     </nav>
 </template>
@@ -76,7 +103,8 @@ export default {
                 {title: "Account", path: "/admin/account"},
             ],
             expertDrawer: false,
-            notLoggedInDrawer: false
+            notLoggedInDrawer: false,
+            adminLoggedInHomeDrawer: false
         }
     },
     computed: {
@@ -125,10 +153,15 @@ export default {
                 })
             }
             this.$router.push('/')
+        },
+        adminLogout(){
+            axios.post(this.api + `/auth-admin/logout`, {}, this.adminHeaders).then(() => {
+                this.$store.commit('logOutAdmin')
+                this.$router.push('/')
+            })
         }
     },
     created() {
-        // console.log(this.authUser)
     },
 }
 </script>

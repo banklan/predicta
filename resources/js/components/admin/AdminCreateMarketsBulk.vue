@@ -8,7 +8,7 @@
                 <admin-top-panel title="New Markets(Bulk)" />
             </v-col>
         </v-row>
-        <v-row justify="start" class="ml-n10">
+        <v-row justify="start" class="" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="5">
                 <v-card elevation="12" raised min-height="200">
                     <v-card-title class="primary darken-2 subtitle-1 white--text justify-center">Add Market (Bulk)</v-card-title>
@@ -39,7 +39,7 @@
                                     <tr v-for="(mkt, index) in markets" :key="index">
                                         <td>{{ mkt.tip }}</td>
                                         <td>{{ mkt.abbrv }}</td>
-                                        <td><v-btn small text color="primary" @click="openEditDial(mkt, index)"><v-icon>edit</v-icon></v-btn>&nbsp; <v-btn small text color="red darken-2" @click="delMarket(index)"><v-icon>delete_forever</v-icon></v-btn></td>
+                                        <td><v-btn small icon color="primary" @click="openEditDial(mkt, index)"><v-icon>edit</v-icon></v-btn>&nbsp; <v-btn small icon color="red darken-2" @click="delMarket(index)"><v-icon small>delete_forever</v-icon></v-btn></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -130,7 +130,6 @@ export default {
                     }
                     this.market = {}
                     this.resetField()
-                    // console.log(this.markets)
                 }
             })
         },
@@ -191,10 +190,13 @@ export default {
 </script>
 
 <style lang="css" scoped>
-    .v-card.scroll{
+    .v-card.scroll .v-card__text{
         overflow-x: scroll !important;
     }
     table tbody tr{
         text-transform:capitalize;
+    }
+    table tbody tr td{
+        white-space: nowrap !important;
     }
 </style>

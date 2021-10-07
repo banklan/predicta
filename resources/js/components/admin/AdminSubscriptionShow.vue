@@ -5,13 +5,13 @@
                 <v-btn rounded color="primary lighten--2" dark elevation="4" left @click.prevent="$router.go(-1)"><v-icon left>arrow_left</v-icon> Back</v-btn>
             </v-col>
             <v-col cols="12" md="11">
-                <admin-top-panel :title="`Subscription ${sub}`" />
+                <admin-top-panel :title="`Subscr. ${sub}`" />
             </v-col>
         </v-row>
-        <v-row justify="start" class="mt-4 ml-n10">
+        <v-row justify="center" class="mt-4 ml-n10" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="6">
                 <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
-                <v-card v-else light raised elevation="8" min-height="200" class="scroll">
+                <v-card v-else light raised elevation="8" min-height="200" class="scroll" width="100%">
                     <template v-if="subscription">
                         <v-card-title class="subtitle-1 primary white--text justify-center">Subscription </v-card-title>
                         <v-card-text class="subtitle-2 mt-1">
@@ -19,39 +19,39 @@
                                 <thead></thead>
                                 <tbody>
                                     <tr>
-                                        <th width="35%">Subscription ID</th>
+                                        <th width="35%">Subscription ID:</th>
                                         <td>{{ subscription.sub_id }}</td>
                                     </tr>
                                     <tr>
-                                        <th>User</th>
+                                        <th>User:</th>
                                         <td>{{ subscription.user && subscription.user.fullname }}</td>
                                     </tr>
                                     <tr>
-                                        <th>Expert</th>
+                                        <th>Expert:</th>
                                         <td>{{ subscription.expert && subscription.expert.username }}</td>
                                     </tr>
                                     <tr>
-                                        <th>Odd Category</th>
+                                        <th>Odd Category:</th>
                                         <td>{{ subscription.odd_cat }}</td>
                                     </tr>
                                     <tr>
-                                        <th>Amount(&#8358;)</th>
+                                        <th>Cost(&#8358;):</th>
                                         <td>{{ subscription.amount/100 | price }}</td>
                                     </tr>
                                     <tr>
-                                        <th>Date / Time</th>
+                                        <th>Date / Time:</th>
                                         <td>{{ subscription.created_at | moment('DD/MM/YY') }} - {{ subscription.created_at | moment('H:ma') }}</td>
                                     </tr>
                                     <tr>
-                                        <th>Expiry</th>
+                                        <th>Expiry:</th>
                                         <td>{{ subscription.expiry | moment('DD/MM/YY') }}</td>
                                     </tr>
                                     <tr>
-                                        <th>Expiry Status</th>
+                                        <th>Expiry Status:</th>
                                         <td>{{ subscription.expiry_status }}</td>
                                     </tr>
                                     <tr v-if="subscription.payment">
-                                        <th>Transaction ID</th>
+                                        <th>Transaction ID:</th>
                                         <td class="primary--text go_to" @click="goToPymt(subscription.payment)">{{ subscription.payment.tx_id }}</td>
                                     </tr>
                                 </tbody>
@@ -59,7 +59,7 @@
                         </v-card-text>
                         <v-card-actions class="justify-space-around mb-5">
                             <v-btn width="40%" dark color="primary darken-2" @click="expConfirmDial = true">{{ subscription.status ? 'Disable' : 'Enable' }}</v-btn>
-                            <v-btn dark width="40%" color="red darken-2" @click="delConfirmDial = true"><v-icon>delete_forever</v-icon></v-btn>
+                            <v-btn text width="40%" color="red darken-2" @click="delConfirmDial = true"><v-icon>delete_forever</v-icon></v-btn>
                         </v-card-actions>
                     </template>
                     <template v-else>
@@ -90,7 +90,7 @@
                             <div class="subtitle-1 my-2 text-center">Events </div>
                             <template v-for="event in subscription.events">
                                 <v-card flat :key="event.id">
-                                    <v-card-text>
+                                    <v-card-text class="ml-n2">
                                         <table class="table table-condensed table-hover">
                                             <thead></thead>
                                             <tbody>
@@ -125,7 +125,6 @@
                             </template>
                         </v-card-text>
                     </template>
-
                 </v-card>
             </v-col>
         </v-row>
@@ -133,7 +132,7 @@
             <v-card min-height="150">
                 <v-card-title class="subtitle-1 primary white--text justify-center">Delete Subscription?</v-card-title>
                 <v-card-text class="text-center mt-5 subtitle-1">
-                    Are you sure you want to delete this subscription? User and Expert will no longer see the subscription in their account if you proceed to delete.
+                    Are you sure you want to delete this subscription? User and Expert will loose this subscription and will no longer see it in their account if you proceed to delete.
                 </v-card-text>
                 <v-card-actions class="pb-5 justify-center">
                     <v-btn text color="red darken--2" @click="delConfirmDial = false" width="30%">Cancel</v-btn>
@@ -283,5 +282,8 @@ export default {
     .won{
         background: #00b900;
         border-radius: 1px solid #01a201;
+    }
+    table tbody tr td,table tbody tr th {
+        white-space: nowrap !important;
     }
 </style>

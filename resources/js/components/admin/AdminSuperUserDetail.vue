@@ -5,10 +5,10 @@
                 <v-btn rounded color="primary lighten--2" dark elevation="4" left :to="{name: 'AdminSuperUsersList'}"><v-icon left>arrow_left</v-icon> Admin List</v-btn>
             </v-col>
         </v-row>
-        <v-row justify="start" class="mt-5 mr-5">
+        <v-row justify="start" class="mt-5" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="5">
                 <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
-                <v-card v-else light raised outlined elevation="4" min-height="400">
+                <v-card v-else light raised outlined elevation="4" min-height="400" class="scroll">
                     <v-img v-if="user.picture" :src="`/images/profiles/admins/${user.picture}`" aspect-ratio="1" height="300" transition="scale-transition"></v-img>
                     <v-img v-else src="/images/shared/user6.jpg" aspect-ratio="1" height="300" transition="scale-transition"></v-img>
                     <v-card-text>
@@ -217,4 +217,11 @@ export default {
     a, .v-btn{
         text-decoration: none !important;
     }
+    .v-card.scroll .v-card__text{
+        overflow-x: scroll !important;
+    }
+    table tbody tr th,table tbody tr td {
+        white-space: nowrap !important;
+    }
+
 </style>

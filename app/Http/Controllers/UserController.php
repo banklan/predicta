@@ -161,6 +161,8 @@ class UserController extends Controller
         $fb->body = $request->feedback['body'];
         $fb->save();
 
+        $fb->fresh();
+
         // send email to user and admin
         Mail::to($user->email)->send(new FeedbackPostedEmail($user, $fb));
         Mail::to('banklan2010@gmail.com')->send(new FeedbackPostedEmail($user, $fb));
@@ -290,6 +292,7 @@ class UserController extends Controller
         $enquiry->is_read = false;
         $enquiry->save();
 
+        $enquiry->fresh();
         //send acknowledgement mail to user
         Mail::to($enquiry->email)->send(new EnquirySent($enquiry));
 

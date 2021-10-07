@@ -6,7 +6,7 @@
             </span>
             <v-toolbar-title class="ml-5 my-2 white--text">
                 <router-link to="/" style="cursor:pointer" exact>
-                    <span class="font-weight-thin headline headline secondary--text">Surepredict</span>
+                    <span class="font-weight-thin headline headline secondary--text">TipExpats</span>
                 </router-link>
             </v-toolbar-title>
             <v-spacer></v-spacer>

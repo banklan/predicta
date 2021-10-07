@@ -23,18 +23,9 @@ import App from './components/App'
 import Moment from 'vue-moment'
 import './filters'
 
-// import VueCreditCard from '@fracto/vue-credit-card';
-// import VueCreditCard from '@fracto/vue-credit-card';
-// import Flutterwave from 'flutterwave-vue-v3'
-// import Rave from 'vue-ravepayment'
-
-
 Vue.use(VueRouter)
 Vue.use(VeeValidate)
 Vue.use(Moment)
-// Vue.use(VueCreditCard)
-// Vue.use(Flutterwave, { publicKey: 'FLWPUBK-7c356af6b5e9e45798328a1e188909d2-X' })
-// Vue.use(Rave)
 
 const router = new VueRouter({
     routes: Routes,

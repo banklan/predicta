@@ -8,16 +8,16 @@
                 <admin-top-panel title="Daily Tip" />
             </v-col>
         </v-row>
-        <v-row justify="start" class="mt-4 ml-n10">
+        <v-row justify="start" class="mt-4 ml-n10" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="6">
                 <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
                 <v-card v-else light raised elevation="8" min-height="200" class="scroll">
                     <template v-if="tipSummary && tipSummary.event_count > 0">
-                        <v-card-title class="sub_title primary white--text justify-center">Daily Tips</v-card-title>
+                        <v-card-title class="subtitle-1 primary white--text justify-center">Daily Tips</v-card-title>
                         <v-card-text class="subtitle-2">
                             <template v-if="tips.length > 0">
                                 <v-card flat min-height="100" v-for="(fc, index) in tips" :key="fc.id" :class="index == 0 ? '' : 'mt-2'">
-                                    <v-card-text>
+                                    <v-card-text class="ml-n5">
                                         <table class="table table-striped table-hover">
                                             <thead></thead>
                                             <tbody>
@@ -63,8 +63,8 @@
                                         </table>
                                     </v-card-text>
                                     <v-card-actions class="justify-space-around mt-n3 pb-6">
-                                        <v-btn dark color="primary darken-2" width="40%" :to="{name: 'AdminDailyTipUpdate', params: {code:$route.params.code, tip: fc.id}}">Update Event</v-btn>
-                                        <v-btn text color="red darken-3" width="40%" @click="confirmRemoveEvent(fc, index)"><v-icon>delete_forever</v-icon>Remove Event</v-btn>
+                                        <v-btn text color="red darken-3" @click="confirmRemoveEvent(fc, index)"><v-icon>delete_forever</v-icon>Remove</v-btn>
+                                        <v-btn dark color="primary darken-2" :to="{name: 'AdminDailyTipUpdate', params: {code:$route.params.code, tip: fc.id}}">Update Event</v-btn>
                                     </v-card-actions>
                                 </v-card>
                             </template>
@@ -223,4 +223,8 @@ export default {
         background: #00b900;
         border-radius: 1px solid #01a201;
     }
+    table tbody tr td{
+        white-space: nowrap !important;
+    }
+
 </style>

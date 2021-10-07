@@ -1,19 +1,19 @@
 <template>
     <v-container>
         <admin-top-panel title="Markets" />
-        <v-row class="mt-4">
+        <v-row class="mt-4" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="6" md="3" offset-md="6">
-                <v-btn dark color="primary" @click="addNewDial = true"><v-icon left>add</v-icon>New Market</v-btn>
+                <v-btn dark color="primary" @click="addNewDial = true"><v-icon left>add</v-icon>New</v-btn>
             </v-col>
             <v-col cols="6" md="3">
                 <v-btn dark color="primary" :to="{name: 'AdminCreateMarketsBulk'}"><v-icon left>add</v-icon>New (Bulk)</v-btn>
             </v-col>
         </v-row>
-        <v-row class="mt-4 ml-n10">
+        <v-row class="mt-4 ml-n10" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="10">
                 <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
-                <v-card v-else light raised elevation="8" min-height="200" class="scroll">
-                    <v-card-title class="sub_title primary white--text justify-center">Markets <v-chip color="primary lighten-2" v-if="total > 0" class="ml-2">{{ total }}</v-chip></v-card-title>
+                <v-card v-else light raised elevation="8" min-height="200" class="scroll" width="100%">
+                    <v-card-title class="subtitle-1 primary white--text justify-center">Markets <v-chip color="primary lighten-2" v-if="total > 0" class="ml-1">{{ total }}</v-chip></v-card-title>
                     <v-card-text>
                         <template v-if="total > 0">
                             <table class="table table-striped table-hover">
@@ -30,7 +30,7 @@
                                         <td>{{ mkt.id }}</td>
                                         <td>{{ mkt.tip }}</td>
                                         <td>{{ mkt.abbrv }}</td>
-                                        <td><v-btn small text color="primary" @click="openUpdate(mkt)"><v-icon>edit</v-icon></v-btn> &nbsp; <v-btn small text color="red darken-2" @click="confirmDel(mkt, i)"><v-icon>delete_forever</v-icon></v-btn></td>
+                                        <td><v-btn small icon color="primary" @click="openUpdate(mkt)"><v-icon>edit</v-icon></v-btn> &nbsp; <v-btn small icon color="red darken-2" @click="confirmDel(mkt, i)"><v-icon>delete_forever</v-icon></v-btn></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -59,8 +59,8 @@
             <v-card min-height="150">
                 <v-card-title class="sub_title primary white--text justify-center">Add Market</v-card-title>
                 <v-card-text class="text-center mt-5 subtitle-1">
-                    <v-text-field label="Market" v-model="add.tip" required v-validate="'required|min:3|max:30'" :error-messages="errors.collect('add.tip')" name="tip" data-vv-scope="add"></v-text-field>
-                    <v-text-field label="Abbreviation" v-model="add.abbrv" required v-validate="'required|min:3|max:15'" :error-messages="errors.collect('add.abbrv')" name="abbrv" data-vv-scope="add"></v-text-field>
+                    <v-text-field label="Market" v-model="add.tip" required v-validate="'required|min:1|max:30'" :error-messages="errors.collect('add.tip')" name="tip" data-vv-scope="add"></v-text-field>
+                    <v-text-field label="Abbreviation" v-model="add.abbrv" required v-validate="'required|min:1|max:15'" :error-messages="errors.collect('add.abbrv')" name="abbrv" data-vv-scope="add"></v-text-field>
                 </v-card-text>
                 <v-card-actions class="pb-8 mt-2 justify-center">
                     <v-btn text color="red darken--2" @click="addNewDial = false" width="30%">Cancel</v-btn>
@@ -72,8 +72,8 @@
             <v-card min-height="150">
                 <v-card-title class="sub_title primary white--text justify-center">Update Market</v-card-title>
                 <v-card-text class="text-center mt-5 subtitle-1">
-                    <v-text-field label="Market" v-model="edit.tip" required v-validate="'required|min:3|max:20'" :error-messages="errors.collect('updt.tip')" name="tip" data-vv-scope="updt"></v-text-field>
-                    <v-text-field label="Abbreviation" v-model="edit.abbrv" required v-validate="'required|min:3|max:8'" :error-messages="errors.collect('updt.abbrv')" name="abbrv" data-vv-scope="updt"></v-text-field>
+                    <v-text-field label="Market" v-model="edit.tip" required v-validate="'required|min:1|max:30'" :error-messages="errors.collect('updt.tip')" name="tip" data-vv-scope="updt"></v-text-field>
+                    <v-text-field label="Abbreviation" v-model="edit.abbrv" required v-validate="'required|min:1|max:15'" :error-messages="errors.collect('updt.abbrv')" name="abbrv" data-vv-scope="updt"></v-text-field>
                 </v-card-text>
                 <v-card-actions class="pb-8 justify-center">
                     <v-btn text color="red darken--2" @click="updateDial = false" width="30%">Cancel</v-btn>
@@ -266,3 +266,12 @@ export default {
      }
 }
 </script>
+
+<style lang="css" scoped>
+    table tbody tr td{
+        white-space:nowrap;
+    }
+    .v-card .v-card__text{
+        overflow-x: scroll !important;
+    }
+</style>

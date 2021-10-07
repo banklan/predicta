@@ -1,15 +1,15 @@
 <template>
     <v-container>
         <admin-top-panel title="Follows" />
-        <v-row class="mt-n2">
+        <v-row class="mt-n2" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="4" offset-md="6">
                 <v-select label="Filter Experts" :items="experts" item-text="username" item-value="id" v-model="filteredFollows" @change="filterExperts"></v-select>
             </v-col>
         </v-row>
-        <v-row class="mt-2 ml-n10">
+        <v-row class="mt-2 ml-n10" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="10">
                 <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
-                <v-card v-else light raised elevation="8" min-height="200">
+                <v-card v-else light raised elevation="8" min-height="200" class="scroll">
                     <v-card-title class="subtitle-1 primary white--text justify-center">Follows <v-chip v-if="follows.length > 0" class="ml-1 primary lighten-2">{{ follows.length }}</v-chip></v-card-title>
                     <v-card-text>
                         <template v-if="follows.length > 0">
@@ -230,7 +230,10 @@ export default {
     table tbody tr{
         cursor: pointer;
     }
-    .v-card{
+    table tbody tr td{
+        white-space: nowrap !important;
+    }
+    .v-card.scroll .v-card__text{
         overflow-x: scroll !important;
     }
 </style>

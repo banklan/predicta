@@ -1,24 +1,24 @@
 <template>
     <v-container>
         <admin-top-panel title="Super Users" />
-        <v-row justify="center">
+        <v-row justify="center" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="5">
                 <v-text-field placeholder="Search for Super User" v-model="q" outlined dense append-icon="search" clearable @keypress.enter="filter"></v-text-field>
             </v-col>
-            <v-col cols="12" md="4" offset-md="2">
+            <v-col cols="12" md="4" offset-md="2" :class="$vuetify.breakpoint.smAndDown ? 'mt-n7':''">
                 <v-btn dark color="primary" :to="{name: 'AdminCreateSuperUser'}"><v-icon left>add</v-icon>New Admin</v-btn>
             </v-col>
         </v-row>
-        <v-row v-if="filterView" justify="center" class="mt-n5">
+        <v-row v-if="filterView" justify="center" class="mt-n5" :class="$vuetify.breakpoint.smAndDown ? 'mt-n7':''">
             <v-col cols="12">
                 <div class="text-center subtitle-1">Search for <strong>{{ q }}</strong> returns {{ filtered.length }} admin users.</div>
             </v-col>
         </v-row>
-        <v-row class="mt-2 ml-n10">
+        <v-row class="mt-2 ml-n10" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="10">
                 <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
                 <v-card v-else light raised elevation="8" min-height="150">
-                    <v-card-title class="sub_title primary white--text justify-center">Super Users</v-card-title>
+                    <v-card-title class="subtitle-1 primary white--text justify-center">Super Users</v-card-title>
                     <v-card-text>
                         <v-simple-table light fixed-header height="300" v-if="!filterView">
                             <template v-slot:default>
@@ -37,7 +37,7 @@
                                         <td @click="showUser(user)">{{ user.fullname }}</td>
                                         <td @click="showUser(user)">{{ user.email }}</td>
                                         <td>{{ user.status ? 'Enabled' : 'Disabled'}} &nbsp; <v-btn dark small class="primary" @click.prevent="toggleUserStatus(user)">{{ user.status ? 'Disable' : 'Enable'}}</v-btn> </td>
-                                        <td><v-btn small text color="primary" :to="{name: 'AdminUpdateSuperUser', params:{id: user.id}}"><v-icon>edit</v-icon></v-btn> &nbsp; <v-btn v-if="user.id !== authAdmin.id" small text color="red darken-2" @click="confirmDel(user, i)"><v-icon>delete_forever</v-icon></v-btn></td>
+                                        <td><v-btn small icon color="primary" :to="{name: 'AdminUpdateSuperUser', params:{id: user.id}}"><v-icon>edit</v-icon></v-btn> &nbsp; <v-btn v-if="user.id !== authAdmin.id" small icon color="red darken-2" @click="confirmDel(user, i)"><v-icon>delete_forever</v-icon></v-btn></td>
                                     </tr>
                                 </tbody>
                             </template>
@@ -184,5 +184,11 @@ export default {
 <style lang="css" scoped>
     table .admin_list tr td{
         cursor: pointer;
+    }
+    table tbody tr td{
+        white-space: nowrap !important;
+    }
+    .v-card .v-card__text{
+        overflow-x: scroll !important;
     }
 </style>

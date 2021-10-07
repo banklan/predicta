@@ -54,7 +54,6 @@ export default {
             axios.get(this.api + '/get_top_experts').then((res) =>{
                 this.isLoading = false
                 this.experts = res.data
-                console.log('top experts =>', res.data)
             })
         }
     },

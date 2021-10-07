@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <v-row justify="space-between">
+        <v-row justify="space-between" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="1">
                 <v-btn rounded color="primary lighten--2" dark elevation="4" left @click.prevent="$router.go(-1)"><v-icon left>arrow_left</v-icon> Back</v-btn>
             </v-col>
@@ -8,11 +8,11 @@
                 <admin-top-panel title="Expert Forecast" />
             </v-col>
         </v-row>
-       <v-row class="justify-start mt-5 ml-n10">
+       <v-row class="justify-start ml-n10" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="7">
                 <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
                 <v-card v-else light raised elevation="10" min-height="200">
-                    <v-card-title class="justify-center sub_title primary darken-2 white--text">Forecasts for Expert </v-card-title>
+                    <v-card-title class="justify-center subtitle-1 primary darken-2 white--text">Forecasts for Expert </v-card-title>
                     <v-card-text>
                         <template v-if="forecasts.length > 0">
                             <table class="table table-condensed table-striped table-hover">

@@ -1,16 +1,16 @@
 <template>
     <v-container>
         <admin-top-panel title="Expert Forecasts" />
-        <v-row justify="end">
+        <v-row justify="end" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="6">
                <admin-search model="Forecasts" searchFor="forecasts"/>
            </v-col>
         </v-row>
-        <v-row class="mt-2 ml-n10">
+        <v-row class="mt-2 ml-n10" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="10">
                 <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
                 <v-card v-else light raised elevation="8" min-height="200" class="scroll">
-                    <v-card-title class="sub_title primary white--text justify-center">Expert Forecasts</v-card-title>
+                    <v-card-title class="subtitle-1 primary white--text justify-center">Expert Forecasts</v-card-title>
                     <v-card-text>
                         <template v-if="forecasts.length > 0">
                             <table class="table table-condensed table-striped table-hover">
@@ -33,13 +33,13 @@
                                         <td v-if="fc.progress == '0'" style="text-align: left"><v-icon color="red darken-2">mdi-close</v-icon> </td>
                                         <td v-if="fc.progress == '1'" style="text-align: left"><v-icon color="green darken-1">mdi-check-all</v-icon> </td>
                                         <td v-if="fc.progress == '2'" style="text-align: left"><v-icon color="orange darken-2">mdi-minus</v-icon> </td>
-                                        <td><v-btn small text color="red darken-2" @click="confirmDel(fc, i)"><v-icon>delete_forever</v-icon></v-btn></td>
+                                        <td><v-btn small icon color="red darken-2" @click="confirmDel(fc, i)"><v-icon>delete_forever</v-icon></v-btn></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </template>
                         <template v-else>
-                            <v-alert type="info" border="left">
+                            <v-alert type="info" border="left" class="mt-5">
                                 There are currently no expert forecasts.
                             </v-alert>
                         </template>
@@ -157,6 +157,7 @@ export default {
 <style lang="css" scoped>
     table .expert_list tr td{
         cursor: pointer;
+        white-space: nowrap;
     }
     .scroll .v-card__text{
         overflow: scroll !important;

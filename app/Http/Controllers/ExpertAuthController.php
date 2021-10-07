@@ -88,6 +88,7 @@ class ExpertAuthController extends Controller
             $conf->token = bin2hex(random_bytes(80));
             $conf->save();
 
+            $conf->fresh();
             // send welcome email
             Mail::to($expert->email)->send(new ExpertWelcomeEmail($expert, $conf));
         }

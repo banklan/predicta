@@ -1,14 +1,14 @@
 <template>
     <v-container>
-        <v-row class="">
+        <v-row :class="$vuetify.breakpoint.smAndDown ? 'ml-n3':''">
             <v-col cols="12" md="1">
                 <v-btn rounded color="primary lighten--2" dark elevation="4" left @click.prevent="$router.go(-1)"><v-icon left>arrow_left</v-icon> Back</v-btn>
             </v-col>
             <v-col cols="12" md="11">
-                <admin-top-panel :title="`Payment Trx ID ${trx_id}`" />
+                <admin-top-panel :title="`Pymt Trx ID ${trx_id}`" />
             </v-col>
         </v-row>
-        <v-row class="mt-4">
+        <v-row class="mt-4" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
             <v-col v-else cols="12" md="8">
                 <v-card light raised elevation="8" min-height="200">
@@ -74,7 +74,7 @@
                             </table>
                         </template>
                         <template v-else>
-                            <v-alert type="info" border="left">
+                            <v-alert type="info" border="left" class="mt-5">
                                 The payment details you are tryig to view is invalid.
                             </v-alert>
                         </template>
@@ -140,7 +140,10 @@ export default {
     .table tbody tr{
         cursor: pointer;
     }
-    .v-card{
+    table tbody tr td, table tbody tr th{
+        white-space: nowrap !important;
+    }
+    .v-card .v-card__text{
         overflow-x: scroll !important;
     }
 </style>

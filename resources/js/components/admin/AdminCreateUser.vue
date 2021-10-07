@@ -5,11 +5,11 @@
                 <v-btn rounded color="primary lighten--2" dark elevation="4" left @click.prevent="$router.go(-1)"><v-icon left>arrow_left</v-icon> Back</v-btn>
             </v-col>
         </v-row>
-        <v-row class="mt-4 ml-n10" justify="start">
+        <v-row class="mt-4" justify="start" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="8">
                 <v-card light raised elevation="8" min-height="200">
-                    <v-card-title class="sub_title primary white--text justify-center">Create New User</v-card-title>
-                    <v-card-text class="body-1 mt-5 px-8">
+                    <v-card-title class="subtitle-1 primary white--text justify-center">Create New User</v-card-title>
+                    <v-card-text class="body-1 mt-5 px-3">
                         <v-text-field label="First Name" v-model="user.first_name" required placeholder="First Name" v-validate="'required|min:2|max:50'" :error-messages="errors.collect('first_name')" name="first_name" data-vv-as="first name"></v-text-field>
                         <v-text-field label="Last Name" v-model="user.last_name" required placeholder="Surname" v-validate="'required|min:2|max:50'" :error-messages="errors.collect('last_name')" name="last_name" data-vv-as="last name"></v-text-field>
                         <v-row>
@@ -26,7 +26,7 @@
                     </v-card-text>
                     <v-card-actions class="justify-center pb-8">
                         <v-btn large text color="red darken-2" width="40%" @click.prevent="$router.go(-1)">Cancel</v-btn>
-                        <v-btn large dark color="primary" width="40%" @click="createUser" :loading="isLoading">Create User</v-btn>
+                        <v-btn large dark color="primary" width="40%" @click="createUser" :loading="isLoading">Submit</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-col>
@@ -94,6 +94,6 @@ export default {
 
 <style lang="css" scoped>
     .v-card{
-        overflow: scroll !important;
+        overflow-x: scroll !important;
     }
 </style>

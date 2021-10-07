@@ -1,11 +1,11 @@
 <template>
     <v-container>
         <admin-top-panel title="Experts (Forecasters)" />
-        <v-row class="mt-4">
+        <v-row class="mt-4" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="5">
                <admin-search model="Expert" searchFor="experts"/>
            </v-col>
-            <v-col cols="4" md="4" offset-md="3">
+            <v-col cols="4" md="4" offset-md="3" :class="$vuetify.breakpoint.smAndDown ? 'mt-n7':''">
                 <v-btn dark color="primary" :to="{name: 'AdminCreateExpert'}"><v-icon left>add</v-icon>New Expert</v-btn>
             </v-col>
         </v-row>
@@ -13,7 +13,7 @@
             <v-col cols="12" md="10">
                 <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
                 <v-card v-else light raised elevation="8" min-height="200">
-                    <v-card-title class="sub_title primary white--text justify-center">Expert Users</v-card-title>
+                    <v-card-title class="subtitle-1 primary white--text justify-center">Expert Users</v-card-title>
                     <v-card-text>
                         <template v-if="experts.length > 0">
                             <table class="table table-striped table-hover">
@@ -32,13 +32,13 @@
                                         <td @click="showExpert(user)">{{ user.expert_id }}</td>
                                         <td @click="showExpert(user)">{{ user.username }}</td>
                                         <td @click="showExpert(user)">{{ user.email }}</td>
-                                        <td><v-btn small text color="primary" :to="{name: 'AdminExpertUpdate', params:{id: user.id}}"><v-icon>edit</v-icon></v-btn> &nbsp; <v-btn small text color="red darken-2" @click="confirmDel(user, i)"><v-icon>delete_forever</v-icon></v-btn></td>
+                                        <td><v-btn small icon color="primary" :to="{name: 'AdminExpertUpdate', params:{id: user.id}}"><v-icon>edit</v-icon></v-btn> &nbsp; <v-btn small icon color="red darken-2" @click="confirmDel(user, i)"><v-icon>delete_forever</v-icon></v-btn></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </template>
                         <template v-else>
-                            <v-alert type="info" border="left">
+                            <v-alert type="info" border="left" class="mt-5">
                                 There are currently no experts users.
                             </v-alert>
                         </template>
@@ -198,6 +198,9 @@ export default {
         cursor: pointer;
     }
     .v-card .v-card__text{
-        overflow: scroll !important;
+        overflow-x: scroll !important;
+    }
+    table tbody tr td{
+        white-space: nowrap !important;
     }
 </style>

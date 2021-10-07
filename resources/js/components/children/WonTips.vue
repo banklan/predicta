@@ -58,7 +58,6 @@ export default {
             axios.get(this.api + '/get_brief_won_daily_tips').then((res) =>{
                 this.isLoading = false
                 this.tips = res.data
-                console.log(res.data)
             })
         }
     },

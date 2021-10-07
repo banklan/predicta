@@ -271,4 +271,7 @@ export default {
     table.sub_table tbody tr{
         cursor: pointer;
     }
+    .v-card .v-card__text tbody tr td{
+        white-space: nowrap !important;
+    } 
 </style>

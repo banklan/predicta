@@ -1,12 +1,12 @@
 <template>
    <v-container>
         <admin-top-panel title="Daily Tips" />
-        <v-row>
-           <v-col cols="12" md="5">
+        <v-row :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
+           <v-col cols="12" md="5" class="mb-sm-n10">
                <admin-search model="DailyTips" searchFor="daily tips"/>
            </v-col>
-           <v-col cols="12" md="4" offset-md="3">
-               <v-btn small dark color="primary darken-2" :to="{name: 'AdminCreateDailyTips'}"><v-icon left>add</v-icon>New Daily Tip</v-btn>
+           <v-col cols="12" md="4" offset-md="3" :class="$vuetify.breakpoint.smAndDown ? 'mt-n7':''">
+               <v-btn dark  color="primary" :to="{name: 'AdminCreateDailyTips'}"><v-icon left>add</v-icon>New Daily Tip</v-btn>
             </v-col>
         </v-row>
         <v-row justify="start" class="mt-4 ml-n10">
@@ -164,7 +164,7 @@ export default {
 </script>
 
 <style lang="css" scoped>
-    .v-card{
+    .v-card.scroll{
         overflow-x: scroll !important;
     }
     table tr{

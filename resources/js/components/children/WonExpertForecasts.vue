@@ -56,7 +56,6 @@ export default {
             axios.get(this.api + '/get_brief_won_expert_forecasts').then((res) =>{
                 this.isLoading = false
                 this.fcs = res.data
-                console.log(res.data)
             })
         }
     },

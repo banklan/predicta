@@ -3,10 +3,10 @@
         <Navbar />
         <div v-if="authAdmin && $route.path.substring(0, 6) == '/admin'">
             <v-row>
-                <v-col cols="4" md="3">
+                <v-col cols="4" md="2">
                     <AdminNavDrawer />
                 </v-col>
-                <v-col cols="8" md="9">
+                <v-col cols="8" md="10">
                     <v-row justify="start" class="">
                         <v-col cols="12">
                             <router-view></router-view>

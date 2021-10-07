@@ -1,7 +1,6 @@
 <template>
     <div class="d-flex">
         <v-text-field :placeholder="`Search for ${ searchFor }`" v-model="q" outlined dense append-icon="search" clearable @keypress.enter="search"></v-text-field>
-        <!-- <v-btn class="primary" @click.prevent="search">Go</v-btn> -->
     </div>
 </template>
 

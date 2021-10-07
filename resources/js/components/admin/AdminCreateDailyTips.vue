@@ -1,15 +1,14 @@
 <template>
     <v-container>
-        <admin-top-panel title="Create Daily Tips" />
-        <v-row class="mt-4">
+        <v-row class="mt-4" justify="center">
             <v-col cols="12" md="3">
-                <v-btn rounded color="primary lighten--2" dark elevation="4" left @click.prevent="$router.go(-1)"><v-icon left>arrow_left</v-icon> Back</v-btn>
+                <v-btn class="text-left" rounded color="primary lighten--2" dark elevation="4" left @click.prevent="$router.go(-1)"><v-icon left>arrow_left</v-icon> Back</v-btn>
             </v-col>
             <v-col cols="12" md="9">
                 <admin-top-panel title="Create Daily Tips" />
             </v-col>
         </v-row>
-        <v-row class="mt-4 ml-n10" justify="space-around">
+        <v-row class="mt-4 ml-n10" justify="start">
             <v-col cols="12" md="5">
                 <v-card light raised elevation="8" min-height="200">
                     <v-card-title class="sub_title primary white--text justify-center">Create Daily Tip</v-card-title>
@@ -27,7 +26,7 @@
             <v-col cols="12" md="7">
                 <v-card light raised elevation="8" min-height="200">
                     <v-card-title class="sub_title primary white--text justify-center mx-auto">Forecast <v-chip color="primary lighten-2" v-if="dailyTips.length > 0" class="ml-1">{{ dailyTips.length }}</v-chip></v-card-title>
-                    <v-card-text class="caption px-8">
+                    <v-card-text class="caption">
                         <template v-if="dailyTips.length > 0">
                             <table class="table table-striped table-hover">
                                 <thead>
@@ -42,12 +41,12 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="(tip, index) in dailyTips" :key="index">
-                                        <td>{{ tip.date |  moment('D/MM/YY')}} - {{ tip.time }}</td>
+                                        <td>{{ tip.date |  moment('D/MM/YY') }} - {{ tip.time }}</td>
                                         <td>{{ tip.league }}</td>
                                         <td>{{ tip.home }} Vs {{ tip.away }}</td>
                                         <td>{{ tip.tip }}</td>
                                         <td>{{ tip.odd }}</td>
-                                        <td><v-btn x-small text color="red darken-2" @click="openDelDial(index)"><v-icon small>delete_forever</v-icon></v-btn></td>
+                                        <td><v-btn x-small icon color="red darken-2" @click="openDelDial(index)"><v-icon small>delete_forever</v-icon></v-btn></td>
                                     </tr>
                                 </tbody>
                             </table>

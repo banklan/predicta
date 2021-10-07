@@ -6,7 +6,7 @@
                 <admin-search model="Payment" searchFor="payments"/>
             </v-col>
         </v-row>
-        <v-row class="mt-n4 ml-n10">
+        <v-row class="mt-n4 ml-n10" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="10">
                 <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
                 <v-card v-else light raised elevation="8" min-height="200">
@@ -35,7 +35,7 @@
                             </table>
                         </template>
                         <template v-else>
-                            <v-alert type="info" border="left">
+                            <v-alert type="info" border="left" class="mt-5">
                                 There are currently no payments.
                             </v-alert>
                         </template>
@@ -118,8 +118,10 @@ export default {
 </script>
 
 <style lang="css" scoped>
-    table tbody tr{
+    
+    table tbody tr td{
         cursor: pointer;
+        white-space: nowrap !important;
     }
     .v-card .v-card__text{
         overflow-x: scroll !important;

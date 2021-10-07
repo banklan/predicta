@@ -1,16 +1,16 @@
 <template>
     <v-container>
         <admin-top-panel title="Bookmakers" />
-        <v-row class="mt-4">
+        <v-row class="mt-4" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="4" md="4" offset-md=8>
                 <v-btn dark color="primary" @click="addNewDial = true"><v-icon left>add</v-icon>New Bookmaker</v-btn>
             </v-col>
         </v-row>
-        <v-row class="mt-4 ml-n10">
+        <v-row class="mt-4 ml-n10" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="10">
                 <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
                 <v-card v-else light raised elevation="8" min-height="200" class="scroll">
-                    <v-card-title class="sub_title primary white--text justify-center">Bookmakers <v-chip color="primary lighten-2" v-if="bookmakers.length > 0">{{ bookmakers.length }}</v-chip></v-card-title>
+                    <v-card-title class="subtitle-1 primary white--text justify-center">Bookmakers <v-chip color="primary lighten-2" v-if="bookmakers.length > 0" class="ml-1">{{ bookmakers.length }}</v-chip></v-card-title>
                     <v-card-text>
                         <template v-if="bookmakers.length > 0">
                             <table class="table table-striped table-hover">
@@ -27,7 +27,7 @@
                                         <td>{{ bkm.id }}</td>
                                         <td>{{ bkm.name }}</td>
                                         <td><v-img v-if="bkm.logo" :src="`/images/bookmakers/${bkm.logo}`" width="60" height="40" contain transition="scale-transition" class=""></v-img></td>
-                                        <td><v-btn small text color="primary" @click="openUpdate(bkm)"><v-icon>edit</v-icon></v-btn> &nbsp; <v-btn small text color="red darken-2" @click="confirmDel(bkm, i)"><v-icon>delete_forever</v-icon></v-btn></td>
+                                        <td><v-btn small icon color="primary" @click="openUpdate(bkm)"><v-icon>edit</v-icon></v-btn> &nbsp; <v-btn small icon color="red darken-2" @click="confirmDel(bkm, i)"><v-icon>delete_forever</v-icon></v-btn></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -95,7 +95,7 @@
             <v-btn text color="white--text" @click="addNewSuccess = false">Close</v-btn>
         </v-snackbar>
         <v-snackbar v-model="addNewFailed" :timeout="7000" top color="red darken-1 white--text">
-            There was an error while trying to add new bookmaker. Kindly try another logo and ensure the bookmaker doesnt already exist.
+            There was an error while trying to add new bookmaker. If you are uploading a logo, kindly try another one and ensure the bookmaker doesnt already exist.
             <v-btn text color="white--text" @click="addNewFailed = false">Close</v-btn>
         </v-snackbar>
         <v-snackbar v-model="updateSuccess" :timeout="4000" top color="green darken-1 white--text">
@@ -228,16 +228,32 @@ export default {
                             this.$validator.pause()
                             this.$validator.fields.items.forEach(field => field.reset())
                             this.$validator.errors.clear()
-                            console.log(res.data)
                         }).catch((err)=>{
                             this.isBusy = false
                             this.addNewFailed = true
-                            console.log(err)
                         })
                     }
                 })
             }else{
-                this.uploadError = true
+                this.$validator.validateAll('add').then((isValid) => {
+                    if (isValid) {
+                        this.isBusy = true
+                        axios.post(this.api + '/auth-admin/create_new_bookmaker_without_logo', {
+                            bkmk: this.add.name
+                        }, this.adminHeaders).then((res) =>{
+                            this.isBusy = false
+                            this.addNewDial = false
+                            this.addNewSuccess = true
+                            this.bookmakers.unshift(res.data)
+                            this.add.name = ''
+                            this.$validator.pause()
+                            this.$validator.fields.items.forEach(field => field.reset())
+                            this.$validator.errors.clear()
+                        })
+                    }
+                }).catch(()=>{
+                    this.addNewFailed = true
+                })
             }
         },
         confirmDel(bkm, i){
@@ -265,3 +281,12 @@ export default {
      }
 }
 </script>
+
+<style lang="css" scoped>
+    table tbody tr td{
+        white-space: nowrap !important;
+    }
+    .v-card{
+        overflow-x: scroll !important;
+    }
+</style>

@@ -1,15 +1,15 @@
 <template>
     <v-container>
         <admin-top-panel title="Users" />
-        <v-row class="mt-4">
+        <v-row class="mt-4" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="5">
                <admin-search model="User" searchFor="users"/>
            </v-col>
-            <v-col cols="4" md="4" offset-md="3">
+            <v-col cols="4" md="4" offset-md="3" :class="$vuetify.breakpoint.smAndDown ? 'mt-n7':''">
                 <v-btn dark color="primary" :to="{name: 'AdminCreateUser'}"><v-icon left>add</v-icon>New User</v-btn>
             </v-col>
         </v-row>
-        <v-row class="mt-4 ml-n10">
+        <v-row class="mt-4 ml-n10" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="10">
                 <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
                 <v-card v-else light raised elevation="8" min-height="200" class="scroll">
@@ -38,7 +38,7 @@
                             </table>
                         </template>
                         <template v-else>
-                            <v-alert type="info" border="left">
+                            <v-alert type="info" border="left" class="mt-5">
                                 There are currently no users in the database.
                             </v-alert>
                         </template>
@@ -227,7 +227,10 @@ export default {
     table .expert_list tr td{
         cursor: pointer;
     }
-    .v-card.scroll .v-card__text{
+    .v-card.scroll{
         overflow-x: scroll !important;
+    }
+    table tbody tr td{
+        white-space: nowrap !important;
     }
 </style>

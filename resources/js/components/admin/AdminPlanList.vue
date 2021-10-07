@@ -1,11 +1,11 @@
 <template>
     <v-container>
-        <v-row class="mt-4">
+        <v-row class="mt-4" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="4" md="4" offset-md=8>
                 <v-btn dark color="primary" @click="newPlanDial = true"><v-icon left>add</v-icon>New Plan</v-btn>
             </v-col>
         </v-row>
-        <v-row class="mt-4 ml-n8">
+        <v-row class="mt-4 ml-n8" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="8">
                 <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
                 <v-card v-else light raised elevation="8" min-height="200" class="scroll">
@@ -40,7 +40,7 @@
                 </v-card>
             </v-col>
         </v-row>
-        <v-dialog v-model="updateDial" max-width="480">
+        <v-dialog v-model="updateDial" max-width="400">
             <v-card min-height="150">
                 <v-card-title class="sub_title primary white--text justify-center">Update Plan</v-card-title>
                 <v-card-text class="text-center mt-5 subtitle-1">
@@ -248,6 +248,7 @@ export default {
 <style lang="css" scoped>
     table .table_list tr td{
         cursor: pointer;
+        white-space: nowrap !important;
     }
     .v-card.scroll .v-card__text{
         overflow-x: scroll !important;

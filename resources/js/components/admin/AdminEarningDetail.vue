@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <v-row class="">
+        <v-row>
             <v-col cols="12" md="1">
                 <v-btn rounded color="primary lighten--2" dark elevation="4" left @click.prevent="$router.go(-1)"><v-icon left>arrow_left</v-icon> Back</v-btn>
             </v-col>
@@ -8,10 +8,10 @@
                 <admin-top-panel title="Earning" />
             </v-col>
         </v-row>
-        <v-row class="mt-4">
+        <v-row class="mt-4" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
             <v-col v-else cols="12" md="8">
-                <v-card light raised elevation="8" min-height="200">
+                <v-card light raised elevation="8" min-height="200" class="scroll">
                     <v-card-title class="justify-center subtitle-1 primary white--text">Earning ID <span v-if="earning" class="ml-2">{{ earning.id }}</span></v-card-title>
                     <v-card-text>
                         <template v-if="earning">
@@ -55,7 +55,7 @@
                             </table>
                         </template>
                         <template v-else>
-                            <v-alert type="info" border="left">
+                            <v-alert type="info" border="left" class="mt-5">
                                 The earning details you are tryig to view is invalid.
                             </v-alert>
                         </template>
@@ -149,5 +149,11 @@ export default {
 <style lang="css" scoped>
     .table tbody tr{
         cursor: pointer;
+    }
+    table tbody tr td,table tbody tr th{
+        white-space: nowrap !important;
+    }
+    .v-card.scroll .v-card__text{
+        overflow-x: scroll !important;
     }
 </style>

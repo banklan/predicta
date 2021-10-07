@@ -138,6 +138,7 @@ class AuthController extends Controller
             $conf->token = bin2hex(random_bytes(80));
             $conf->save();
 
+            $conf->fresh();
             // send welcome email
             Mail::to($user->email)->send(new UserWelcomeEmail($user, $conf));
         }

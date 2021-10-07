@@ -144,7 +144,7 @@ class AdminController extends Controller
     }
 
     public function getPgntdExperts(){
-        $users = Expert::latest()->paginate(10);
+        $users = Expert::latest()->paginate(15);
 
         return response()->json($users, 200);
     }
@@ -326,7 +326,7 @@ class AdminController extends Controller
     }
 
     public function adminGetPgntdExpertforecasts(){
-        $fc = ExpertPredictionSummary::latest()->paginate(10);
+        $fc = ExpertPredictionSummary::latest()->paginate(20);
 
         return response()->json($fc, 200);
     }
@@ -346,7 +346,7 @@ class AdminController extends Controller
     }
 
     public function getPgntdCountries(){
-        $countries = Country::latest()->paginate(10);
+        $countries = Country::latest()->paginate(20);
 
         return response()->json($countries, 200);
     }
@@ -451,7 +451,7 @@ class AdminController extends Controller
     }
 
     public function getPgntdLeagues(){
-        $lgs = League::latest()->paginate(10);
+        $lgs = League::latest()->paginate(20);
 
         return response()->json($lgs, 200);
     }
@@ -499,7 +499,7 @@ class AdminController extends Controller
     }
 
     public function getPgntdTeams(){
-        $teams = Team::latest()->paginate(10);
+        $teams = Team::latest()->paginate(20);
 
         return response()->json($teams, 200);
     }
@@ -640,14 +640,14 @@ class AdminController extends Controller
     }
 
     public function getPgntdMarkets(){
-        $tips = Tip::latest()->paginate(10);
+        $tips = Tip::latest()->paginate(20);
         return response()->json($tips, 200);
     }
 
     public function updateMarket(Request $request, $id){
         $this->validate($request, [
-            'mkt.tip' => 'required|min:3|max:30',
-            'mkt.abbrv' => 'required|min:3|max:15',
+            'mkt.tip' => 'required|min:1|max:30',
+            'mkt.abbrv' => 'required|min:1|max:15',
         ]);
 
         $mkt = Tip::findOrFail($id);
@@ -671,8 +671,8 @@ class AdminController extends Controller
 
     public function createNewMarket(Request $request){
         $this->validate($request, [
-            'mkt.tip' => 'required|min:3|max:30|unique:tips,tip',
-            'mkt.abbrv' => 'required|min:3|max:15|unique:tips,abbrv',
+            'mkt.tip' => 'required|min:1|max:30|unique:tips,tip',
+            'mkt.abbrv' => 'required|min:1|max:15|unique:tips,abbrv',
         ]);
 
         $mkt = new Tip;
@@ -754,7 +754,7 @@ class AdminController extends Controller
     }
 
     public function getPgntdDailyTips(){
-        $tips = DailyTipsSummary::latest()->paginate(10);
+        $tips = DailyTipsSummary::latest()->paginate(20);
 
         return response()->json($tips, 201);
     }
@@ -873,7 +873,7 @@ class AdminController extends Controller
     }
 
     public function getPgntdSubscriptions(){
-        $subs = Subscription::latest()->paginate(10);
+        $subs = Subscription::latest()->paginate(15);
 
         return response()->json($subs, 200);
     }
@@ -909,7 +909,7 @@ class AdminController extends Controller
     }
 
     public function getPgntdUsers(){
-        $users = User::latest()->paginate(10);
+        $users = User::latest()->paginate(15);
 
         return response()->json($users, 200);
     }
@@ -1103,7 +1103,7 @@ class AdminController extends Controller
     }
 
     public function getPgntdPayments(){
-        $pymts = Payment::latest()->paginate(10);
+        $pymts = Payment::latest()->paginate(15);
 
         return response()->json($pymts, 200);
     }
@@ -1115,7 +1115,7 @@ class AdminController extends Controller
     }
 
     public function getPgntdEarnings(){
-        $earnings = Earning::with('subscription')->latest()->paginate(10);
+        $earnings = Earning::with('subscription')->latest()->paginate(15);
 
         return response()->json($earnings, 200);
     }
@@ -1261,6 +1261,8 @@ class AdminController extends Controller
         $fb->body = $request->reply['body'];
         $fb->save();
 
+        $fb->fresh();
+
         Mail::to($receiver->email)->send(new FeedbackReplyEmail($receiver, $fb));
 
         return response()->json(['fb' => $fb, 'to' => $receiver], 200);
@@ -1310,7 +1312,7 @@ class AdminController extends Controller
 
     public function getPgntdEnquiries(){
         $enqs = Enquiry::latest()
-                    ->paginate(10);
+                    ->paginate(15);
 
         return response()->json($enqs, 200);
     }
@@ -1548,7 +1550,7 @@ class AdminController extends Controller
     }
 
     public function getMailingList(){
-        $list = MailingList::paginate(10);
+        $list = MailingList::paginate(15);
 
         return response()->json($list, 200);
     }
@@ -1613,7 +1615,7 @@ class AdminController extends Controller
     }
 
     public function getMailedTips(){
-        $mails = DailyTipsMailing::with('daily_tips_summary')->latest()->paginate(10);
+        $mails = DailyTipsMailing::with('daily_tips_summary')->latest()->paginate(15);
 
         return response()->json($mails, 200);
     }
@@ -1630,8 +1632,8 @@ class AdminController extends Controller
 
         $data = ['data' => $mkts];
         $validator = Validator::make($data, [
-            'data.*.tip' => 'required|min:3|max:30|unique:tips,tip',
-            'data.*.abbrv' => 'required|min:3|max:15|unique:tips,abbrv',
+            'data.*.tip' => 'required|min:1|max:30|unique:tips,tip',
+            'data.*.abbrv' => 'required|min:1|max:15|unique:tips,abbrv',
         ]);
 
         if($validator->fails()){
@@ -1671,7 +1673,7 @@ class AdminController extends Controller
     }
 
     public function getPaginatedFollows(){
-        $follows = ExpertFollow::latest()->paginate(10);
+        $follows = ExpertFollow::latest()->paginate(20);
 
         return response()->json($follows, 200);
     }
@@ -1703,7 +1705,19 @@ class AdminController extends Controller
     }
 
     public function filterFollowsByExpert($exp){
-        $follows = ExpertFollow::where('expert_id', $exp)->paginate(10);
+        $follows = ExpertFollow::where('expert_id', $exp)->paginate(15);
         return response()->json($follows, 200);
+    }
+
+    public function createBookmakerWithoutLogo(Request $request){
+        $this->validate($request, [
+            'bkmk' => 'required|min:3|max:12|unique:bookmakers,name',
+        ]);
+
+        $bkmr = new Bookmaker;
+        $bkmr->name = $request->bkmk;
+        $bkmr->save();
+
+        return response()->json($bkmr, 200);
     }
 }

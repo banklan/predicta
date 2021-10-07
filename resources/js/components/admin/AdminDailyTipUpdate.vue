@@ -69,7 +69,7 @@
                         </v-card-actions>
                     </template>
                     <template v-else>
-                        <v-alert type="info" class="mt-5">
+                        <v-alert type="info" border="left" class="mt-5">
                             The tip you are trying to view is invalid or does not exist.
                         </v-alert>
                     </template>

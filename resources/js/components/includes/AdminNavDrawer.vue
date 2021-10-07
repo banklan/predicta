@@ -1,8 +1,8 @@
 <template>
-    <v-navigation-drawer dense hide-overlay value="true" permanent class="primary darken-4">
+    <v-navigation-drawer dense hide-overlay value="true" permanent :mini-variant.sync="mini" class="primary darken-4">
         <v-list dark>
             <v-list-item-group>
-                <v-list-item class="justify-center py-2 body-2">Welcome {{ authAdmin && authAdmin.first_name }}</v-list-item>
+                <!-- <v-list-item class="justify-center py-2 body-2">Welcome {{ authAdmin && authAdmin.first_name }}</v-list-item> -->
                 <v-list-item link to="/admin" exact>
                     <v-list-item-icon>
                         <v-icon>dashboard</v-icon>
@@ -20,9 +20,7 @@
                     <v-list-item-icon>
                         <v-icon v-text="link.icon"></v-icon>
                     </v-list-item-icon>
-
-                    <v-list-item-title v-text="link.title" class="body-2">
-                    </v-list-item-title>
+                    <v-list-item-title v-text="link.title" class="body-2 ml-n5"></v-list-item-title>
                 </v-list-item>
                 <v-list-item  @click="logout">
                     <v-list-item-icon>
@@ -40,6 +38,7 @@ export default {
     data(){
         return{
             item: 0,
+            mini: true,
             items: [
                 {title: "Admins", path: "/admin/super-users", icon:"supervisor_account"},
                 {title: "Daily Tips", path: "/admin/daily-tips", icon:"today"},
@@ -63,7 +62,6 @@ export default {
                 {title: "Mailing List", path: "/admin/mailing-list", icon: "email"},
                 {title: "Mailed Daily Tips", path: "/admin/mailed-daily-tips", icon: "email"},
                 {title: "Profile", path: "/admin/profile", icon: "lock"},
-                // {title: "Logout", path: "/admin/profile", icon: "exit"},
             ],
             mini: true
         }

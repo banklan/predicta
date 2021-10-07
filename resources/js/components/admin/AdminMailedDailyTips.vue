@@ -2,10 +2,10 @@
     <v-container>
         <admin-top-panel title="Mailed Daily Tips" />
         <v-progress-circular indeterminate color="primary" :width="4" :size="40" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
-        <v-row v-else class="mt-4 ml-n10" justify="start">
+        <v-row v-else class="mt-4 ml-n10" justify="start" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="10">
                 <v-card light raised elevation="8" min-height="200" class="scroll">
-                    <v-card-title class="subtitle-1 primary white--text justify-center">Mailed tips <span class="ml-2"><v-chip color="primary lighten-2" v-if="mails.length > 0">{{ total }}</v-chip></span></v-card-title>
+                    <v-card-title class="subtitle-1 primary white--text justify-center">Mailed Daily Tips <span class="ml-2"><v-chip color="primary lighten-2" v-if="mails.length > 0">{{ total }}</v-chip></span></v-card-title>
                     <v-card-text>
                         <template v-if="mails.length > 0">
                             <table class="table table-striped table-hover">
@@ -22,7 +22,7 @@
                                         <td>{{ mail.id }}</td>
                                         <td v-if="mail.daily_tips_summary">{{ mail.daily_tips_summary.tip_code }}</td>
                                         <td>{{ mail.created_at | moment('DD/MM/YY') }}</td>
-                                        <td><v-btn small text color="red darken-2" @click="openConfirmDelDial(mail, index)"><v-icon>delete_forever</v-icon></v-btn></td>
+                                        <td><v-btn small icon color="red darken-2" @click="openConfirmDelDial(mail, index)"><v-icon>delete_forever</v-icon></v-btn></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -42,7 +42,7 @@
                 </v-card>
             </v-col>
         </v-row>
-        <v-dialog v-model="confirmDelDial" max-width="480">
+        <v-dialog v-model="confirmDelDial" max-width="450">
             <v-card min-height="150">
                 <v-card-title class="subtitle-1 primary darken-2 white--text justify-center">Are you sure you want to delete this mail from the list?</v-card-title>
                 <v-card-text class="text-center mt-5 subtitle-1">
@@ -129,7 +129,6 @@ export default {
                 this.isDeleting = false
                 this.mails.splice(this.mailIndexToDel, 1)
                 this.confirmDelDial = false
-                console.log(res.data)
                 this.mailDeleted = true
                 this.total--
             }).catch(() => {
@@ -145,7 +144,10 @@ export default {
 </script>
 
 <style lang="css" scoped>
-    .v-card{
+    .v-card.scroll .v-card__text{
         overflow-x: scroll !important;
+    }
+    table tbody tr td{
+        white-space: nowrap !important;
     }
 </style>

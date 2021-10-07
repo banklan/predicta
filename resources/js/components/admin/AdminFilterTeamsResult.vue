@@ -37,7 +37,7 @@
                     </template>
                     <template v-else>
                         <v-card-text>
-                            <v-alert type="info" border="left" class="mt-8">
+                            <v-alert type="info" border="left" class="mt-5">
                                 There are currently no teams for <span v-if="league">{{ league.league }}</span> in the database.
                             </v-alert>
                         </v-card-text>

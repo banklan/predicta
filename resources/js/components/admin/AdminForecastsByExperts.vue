@@ -44,7 +44,7 @@
                             </v-alert>
                         </template>
                     </v-card-text>
-                    <v-card-actions class="my-5 justify-space-around">
+                    <v-card-actions class="my-5 justify-space-around" v-if="forecasts.length > 0">
                         <span class="pl-4 pb-2">
                             <v-btn color="primary" @click.prevent="getForecasts(pagination.first_link)" :disabled="!pagination.prev_link">&lt;&lt;</v-btn>
                             <v-btn color="primary" @click.prevent="getForecasts(pagination.prev_link)" :disabled="!pagination.prev_link">&lt;</v-btn>
@@ -160,6 +160,6 @@ export default {
         white-space: nowrap;
     }
     .scroll .v-card__text{
-        overflow: scroll !important;
+        overflow-x: scroll !important;
     }
 </style>

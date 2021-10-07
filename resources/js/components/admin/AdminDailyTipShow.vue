@@ -223,8 +223,7 @@ export default {
         background: #00b900;
         border-radius: 1px solid #01a201;
     }
-    table tbody tr td{
+    table tbody tr td, table tbody tr th{
         white-space: nowrap !important;
     }
-
 </style>

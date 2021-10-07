@@ -34,8 +34,13 @@
                                 </tbody>
                             </table>
                         </template>
+                        <template v-else>
+                            <v-alert type="info" border="left" class="mt-5">
+                                There are no mails in your mailing list at the moment.
+                            </v-alert>
+                        </template>
                     </v-card-text>
-                    <v-card-actions class="justify-center pb-7">
+                    <v-card-actions class="justify-center pb-7" v-if="mailList.length > 0">
                         <span class="pl-4">
                             <v-btn color="primary" @click.prevent="getList(pagination.first_link)" :disabled="!pagination.prev_link">&lt;&lt;</v-btn>
                             <v-btn color="primary" @click.prevent="getList(pagination.prev_link)" :disabled="!pagination.prev_link">&lt;</v-btn>

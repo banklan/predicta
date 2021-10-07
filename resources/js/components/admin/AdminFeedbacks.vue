@@ -1,12 +1,12 @@
 <template>
     <v-container>
-        <admin-top-panel title="Daily Tips" />
-        <v-row class="mt-n3" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
+        <admin-top-panel title="Feedbacks" />
+        <v-row class="mt-n4" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="5" offset-md="6">
                 <admin-search model="Feedback" searchFor="feedbacks" />
             </v-col>
         </v-row>
-        <v-row class="ml-n10 mt-n5" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
+        <v-row class="ml-n10 mt-n4" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="10">
                 <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
                 <v-card v-else light elevation="8" raised class="mt-5">

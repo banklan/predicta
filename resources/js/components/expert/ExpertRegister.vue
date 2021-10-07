@@ -82,14 +82,14 @@ export default {
                         this.isLoading = false
                         this.createFail = false
                         this.expertCreated = true
-                        this.createError = ''
-                        this.$router.push({name: 'ExpertCreated'})
                     }).catch((err) =>{
                         this.isLoading = false
+                        console.log(err.response)
                         if(err.response.status === 422){
                             this.createFail = true
                             this.createError = "The email you are trying to register with is already taken. please try another email."
                         }else{
+                            this.createFail = true
                             this.createError = 'There was an error while trying to register. Please ensure you are connected to the internet and try again.'
                         }
                     })

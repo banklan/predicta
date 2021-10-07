@@ -1,5 +1,6 @@
 <template>
     <v-container>
+        <admin-top-panel title="Plans" />
         <v-row class="mt-4" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="4" md="4" offset-md=8>
                 <v-btn dark color="primary" @click="newPlanDial = true"><v-icon left>add</v-icon>New Plan</v-btn>

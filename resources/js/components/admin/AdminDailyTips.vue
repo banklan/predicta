@@ -43,7 +43,7 @@
                             </v-alert>
                         </template>
                     </v-card-text>
-                    <v-card-actions class="my-5">
+                    <v-card-actions class="my-5" v-if="total > 0">
                         <span class="pl-4">
                             <v-btn color="primary" @click.prevent="getDailyTips(pagination.first_link)" :disabled="!pagination.prev_link">&lt;&lt;</v-btn>
                             <v-btn color="primary" @click.prevent="getDailyTips(pagination.prev_link)" :disabled="!pagination.prev_link">&lt;</v-btn>
@@ -164,10 +164,13 @@ export default {
 </script>
 
 <style lang="css" scoped>
-    .v-card.scroll{
+    .v-card.scroll .v-card__text{
         overflow-x: scroll !important;
     }
     table tr{
         cursor: pointer;
+    }
+    table tbody tr td{
+        white-space: nowrap !important;
     }
 </style>

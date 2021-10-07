@@ -43,7 +43,7 @@
                             </v-alert>
                         </template>
                     </v-card-text>
-                    <v-card-actions class="my-5">
+                    <v-card-actions class="my-5" v-if="users.length > 0">
                         <span class="pl-4">
                             <v-btn color="primary" @click.prevent="getUsers(pagination.first_link)" :disabled="!pagination.prev_link">&lt;&lt;</v-btn>
                             <v-btn color="primary" @click.prevent="getUsers(pagination.prev_link)" :disabled="!pagination.prev_link">&lt;</v-btn>
@@ -227,7 +227,7 @@ export default {
     table .expert_list tr td{
         cursor: pointer;
     }
-    .v-card.scroll{
+    .v-card.scroll .v-card__text{
         overflow-x: scroll !important;
     }
     table tbody tr td{

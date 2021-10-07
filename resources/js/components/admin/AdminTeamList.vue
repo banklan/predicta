@@ -194,7 +194,6 @@ export default {
             axios.get(pag, this.adminHeaders)
             .then((res) => {
                 this.isLoading = false
-                // console.log(res.data)
                 this.teams = res.data.data
                 this.total = res.data.total
                 this.pagination = {

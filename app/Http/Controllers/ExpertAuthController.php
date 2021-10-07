@@ -82,6 +82,8 @@ class ExpertAuthController extends Controller
         $expert->password = Hash::make($request->expert['password']);
         $expert->save();
 
+        $expert->fresh();
+
         if($expert){
             $conf = new ExpertEmailConfirmation;
             $conf->expert_id = $expert->id;
@@ -92,7 +94,7 @@ class ExpertAuthController extends Controller
             // send welcome email
             Mail::to($expert->email)->send(new ExpertWelcomeEmail($expert, $conf));
         }
-            return response()->json($expert);
+            return response()->json($expert, 200);
     }
 
     public function logout()

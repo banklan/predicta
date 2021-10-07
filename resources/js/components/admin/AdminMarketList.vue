@@ -41,7 +41,7 @@
                             </v-alert>
                         </template>
                     </v-card-text>
-                    <v-card-actions class="my-5">
+                    <v-card-actions class="my-5" v-if="total > 0">
                         <span class="pl-4">
                             <v-btn color="primary" @click.prevent="getMarkets(pagination.first_link)" :disabled="!pagination.prev_link">&lt;&lt;</v-btn>
                             <v-btn color="primary" @click.prevent="getMarkets(pagination.prev_link)" :disabled="!pagination.prev_link">&lt;</v-btn>

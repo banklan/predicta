@@ -206,3 +206,14 @@ export default {
     }
 }
 </script>
+
+<style lang="css" scoped>
+    table .table_list tr td{
+        cursor: pointer;
+        white-space: nowrap !important;
+    }
+    .v-card.scroll .v-card__text{
+        overflow: scroll !important;
+    }
+</style>
+

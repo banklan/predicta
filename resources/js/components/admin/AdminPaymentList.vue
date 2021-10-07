@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <admin-top-panel title="Payments" />
-        <v-row justify="end">
+        <v-row justify="center" :class="$vuetify.breakpoint.smAndDown ? 'ml-n10':''">
             <v-col cols="12" md="6">
                 <admin-search model="Payment" searchFor="payments"/>
             </v-col>
@@ -40,7 +40,7 @@
                             </v-alert>
                         </template>
                     </v-card-text>
-                    <v-card-actions class="my-5">
+                    <v-card-actions class="my-5" v-if="total > 0">
                         <span class="pl-4">
                             <v-btn color="primary" @click.prevent="getExperts(pagination.first_link)" :disabled="!pagination.prev_link">&lt;&lt;</v-btn>
                             <v-btn color="primary" @click.prevent="getExperts(pagination.prev_link)" :disabled="!pagination.prev_link">&lt;</v-btn>
@@ -63,6 +63,7 @@ export default {
         return {
             payments: [],
             pagination: {},
+            total: 0,
             isLoading: false,
         }
     },
@@ -118,7 +119,6 @@ export default {
 </script>
 
 <style lang="css" scoped>
-    
     table tbody tr td{
         cursor: pointer;
         white-space: nowrap !important;

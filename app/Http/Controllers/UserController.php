@@ -151,7 +151,6 @@ class UserController extends Controller
         $admin = 9999999;
 
         $fb = new UsersFeedback;
-        // $fb->user_id_from = $user->id;
         $fb->user_id = $user->id;
         $fb->user_id_to = $admin;
         $fb->is_parent = TRUE;
@@ -265,7 +264,7 @@ class UserController extends Controller
         $fb->save();
 
         $fb->fresh();
-        // Mail::to('banklan2010@gmail.com')->send(new FeedbackPostedEmail($user, $fb));
+        Mail::to('banklan2010@gmail.com')->send(new FeedbackPostedEmail($user, $fb));
 
         return response()->json(['feedback' => $fb, 'user'=> $user], 200);
     }

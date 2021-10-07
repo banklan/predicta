@@ -311,9 +311,4 @@ class ExpertController extends Controller
         $follows = ExpertFollow::where('expert_id', $expert)->get();
         return response()->json($follows, 200);
     }
-
-    // public function getAllExpertFollowers(){
-    //     $expert = auth('expert-api')->user()->id;
-    //     $follows = ExpertFollow::where('expert_id', $expert)->get();
-    // }
 }

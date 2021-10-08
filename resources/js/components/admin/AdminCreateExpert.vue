@@ -12,7 +12,7 @@
                     <v-card-text class="body-1 mt-5 px-3">
                         <v-text-field label="First Name" v-model="user.first_name" required placeholder="First Name" v-validate="'required|min:2|max:50'" :error-messages="errors.collect('first_name')" name="first_name" data-vv-as="first name"></v-text-field>
                         <v-text-field label="Last Name" v-model="user.last_name" required placeholder="Surname" v-validate="'required|min:2|max:50'" :error-messages="errors.collect('last_name')" name="last_name" data-vv-as="last name"></v-text-field>
-                        <v-text-field label="Username" v-model="user.last_name" required placeholder="Unique Username" v-validate="'required|min:2|max:50'" :error-messages="errors.collect('username')" name="username" data-vv-as="username"></v-text-field>
+                        <v-text-field label="Username" v-model="user.username" required placeholder="Unique Username" v-validate="'required|min:2|max:50'" :error-messages="errors.collect('username')" name="username" data-vv-as="username"></v-text-field>
                         <v-row>
                             <v-col cols="12" md="6">
                                 <v-text-field label="Email" type="text" v-model="user.email" required v-validate="'required|email'" :error-messages="errors.collect('email')" name="email"></v-text-field>

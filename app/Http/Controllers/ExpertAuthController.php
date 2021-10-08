@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use App\Mail\ExpertWelcomeEmail;
+use App\Mail\ExpertWelcome;
 
 class ExpertAuthController extends Controller
 {
@@ -91,7 +92,8 @@ class ExpertAuthController extends Controller
             $conf->fresh();
 
             // send welcome email
-            Mail::to($expert->email)->send(new ExpertWelcomeEmail($expert, $conf));
+            // Mail::to($expert->email)->send(new ExpertWelcomeEmail($expert, $conf));
+            Mail::to($expert->email)->send(new ExpertWelcome($expert, $conf));
             return response()->json($expert, 200);
         }
     }

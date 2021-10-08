@@ -12,7 +12,7 @@
         <v-row class="mt-4 ml-n10">
             <v-col cols="12" md="10">
                 <v-progress-circular indeterminate color="primary" :width="7" :size="70" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
-                <v-card v-else light raised elevation="8" min-height="200">
+                <v-card v-else light raised elevation="8" min-height="200" class="scroll">
                     <v-card-title class="subtitle-1 primary white--text justify-center">Expert Users</v-card-title>
                     <v-card-text>
                         <template v-if="experts.length > 0">
@@ -197,7 +197,7 @@ export default {
     table .expert_list tr td{
         cursor: pointer;
     }
-    .v-card .v-card__text{
+    .v-card.scroll .v-card__text{
         overflow-x: scroll !important;
     }
     table tbody tr td{

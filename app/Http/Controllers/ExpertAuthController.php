@@ -84,17 +84,17 @@ class ExpertAuthController extends Controller
 
         $expert->fresh();
 
-        if($expert){
             $conf = new ExpertEmailConfirmation;
             $conf->expert_id = $expert->id;
             $conf->token = bin2hex(random_bytes(80));
             $conf->save();
 
-            $conf->fresh();
             // send welcome email
-            Mail::to($expert->email)->send(new ExpertWelcomeEmail($expert, $conf));
-        }
             return response()->json($expert, 200);
+            $conf->fresh();
+         if($conf){
+             Mail::to($expert->email)->send(new ExpertWelcomeEmail($expert, $conf));
+         }
     }
 
     public function logout()

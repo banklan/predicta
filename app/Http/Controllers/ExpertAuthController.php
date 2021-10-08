@@ -93,6 +93,7 @@ class ExpertAuthController extends Controller
 
             // send welcome email
             // Mail::to($expert->email)->send(new ExpertWelcomeEmail($expert, $conf));
+            $url = 'https://surepredict.herokuapp.com/expert-email-confirmation?token='.$conf->token;
             Mail::to($expert->email)->send(new ExpertWelcome($expert, $conf));
             return response()->json($expert, 200);
         }

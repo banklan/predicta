@@ -7,7 +7,7 @@ As you might have learnt, we are a team of talented, resourceful and effective g
 When you join us as an expert forecaster, you turn your passion into earnings as we pay you weekly based on a percentage of the subscriptions that users make on your forecasts.
 But first, you need to confirm this email address by clicking on the link below.
 
-@component('mail::button', ['url' => 'https://surepredict.herokuapp.com//expert-email-confirmation?token={{ $conf->token }}'])
+@component('mail::button', ['url' => 'https://surepredict.herokuapp.com/expert-email-confirmation?token='.$conf->token])
 Confirm Email
 @endcomponent
 

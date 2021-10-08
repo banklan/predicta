@@ -18,7 +18,7 @@ class CreateDailyTipsMailingTable extends Migration
             $table->integer('daily_tips_summary_id')->unsigned();
             $table->timestamps();
 
-            $table->foreign('daily_tips_summary_id')->references('id')->on('daily_tips_summary');
+            $table->foreign('daily_tips_summary_id')->references('id')->on('daily_tips_summary')->onDelete('cascade');
         });
     }
 

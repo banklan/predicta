@@ -21,9 +21,9 @@ class CreateBookmakersCodesTable extends Migration
             $table->string('bookmaker_code');
             $table->timestamps();
 
-            $table->foreign('forecast_summary_id')->references('id')->on('forecast_summary');
-            $table->foreign('expert_id')->references('id')->on('experts');
-            $table->foreign('bookmaker_id')->references('id')->on('bookmakers');
+            $table->foreign('forecast_summary_id')->references('id')->on('forecast_summary')->onDelete('cascade');
+            $table->foreign('expert_id')->references('id')->on('experts')->onDelete('cascade');
+            $table->foreign('bookmaker_id')->references('id')->on('bookmakers')->onDelete('cascade');
         });
     }
 

@@ -23,8 +23,8 @@ class CreateSubscriptionsTable extends Migration
             $table->boolean('status');
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('expert_id')->references('id')->on('experts');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('expert_id')->references('id')->on('experts')->onDelete('cascade');
         });
     }
 

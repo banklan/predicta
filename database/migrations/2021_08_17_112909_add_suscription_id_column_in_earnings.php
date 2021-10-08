@@ -16,7 +16,7 @@ class AddSuscriptionIdColumnInEarnings extends Migration
         Schema::table('earnings', function (Blueprint $table) {
             $table->integer('subscription_id')->unsigned();
 
-            $table->foreign('subscription_id')->references('id')->on('subscriptions');
+            $table->foreign('subscription_id')->references('id')->on('subscriptions')->onDelete('cascade');
         });
     }
 

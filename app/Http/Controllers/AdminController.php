@@ -33,6 +33,7 @@ use App\Mail\DailyTipMail;
 use App\Mail\DailyTipsFromSurePredict;
 use App\MailingList;
 use App\DailyTipsMailing;
+use App\ExpertEmailConfirmation;
 use App\ExpertFollow;
 
 class AdminController extends Controller
@@ -227,6 +228,10 @@ class AdminController extends Controller
 
     public function deleteExpert($id){
         $expert = Expert::findOrFail($id);
+        $conf = ExpertEmailConfirmation::where('expert_id', $id)->first();
+        if($conf){
+            $conf->delete();
+        }
 
         $expert->delete();
 

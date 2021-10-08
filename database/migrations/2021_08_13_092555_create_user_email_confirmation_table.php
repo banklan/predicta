@@ -20,7 +20,7 @@ class CreateUserEmailConfirmationTable extends Migration
             $table->boolean('is_confirmed')->default(false);
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

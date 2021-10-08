@@ -20,7 +20,7 @@ class CreateTeamsTables extends Migration
             $table->string('abbrv');
             $table->timestamps();
 
-            $table->foreign('league_id')->references('id')->on('leagues');
+            $table->foreign('league_id')->references('id')->on('leagues')->onDelete('cascade');
         });
     }
 

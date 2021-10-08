@@ -16,7 +16,7 @@ class AddExpertPredictionSummaryIdToExpertPredictionSummary extends Migration
         Schema::table('bookmakers_codes', function (Blueprint $table) {
             $table->integer('expert_prediction_summary_id')->after('id')->unsigned();
 
-            $table->foreign('expert_prediction_summary_id')->references('id')->on('forecast_summary');
+            $table->foreign('expert_prediction_summary_id')->references('id')->on('forecast_summary')->onDelete('cascade');
         });
     }
 

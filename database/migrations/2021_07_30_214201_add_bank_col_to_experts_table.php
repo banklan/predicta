@@ -16,7 +16,7 @@ class AddBankColToExpertsTable extends Migration
         Schema::table('experts', function (Blueprint $table) {
             $table->integer('bank_id')->unsigned()->nullable();
 
-            $table->foreign('bank_id')->references('id')->on('banks');
+            $table->foreign('bank_id')->references('id')->on('banks')->onDelete('cascade');
         });
     }
 

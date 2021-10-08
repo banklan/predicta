@@ -20,7 +20,7 @@ class CreateLeagueTable extends Migration
             $table->string('abbrv');
             $table->timestamps();
 
-            $table->foreign('country_id')->references('id')->on('countries');
+            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
         });
     }
 

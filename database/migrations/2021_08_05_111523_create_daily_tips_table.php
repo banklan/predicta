@@ -29,7 +29,7 @@ class CreateDailyTipsTable extends Migration
             $table->integer('status')->default(0)->unsigned();
             $table->timestamps();
 
-            $table->foreign('admin_id')->references('id')->on('admins');
+            $table->foreign('admin_id')->references('id')->on('admins')->onDelete('cascade');
         });
     }
 

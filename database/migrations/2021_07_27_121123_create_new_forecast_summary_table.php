@@ -19,7 +19,7 @@ class CreateNewForecastSummaryTable extends Migration
             $table->string('forecast_id');
             $table->timestamps();
 
-            $table->foreign('expert_id')->references('id')->on('experts');
+            $table->foreign('expert_id')->references('id')->on('experts')->onDelete('cascade');
         });
     }
 

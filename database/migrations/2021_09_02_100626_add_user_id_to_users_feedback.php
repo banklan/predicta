@@ -16,7 +16,7 @@ class AddUserIdToUsersFeedback extends Migration
         Schema::table('users_feedbacks', function (Blueprint $table) {
             $table->integer('user_id')->unsigned()->after('user_id_from');
 
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

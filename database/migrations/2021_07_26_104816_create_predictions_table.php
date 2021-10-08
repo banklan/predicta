@@ -29,7 +29,7 @@ class CreatePredictionsTable extends Migration
             $table->boolean('is_won')->default(false);
             $table->timestamps();
 
-            $table->foreign('expert_id')->references('id')->on('experts');
+            $table->foreign('expert_id')->references('id')->on('experts')->onDelete('cascade');
         });
     }
 

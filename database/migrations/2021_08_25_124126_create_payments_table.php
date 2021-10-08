@@ -22,8 +22,8 @@ class CreatePaymentsTable extends Migration
             $table->boolean('status')->default(true);
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('subscription_id')->references('id')->on('subscriptions');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('subscription_id')->references('id')->on('subscriptions')->onDelete('cascade');
         });
     }
 

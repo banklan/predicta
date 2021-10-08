@@ -50,7 +50,7 @@
                 </v-card>
                 <template v-else>
                     <v-alert type="success" border="left" class="mt-10 mb-10">
-                        Thank you for sending enquiry to lista.com. We shall reply you via your email address within the next 24 hours.
+                        Thank you for sending enquiry to tipexpats.com. We shall reply you via your email address within the next 24 hours.
                     </v-alert>
                 </template>
             </v-col>

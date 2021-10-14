@@ -1,53 +1,47 @@
 <template>
-    <div class="footer pt-5" color="#fbff05" light>
-        <v-container min-height="400">
-            <v-row align="start" justify="center">
-                <v-col cols="12" md="4">
-                    <div class="col_wrap">
-                        <p class="white--text">Quick Links</p>
-                        <ul class="">
-                            <li><router-link to="/">Home</router-link></li>
-                            <li><router-link to="/todays-tips">Today's Tips</router-link></li>
-                            <li><router-link to="/about-us">About Us</router-link></li>
-                            <li><router-link to="/contact-us">Contact Us</router-link></li>
-                        </ul>
-                    </div>
-                </v-col>
-                <v-col cols="12" md="4">
-                    <div class="col_wrap">
-                        <p class="white--text">Quick Links</p>
-                        <ul>
-                            <li><router-link to="/tip-experts">Tip Experts </router-link></li>
-                            <li><router-link to="/login">User Login </router-link></li>
-                            <li><router-link to="/register">User Register </router-link></li>
-                            <li><router-link to="/expert-login">Expert Login</router-link></li>
-                        </ul>
-                    </div>
-                </v-col>
-                <v-col cols="12" md="4">
-                    <div class="col_wrap">
-                        <p class="white--text ml-n16">Extras</p>
-                        <ul>
-                            <li><router-link to="/advert">Promote Your Service</router-link></li>
-                            <li><router-link to="/faq">FAQ</router-link></li>
-                            <li><router-link to="/terms-conditions">Terms & Conditions</router-link></li>
-                            <li><router-link to="/privacy-policy">Privacy Policy</router-link></li>
-                            <li><router-link to="/join-mailing-list">Receive Daily Sure Bets</router-link></li>
-                        </ul>
-                    </div>
-                </v-col>
-            </v-row>
-        </v-container>
-        <v-row justify="center" class="base">
-            <v-col cols="6" class="text-center">
-                <v-btn large v-for="icon in icons" :key="icon.name" class="white--text mx-4" icon :href="`${icon.link}`" target="_blank" link>
-                    <v-icon :color="icon.color">{{ icon.name }}</v-icon>
-                </v-btn>
-            </v-col>
-            <v-col cols="6" class="text-center">
-                <div class="body-2 pt-2 white--text">&copy; {{ new Date().getFullYear() }} tipexpats.com All rights reserved </div>
-            </v-col>
-        </v-row>
+    <div class="footer">
+        <div class="wrapper">
+            <div class="top">
+                <div class="pillar">
+                    <ul>
+                        <li class="font-weight-bold header">Quick Links</li>
+                        <li><router-link to="/">Home</router-link></li>
+                        <li><router-link to="/about-us">About Us</router-link></li>
+                        <li><router-link to="/contact-us">Contact Us</router-link></li>
+                        <li><router-link to="/todays-tips">Today's Tips</router-link></li>
+                    </ul>
+                </div>
+                <div class="pillar">
+                    <ul>
+                        <li class="font-weight-bold header">Quick Links</li>
+                        <li><router-link to="/tip-experts">Tip Experts </router-link></li>
+                        <li><router-link to="/login">User Login </router-link></li>
+                        <li><router-link to="/register">User Register </router-link></li>
+                        <li><router-link to="/expert-login">Expert Login</router-link></li>
+                    </ul>
+                </div>
+                <div class="pillar">
+                    <ul>
+                        <li class="font-weight-bold header">Extras</li>
+                        <li><router-link to="/advertise">Promote Your Services</router-link></li>
+                        <li><router-link to="/faq">FAQ</router-link></li>
+                        <li><router-link to="/terms-conditions">Terms & Conditions</router-link></li>
+                        <li><router-link to="/privacy-policy">Privacy Policy</router-link></li>
+                        <li><router-link to="/join-mailing-list">Receive Daily Sure Bets</router-link></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="bottom">
+                <div class="social">
+                    <v-btn large v-for="icon in icons" :key="icon.name" class="white--text mx-4" icon :href="`${icon.link}`" target="_blank" link>
+                        <v-icon :color="icon.color">{{ icon.name }}</v-icon>
+                    </v-btn>
+                </div>
+                <div class="copy">
+                    &copy; {{ new Date().getFullYear() }} tipexpats.com &nbsp;&nbsp; All Rights Reserved
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -65,48 +59,93 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
     .footer{
-        background-color: #1f0066 ;
-        width: 100vw !important;
-
-        .col_wrap{
-            margin: 15px 10px;
+        min-height: 350px;
+        color: #fff;
+        width: 100vw;
+        .wrapper{
+            height: 100%;
+            width: 100%;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            padding: 10px;
+            justify-content: center;
 
-            p{
-                align-self: center;
-                margin-left: 15px;
-                font-size: 17px;
-            }
-            ul{
-                list-style: none;
+            .top{
+                display: flex;
+                flex: 2 1 auto;
+                flex-wrap: auto;
+                box-sizing: border-box;
+                justify-content: space-between;
+                align-items: center;
+                height: 90%;
+                margin: 0;
+                background: #17014a ;
+                .pillar{
+                    display: flex;
+                    flex-direction: column;
+                    flex: 1 0 auto;
+                    box-sizing: border-box;
+                    vertical-align: baseline;
+                    justify-content: center;
+                    align-items: center;
+                    ul{
+                        margin: 0;
+                        list-style: none;
+                        box-sizing: border-box;
+                        padding-left: 0;
+                        margin-left: 0;
+                        line-height: 1.7;
+                        li{
+                            box-sizing: border-box;
+                            display: list-item;
+                            text-align: -webkit-match-parent;
 
-                li{
-                    line-height: 1.9;
-                    padding-bottom: 5px;
+                            a{
+                                text-decoration: none;
+                                color: #9ca5af;
+                                font-size: 17px;
 
-                    a{
-                        text-decoration: none;
-                        color: #cfcccc;
-                        transition: all .4s;
-                        font-size: 16px;
-
-                        &:hover{
-                            color:rgb(255, 255, 255);
+                                &:hover{
+                                    color: #fff;
+                                }
+                            }
+                        }
+                        li.header{
+                            color: #fff;
+                            padding-bottom: 5px;
+                            text-transform: uppercase !important;
                         }
                     }
                 }
             }
-        }
-        .base{
-            background-color: #120138;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            @media screen and (max-width: 767px){
+                .top{
+                    flex-direction: column;
+                    padding-top: 25px;
+                    .pillar{
+                        margin-bottom: 25px;
+                    }
+                }
+            }
+            .bottom{
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                background: #120138;
+                padding: 15px;
+                .v-btn{
+                    text-decoration: none;
+                }
+            }
+            @media screen and (max-width: 767px){
+                .bottom{
+                    flex-direction: column;
+                    .copy{
+                        padding-top: 10px;
+                    }
+                }
+            }
         }
     }
 </style>

@@ -97,6 +97,7 @@ import UserFeedback from './components/user/UserFeedback.vue';
 import NewUserfeedback from './components/user/NewUserfeedback.vue';
 import UserFeedbackShow from './components/user/UserFeedbackShow.vue';
 import UserFeedbackOutboxShow from './components/user/UserFeedbackOutboxShow.vue';
+import Adverts from './components/Adverts.vue';
 
 
 export default [
@@ -113,6 +114,7 @@ export default [
     { path: '/tip-experts', name: 'AllTipExperts', component: AllExperts },
     { path: '/tip-expert/:id', name: 'TipExpertView', component: TipExpertView },
     { path: '/won-experts-forecasts', name: 'WonExpertsForecasts', component: WonExpertsForecasts },
+    { path: '/advertise', name: 'Adverts', component: Adverts },
     {
         path: '/tip-detail/:odd/:expert', name: 'TipOddView', component: TipOddView,
         meta: {

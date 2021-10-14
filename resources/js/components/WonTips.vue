@@ -76,5 +76,14 @@ export default {
     .v-container{
         background-color: #000 !important;
     }
+    .v-card .v-card__text{
+        overflow-x: scroll !important;
+    }
+    .v-data-table table tbody tr td{
+        white-space: nowrap !important;
+    }
+    table tbody tr td{
+        white-space: nowrap !important;
+    }
 </style>
 

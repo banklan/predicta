@@ -103,4 +103,9 @@ class TipController extends Controller
         $fcs = ExpertPredictionSummary::where('prog_status', 2)->whereDate('created_at', '>', Carbon::now()->subDays(31))->get();
         return response()->json($fcs, 200);
     }
+
+    public function getBriefStats(){
+        $stats = ExpertPredictionSummary::all();
+        return response()->json($stats, 200);
+    }
 }

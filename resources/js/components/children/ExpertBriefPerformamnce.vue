@@ -99,20 +99,10 @@ export default {
         goToSub(){
             this.$router.push({name: 'AdminExpertSubscriptionsDetail', params: {id: this.expert}})
         }
-        // getSubscriptions(){
-        //     axios.get(this.api + `/auth-admin/admin_get_expert_subs/${this.expert}`, this.adminHeaders)
-        //     .then((res) => {
-        //         let rez = res.data
-        //         this.subCount = rez.length
-        //         let active = rez.filter((sub) => sub.active_status == 'Active')
-        //         this.activeSub = active.length
-        //     })
-        // }
     },
     created() {
         this.getForecasts()
         this.getEarning()
-        // this.getSubscriptions()
     },
 }
 </script>

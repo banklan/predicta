@@ -13,12 +13,15 @@ use App\Payment;
 use App\Subscription;
 use App\Expert;
 use App\ExpertFollow;
+use App\Mail\AdvertRequestMail;
 use Image;
 use App\MailingList;
 use Illuminate\Support\Facades\Hash;
 use App\UsersFeedback;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\FeedbackPostedEmail;
+use App\AdvertRequest;
+use App\Mail\AdvertReqReceivedMail;
 use phpDocumentor\Reflection\PseudoTypes\False_;
 
 class UserController extends Controller
@@ -361,5 +364,21 @@ class UserController extends Controller
         $user = auth('api')->user()->id;
         $follows = ExpertFollow::where('user_id', $user)->get();
         return response()->json($follows, 200);
+    }
+
+    public function sendAdvRequest(Request $request){
+        $this->validate($request, [
+            'ad.name' => 'required|min:3|max:60',
+            'ad.company' => 'required|min:3|max:100',
+            'ad.phone' => 'required|max:14',
+            'ad.phone2' => 'max:14',
+            'ad.email' => 'required|email',
+            'ad.details' => 'required|min:2|max:600'
+        ]);
+
+        $ad = $request->ad;
+
+        Mail::to($ad['email'])->send(new AdvertReqReceivedMail($ad));
+        Mail::to('banklan2010@gmail.com')->send(new AdvertRequestMail($ad));
     }
 }

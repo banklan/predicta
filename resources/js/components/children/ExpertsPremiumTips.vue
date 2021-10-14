@@ -114,7 +114,6 @@ export default {
         userIsLoggedIn(){
             return this.$store.getters.userIsLoggedIn
         },
-
     },
     methods:{
         detailView(odd, expert){

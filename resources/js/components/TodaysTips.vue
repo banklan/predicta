@@ -60,7 +60,6 @@ export default {
                 this.isLoading = false
                 this.todaysTips = res.data.tips
                 this.tipsDate = res.data.tipDate
-                console.log(res.data)
             })
         },
     },

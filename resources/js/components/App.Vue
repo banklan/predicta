@@ -1,24 +1,28 @@
 <template>
     <v-app>
-        <Navbar />
+        <Navbar></Navbar>
         <div v-if="authAdmin && $route.path.substring(0, 6) == '/admin'">
             <v-row>
                 <v-col cols="4" md="2">
-                    <AdminNavDrawer />
+                    <AdminNavDrawer></AdminNavDrawer>
                 </v-col>
                 <v-col cols="8" md="10">
-                    <v-row justify="start" class="">
+                    <v-row justify="start">
                         <v-col cols="12">
-                            <router-view></router-view>
+                            <transition mode="out-in" enter-active-class="animate__animated animate__fadeIn" leave-active-class="animate__animated animate__fadeOut">
+                                <router-view></router-view>
+                            </transition>
                         </v-col>
                     </v-row>
                 </v-col>
             </v-row>
         </div>
         <template v-else>
-            <router-view></router-view>
+            <transition mode="out-in" enter-active-class="animate__animated animate__fadeIn" leave-active-class="animate__animated animate__fadeOut">
+                <router-view></router-view>
+            </transition>
         </template>
-        <Footer />
+        <Footer></Footer>
     </v-app>
 </template>
 

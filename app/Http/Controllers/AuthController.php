@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\UserWelcomeEmail;
+use App\Mail\UserWelcome;
 use App\UserEmailConfirmation;
 use App\User;
 
@@ -140,7 +141,7 @@ class AuthController extends Controller
 
             $conf->fresh();
             // send welcome email
-            Mail::to($user->email)->send(new UserWelcomeEmail($user, $conf));
+            Mail::to($user->email)->send(new UserWelcome($user, $conf));
         }
             return response()->json($user);
     }

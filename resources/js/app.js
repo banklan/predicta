@@ -15,6 +15,7 @@ import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import '@mdi/font/css/materialdesignicons.css'
+import 'animate.css'
 
 import vuetify from './plugins/vuetify';
 import Routes from './routes';
@@ -109,6 +110,7 @@ Vue.component('sure-odds', require('./components/children/SureOdds.vue').default
 Vue.component('won-tips', require('./components/children/WonTips.vue').default);
 Vue.component('top-experts', require('./components/children/TopExpertsBrief.vue').default);
 Vue.component('won-expert-forecasts', require('./components/children/WonExpertForecasts.vue').default);
+Vue.component('tips-stats', require('./components/children/TipsStats.vue').default);
 Vue.component('expert-navbar', require('./components/includes/ExpertNavbar.vue').default);
 Vue.component('auth-navbar', require('./components/includes/AuthUserNavbar.vue').default);
 Vue.component('expert-top-panel', require('./components/children/ExpertTopPanel.vue').default);

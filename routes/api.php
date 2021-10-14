@@ -33,6 +33,8 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::get('get_brief_won_expert_forecasts', 'TipController@getWonExpertForecasts');
     Route::get('get_won_experts_forecasts', 'TipController@getAllWonExpertForecasts');
     Route::post('join_mailing_list', 'UserController@joinMailingList');
+    Route::get('get_forecasts_brief_starts', 'TipController@getBriefStats');
+    Route::post('send_advert_request', 'UserController@sendAdvRequest');
 });
 
 Route::group(['middleware' => 'api'], function ($router) {

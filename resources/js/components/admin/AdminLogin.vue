@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <v-row justify="center" class="mt-6">
+        <v-row justify="center" class="mt-6 pb-8">
             <v-col cols="12" md="5">
                 <v-card light raised elevation="12" min-height="320" class="mx-auto">
                     <v-card-title class="primary white--text justify-center title font-weight-bold">Admin Login</v-card-title>

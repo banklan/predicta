@@ -228,7 +228,7 @@ export default {
     },
     methods: {
         getOddTypes(){
-            axios.get(this.api + `/get_odd_types`).then((res) => {
+        axios.get(this.api + `/get_odd_types`).then((res) => {
                 this.odds = res.data
             })
         },

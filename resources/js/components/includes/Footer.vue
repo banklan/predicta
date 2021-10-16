@@ -22,6 +22,15 @@
                 </div>
                 <div class="pillar">
                     <ul>
+                        <li class="font-weight-bold header">Quick Links</li>
+                        <li><router-link to="/tip-experts">Tip Experts </router-link></li>
+                        <li><router-link to="/login">User Login </router-link></li>
+                        <li><router-link to="/register">User Register </router-link></li>
+                        <li><router-link to="/expert-login">Expert Login</router-link></li>
+                    </ul>
+                </div>
+                <div class="pillar">
+                    <ul>
                         <li class="font-weight-bold header">Extras</li>
                         <li><router-link to="/advertise">Promote Your Services</router-link></li>
                         <li><router-link to="/faq">FAQ</router-link></li>
@@ -122,7 +131,7 @@ export default {
             @media screen and (max-width: 767px){
                 .top{
                     flex-direction: column;
-                    padding-top: 25px;
+                    padding-top: 30px;
                     .pillar{
                         margin-bottom: 25px;
                     }

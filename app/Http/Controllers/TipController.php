@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\OddType;
 use Illuminate\Http\Request;
+use App\Plan;
 use App\Tip;
 use App\Bookmaker;
 use App\DailyTip;
@@ -22,7 +22,7 @@ class TipController extends Controller
     }
 
     public function getOddTypes(){
-        $odds = OddType::all();
+        $odds = Plan::all();
 
         return response()->json($odds, 200);
     }

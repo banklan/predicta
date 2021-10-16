@@ -2,7 +2,7 @@
     <v-container>
         <v-row justify="center" class="mt-6">
             <v-col cols="12" md="5">
-                <v-card light raised elevation="12" min-height="350" width="90%" class="mx-auto">
+                <v-card light raised elevation="12" min-height="350">
                     <v-card-title class="primary white--text justify-center title font-weight-bold">Expert Login</v-card-title>
                     <v-card-text class="mt-4">
                         <v-text-field label="Email" type="text" v-model="cred.email"></v-text-field>
@@ -12,7 +12,7 @@
                         <v-btn color="primary" large block @click.prevent="login" :loading="isLoading">Login</v-btn>
                     </v-card-actions>
                     <v-card-actions class="justify-center pb-5">
-                        You want to register as a tip expert? <v-btn text color="primary" :to="{name: 'ExpertRegister'}">Register</v-btn>
+                        Register as a tip expert? <v-btn text color="primary" :to="{name: 'ExpertRegister'}">Register</v-btn>
                     </v-card-actions>
                     <div v-if="authError" class="pb-5">
                         <div class="error white--text pa-4 mx-3">

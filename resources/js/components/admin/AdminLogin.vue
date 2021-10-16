@@ -2,7 +2,7 @@
     <v-container>
         <v-row justify="center" class="mt-6">
             <v-col cols="12" md="5">
-                <v-card light raised elevation="12" min-height="350" width="90%" class="mx-auto">
+                <v-card light raised elevation="12" min-height="320" class="mx-auto">
                     <v-card-title class="primary white--text justify-center title font-weight-bold">Admin Login</v-card-title>
                     <v-card-text class="mt-4">
                         <v-text-field label="Email" type="text" v-model="cred.email"></v-text-field>

@@ -60,7 +60,7 @@ export default {
                 ad: this.ad
             }).then((res) => {
                 this.isBusy = false
-                console.log(res.data)
+                // console.log(res.data)
                 this.requestSent = true
             }).catch(() => {
                 this.isBusy = false

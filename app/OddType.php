@@ -6,5 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class OddType extends Model
 {
-    protected $guards = [];
+    protected $fillable = ['odd'];
+
+    protected $table = 'odd_types';
 }

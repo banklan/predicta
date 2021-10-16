@@ -21,7 +21,7 @@
         <v-navigation-drawer v-model="userDrawer" absolute hide-overlay color="primary white--text" class="" disable-resize-watcher>
             <v-toolbar-title class="white--text ml-4 mt-3 pb-4">
                 <router-link to="/" style="cursor: pointer" exact>
-                    <span class="font-weight-thin headline headline secondary--text">Surepredict</span>
+                    <span class="font-weight-thin headline headline secondary--text">TipExpats</span>
                 </router-link>
             </v-toolbar-title>
             <v-divider></v-divider>

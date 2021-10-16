@@ -245,7 +245,6 @@ export default {
                 if(this.bookmakersCode.length > 0){
                     this.isBusy = true
                     let predictions = JSON.parse(localStorage.getItem('forecast'))
-                    console.log(this.bm_codes)
                     axios.post(this.api + '/auth-expert/submit_expert_prediction', {
                         predictions: predictions,
                         forecastOdd: parseFloat(this.foreCastOdd),
@@ -254,7 +253,6 @@ export default {
                     }, this.expertHeader)
                     .then((res) =>{
                         this.isBusy = false
-                        // console.log(res.data)
                         this.$store.commit('newForecastCreated')
                         this.$store.commit('clearForecast')
                         this.$router.push({name: 'MyForecasts'})

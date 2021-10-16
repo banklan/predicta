@@ -271,7 +271,7 @@ export default {
     table tbody tr td{
         white-space:nowrap;
     }
-    .v-card .v-card__text{
+    .v-card.scroll .v-card__text{
         overflow-x: scroll !important;
     }
 </style>

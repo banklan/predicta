@@ -43,7 +43,7 @@
         </v-row>
         <v-row>
             <v-col cols="12" md="6">
-                <v-select dense label="Prediction(Tip)" :items="tips" item-text="abbrv" item-value="abbrv" v-model="pick.tip" required v-validate="'required'" :error-messages="errors.collect('prediction')" name="prediction"></v-select>
+                <v-select dense label="Prediction(Tip)" :items="tips" item-text="tip" item-value="abbrv" v-model="pick.tip" required v-validate="'required'" :error-messages="errors.collect('prediction')" name="prediction"></v-select>
             </v-col>
             <v-col cols="12" md="6">
                 <v-text-field dense label="Other(Not listed)" placeholder="Enter Code eg HWEH" v-model="pick.otherTip" v-validate="'min:3|max:8'" :error-messages="errors.collect('prediction')" name="prediction" data-vv-as="other prediction"></v-text-field>
@@ -164,16 +164,13 @@ export default {
             axios.get(this.api + '/countries')
             .then((res)=> {
                 this.countries = res.data
-                // console.log(res.data)
             })
         },
         getLeagues(){
             let country = this.pickedCountry
-            console.log(country)
             axios.get(this.api + `/leagues_by_country/${country.id}`)
             .then((res) => {
                 this.leagues = res.data
-                // console.log(this.leagues)
             })
         },
         getTeams(){
@@ -181,7 +178,6 @@ export default {
             axios.get(this.api + `/teams_by_league/${league.id}`)
             .then((res) => {
                 this.teams = res.data
-                console.log(res.data)
             })
         },
         getTips(){

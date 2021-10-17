@@ -525,8 +525,8 @@ class AdminController extends Controller
 
     public function updateTeam(Request $request, $id){
         $this->validate($request, [
-            'team.team' => 'required|min:3|max:20',
-            'team.abbrv' => 'required|min:3|max:8',
+            'team.team' => 'required|min:3|max:25',
+            'team.abbrv' => 'required|min:3|max:12',
             'team.league' => 'required|numeric',
         ]);
 
@@ -542,8 +542,8 @@ class AdminController extends Controller
 
     public function createNewTeam(Request $request){
         $this->validate($request, [
-            'team.team' => 'required|min:3|max:20|unique:teams,team',
-            'team.abbrv' => 'required|min:3|max:8|unique:teams,abbrv',
+            'team.team' => 'required|min:3|max:25|unique:teams,team',
+            'team.abbrv' => 'required|min:3|max:12|unique:teams,abbrv',
             'team.league' => 'required|numeric',
         ]);
 
@@ -1193,7 +1193,7 @@ class AdminController extends Controller
         $result = $request->update['home'].'-'.$request->update['away'];
         $dt->update([
             $dt->result = $result,
-            $dt->is_featured = $request->update['is_featured'],
+            $dt->is_featured = $request->update['feature'],
             $dt->status = $request->update['status']
         ]);
 
@@ -1659,8 +1659,8 @@ class AdminController extends Controller
 
         $data = ['data' => $teams];
         $validator = Validator::make($data, [
-            'data.*.team' => 'required|min:3|max:20|unique:teams,team',
-            'data.*.abbrv' => 'required|min:3|max:8|unique:teams,abbrv',
+            'data.*.team' => 'required|min:3|max:25|unique:teams,team',
+            'data.*.abbrv' => 'required|min:3|max:12|unique:teams,abbrv',
         ]);
 
         if($validator->fails()){

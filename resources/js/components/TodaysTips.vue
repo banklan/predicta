@@ -6,7 +6,7 @@
                 <v-card light raised elevation="8" min-height="200">
                     <v-card-title class="sub_title primary white--text justify-center">Today's Tips {{ tipsDate | moment('DD/MM/YY') }}</v-card-title>
                     <v-card-text>
-                        <v-simple-table light fixed-header height="400">
+                        <v-simple-table light fixed-header height="250">
                             <template v-slot:default>
                             <thead>
                                 <tr>

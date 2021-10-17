@@ -61,7 +61,7 @@
                            </div>
                            <div class="d-flex mx-5 px-1">
                                <div class="mt-2 mr-3">Feature Tip?</div>
-                               <v-select dense :items="feature" item-text="value" item-value="value" v-model="update.feature"></v-select>
+                               <v-select dense :items="feature" item-text="text" item-value="value" v-model="update.feature"></v-select>
                            </div>
                         </v-card-text>
                         <v-card-actions class="justify-center mb-8">
@@ -94,8 +94,8 @@ export default {
                 {id: 2, status: 'Won'},
             ],
             feature: [
-                {value: true},
-                {value: false},
+                {value: true, text: 'Feature'},
+                {value: false, text: 'Dont Feature'},
             ],
             update: {
                 home: '',

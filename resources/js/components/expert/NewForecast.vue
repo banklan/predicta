@@ -3,7 +3,7 @@
         <expert-top-panel title="New Forecast"/>
         <v-row justify="center" class="mt-3">
             <v-col cols="12" md="6">
-                <v-card raised flat elevation="6" light min-height="150">
+                <v-card raised flat elevation="6" light min-height="150" class="scroll">
                     <v-card-title class="justify-center primary white--text subtitle-1">New Forecast</v-card-title>
                     <v-card-text class="mt-5">
                         <v-select :items="odds" item-text="odd" item-value="odd" label="Odd Category" v-model="forecastOdd" persistent-hint required @change="setOdd"></v-select>
@@ -307,5 +307,8 @@ export default {
     }
     .v-list-item__content{
         line-height: 1.8 !important;
+    }
+    .v-card.scroll .v-card__text{
+        overflow-x: scroll;
     }
 </style>

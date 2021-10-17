@@ -35,7 +35,7 @@ class TipController extends Controller
 
     public function getFeaturedDailyTips(){
         $tip = DailyTipsSummary::where('is_featured', true)->latest()->first();
-        $tips = DailyTip::where('daily_tips_summary_id', $tip->id)->where('is_featured', true)->get();
+        $tips = DailyTip::where('daily_tips_summary_id', $tip['id'])->where('is_featured', true)->get();
         $tipDate = $tip->tip_date;
 
         return response()->json(['tips' => $tips, 'tipDate' => $tipDate], 200);
@@ -86,7 +86,7 @@ class TipController extends Controller
     }
 
     public function getWonTips(){
-        $tips = DailyTip::where('status', 2)->take('30')->get();
+        $tips = DailyTip::where('status', 2)->take('20')->get();
 
         return response()->json($tips, 200);
     }

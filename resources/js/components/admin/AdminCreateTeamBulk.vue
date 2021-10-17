@@ -13,8 +13,8 @@
                 <v-card elevation="12" raised min-height="200">
                     <v-card-title class="primary darken-2 subtitle-1 white--text justify-center">Add Team (Bulk)</v-card-title>
                     <v-card-text class="mt-5">
-                        <v-text-field label="Team" v-model="newTeam.team" required v-validate="'required|min:3|max:20'" :error-messages="errors.collect('team')" name="team"></v-text-field>
-                        <v-text-field label="Abbreviation" v-model="newTeam.abbrv" required v-validate="'required|min:3|max:8'" :error-messages="errors.collect('abbreviation')" name="abbreviation"></v-text-field>
+                        <v-text-field label="Team" v-model="newTeam.team" required v-validate="'required|min:3|max:25'" :error-messages="errors.collect('team')" name="team"></v-text-field>
+                        <v-text-field label="Abbreviation" v-model="newTeam.abbrv" required v-validate="'required|min:3|max:12'" :error-messages="errors.collect('abbreviation')" name="abbreviation"></v-text-field>
                         <v-select label="Select League" v-model="newTeam.league" :items="leagues" item-text="league" return-object required v-validate="'required'" :error-messages="errors.collect('league')" name="league"></v-select>
                     </v-card-text>
                     <v-card-actions class="justify-space-around pb-8">
@@ -62,8 +62,8 @@
             <v-card min-height="150">
                 <v-card-title class="sub_title primary white--text justify-center">Update Team</v-card-title>
                 <v-card-text class="text-center mt-5 subtitle-1">
-                    <v-text-field label="Team" v-model="edit.team" required v-validate="'required|min:3|max:20'" :error-messages="errors.collect('update.team')" data-vv-scope="team" name="team"></v-text-field>
-                    <v-text-field label="Abbreviation" v-model="edit.abbrv" required v-validate="'required|min:3|max:8'" :error-messages="errors.collect('update.abbreviation')" data-vv-scope="update" name="abbreviation"></v-text-field>
+                    <v-text-field label="Team" v-model="edit.team" required v-validate="'required|min:3|max:25'" :error-messages="errors.collect('update.team')" data-vv-scope="team" name="team"></v-text-field>
+                    <v-text-field label="Abbreviation" v-model="edit.abbrv" required v-validate="'required|min:3|max:12'" :error-messages="errors.collect('update.abbreviation')" data-vv-scope="update" name="abbreviation"></v-text-field>
                     <v-select label="Select League" v-model="edit.league" :items="leagues" item-text="league" item-value="id" required v-validate="'required'" :error-messages="errors.collect('update.league')" data-vv-scope="update" name="league"></v-select>
                 </v-card-text>
                 <v-card-actions class="pb-8 justify-space-around">

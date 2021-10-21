@@ -42,6 +42,9 @@
             <v-col cols="12">
                 <v-text-field label="Event Odd" v-model="select.odd" v-validate="'required|decimal:3'" :error-messages="errors.collect('odd')" name="odd"></v-text-field>
             </v-col>
+            <v-col cols="12">
+                <v-switch color="primary" label="Feature Tip?" v-model="select.feature"></v-switch>
+            </v-col>
         </v-row>
         <v-row>
             <v-col cols="12">
@@ -104,6 +107,7 @@ export default {
                 away: '',
                 tip: '',
                 odd: '',
+                feature: false,
                 date: new Date().toISOString().substr(0, 10),
                 time: null,
             },

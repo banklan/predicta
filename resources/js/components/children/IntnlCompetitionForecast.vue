@@ -15,7 +15,7 @@
                 <v-checkbox class="mt-n3" v-model="homeNotListed" label="Click to enter Home team manually"></v-checkbox>
             </v-col>
             <v-col cols="12" v-if="homeNotListed">
-                <v-text-field label="Home Team" placeholder="Type Home Team" v-model="otherTeamA" required v-validate="'min:3|max:10'" :error-messages="errors.collect('otherHome')" name="otherHome" data-vv-as="home team"></v-text-field>
+                <v-text-field label="Home Team" placeholder="Type Home Team" v-model="otherTeamA" required v-validate="'min:3|max:15'" :error-messages="errors.collect('otherHome')" name="otherHome" data-vv-as="home team"></v-text-field>
             </v-col>
         </v-row>
         <v-row>
@@ -24,7 +24,7 @@
                 <v-checkbox class="mt-n3" v-model="awayNotListed" label="Click to enter Away team manually"></v-checkbox>
             </v-col>
             <v-col cols="12" v-if="awayNotListed">
-                <v-text-field label="Away Team" placeholder="Type Away Team" v-model="otherTeamB" required v-validate="'min:3|max:10'" :error-messages="errors.collect('otherAway')" name="otherAway" data-vv-as="away team"></v-text-field>
+                <v-text-field label="Away Team" placeholder="Type Away Team" v-model="otherTeamB" required v-validate="'min:3|max:15'" :error-messages="errors.collect('otherAway')" name="otherAway" data-vv-as="away team"></v-text-field>
             </v-col>
         </v-row>
         <v-row>
@@ -33,7 +33,7 @@
                 <v-checkbox class="mt-n3" v-model="tipNotListed" label="Click to enter manually"></v-checkbox>
             </v-col>
             <v-col cols="12" md="9" v-if="tipNotListed">
-                <v-text-field dense label="Other(Not listed)" placeholder="Enter Code eg HWEH" v-model="pick.tip" v-validate="'min:3|max:8'" :error-messages="errors.collect('otherTip')" name="otherTip" data-vv-as="other tip"></v-text-field>
+                <v-text-field dense label="Other(Not listed)" placeholder="Enter Code eg HWEH" v-model="pick.tip" v-validate="'min:3|max:15'" :error-messages="errors.collect('otherTip')" name="otherTip" data-vv-as="other tip"></v-text-field>
             </v-col>
         </v-row>
         <v-row>

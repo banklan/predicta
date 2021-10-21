@@ -50,16 +50,16 @@
                         <v-divider></v-divider>
                         <v-card-text class="mt-n5">
                            <div class="text-center subtitle-1 font-weight-bold mb-5 mt-3">Update</div>
-                           <div class="d-flex mx-5 px-1">
+                           <div class="d-flex mx-2 px-1">
                                <div class="mt-2 mr-5">Result</div>
                                <v-text-field class="mr-3" dense placeholder="Home" v-model="update.home"></v-text-field>
                                <v-text-field class="ml-3" dense placeholder="Away" v-model="update.away"></v-text-field>
                            </div>
-                           <div class="d-flex mx-5 px-1">
+                           <div class="d-flex mx-2 px-1">
                                <div class="mt-2 mr-3">Tip Status</div>
                                <v-select dense :items="statuses" item-text="status" item-value="id" v-model="update.status"></v-select>
                            </div>
-                           <div class="d-flex mx-5 px-1">
+                           <div class="d-flex mx-2 px-1">
                                <div class="mt-2 mr-3">Feature Tip?</div>
                                <v-select dense :items="feature" item-text="text" item-value="value" v-model="update.feature"></v-select>
                            </div>
@@ -130,7 +130,7 @@ export default {
                 this.isLoading = false
                 this.tip = res.data
                 this.update.status = res.data.status
-                this.update.is_featured = res.data.is_featured
+                this.update.feature = res.data.is_featured
             })
         },
         getTipSummary(){

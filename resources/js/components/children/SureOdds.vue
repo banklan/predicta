@@ -2,7 +2,7 @@
     <div class="sureodds">
         <v-progress-circular indeterminate color="primary" :width="5" :size="50" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
         <v-card v-else light raised elevation="8" min-height="200">
-            <v-card-title class="sub_title primary white--text justify-center">Free Daily Tips &nbsp;<span v-if="tips.length > 0">{{ tipDate | moment('DD/MM/YY')  }}</span> </v-card-title>
+            <v-card-title class="subtitle-1 primary white--text justify-center">Free Daily Tips &nbsp;<span v-if="tips.length > 0">{{ tipDate | moment('DD/MM/YY')  }}</span> </v-card-title>
             <v-card-text>
                 <template v-if="tips.length > 0">
                     <table class="table table-striped table-hover table-condensed">
@@ -18,7 +18,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="subtitle-2" v-for="tip in tips" :key="tip.id">
+                            <tr v-for="tip in tips" :key="tip.id">
                                 <td>{{ tip.country }}</td>
                                 <td>{{ tip.league }}</td>
                                 <td>{{ tip.time }}</td>
@@ -76,7 +76,7 @@ export default {
 </script>
 
 <style lang="css" scoped>
-    .v-card{
+    .v-card .v-card__text{
         overflow-x: scroll !important;
     }
 </style>

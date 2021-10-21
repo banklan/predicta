@@ -133,6 +133,7 @@ Vue.component('expert-outstanding-earnings', require('./components/children/Admi
 Vue.component('newuser-feedback', require('./components/children/NewUserFeedback.vue').default);
 Vue.component('toggle-mail-user-status', require('./components/children/AdminToggleMailListUserStatus.vue').default);
 Vue.component('admin-daily-tips-mailing', require('./components/children/AdminDailyTipsMailing.vue').default);
+Vue.component('admin-expert-forecast-single-card', require('./components/children/AdminExpertForecastCard.vue').default);
 
 const app = new Vue({
     el: '#app',

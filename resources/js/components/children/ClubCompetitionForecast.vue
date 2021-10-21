@@ -2,7 +2,7 @@
     <div>
         <v-row wrap justify="center">
             <v-col cols="12">
-                <div class="caption">For UCL, EUFA & other club competitions not listed, click
+                <div class="caption">For UCL, EUFA & other FIFA club competitions not listed, click
                     <span class="ml-5">
                         <v-btn dark color="primary" @click="listed = !listed">Others</v-btn>
                     </span>
@@ -19,10 +19,10 @@
         </v-row>
         <v-row v-else>
             <v-col cols="12" md="6">
-                <v-text-field label="Country" placeholder="Type Europe for UCL & UEFA" v-model="pick.country" required v-validate="'required|min:3|max:7'" :error-messages="errors.collect('country')" name="country"></v-text-field>
+                <v-text-field label="Country" placeholder="Type Europe for UCL & EUROPA" v-model="pick.country" required v-validate="'required|min:3|max:7'" :error-messages="errors.collect('country')" name="country"></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
-                <v-text-field label="Competition" placeholder="Type UCL or UEFA" v-model="pick.league" required v-validate="'required|min:3|max:6'" :error-messages="errors.collect('competition')" name="competition"></v-text-field>
+                <v-text-field label="Competition" placeholder="Type UCL or EUROPA" v-model="pick.league" required v-validate="'required|min:3|max:6'" :error-messages="errors.collect('competition')" name="competition"></v-text-field>
             </v-col>
         </v-row>
         <v-row v-if="listed">
@@ -35,10 +35,10 @@
         </v-row>
         <v-row v-else>
             <v-col cols="12" md="6">
-                <v-text-field label="Home Team" placeholder="Home Team" v-model="pick.teamA" required v-validate="'required|min:3|max:6'" :error-messages="errors.collect('homeTeam')" name="homeTeam" data-vv-as="home team"></v-text-field>
+                <v-text-field label="Home Team" placeholder="Home Team" v-model="pick.teamA" required v-validate="'required|min:3|max:20'" :error-messages="errors.collect('homeTeam')" name="homeTeam" data-vv-as="home team"></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
-                <v-text-field label="Away Team" placeholder="Away Team" v-model="pick.teamB" required v-validate="'required|min:3|max:6'" :error-messages="errors.collect('awayTeam')" name="awayTeam" data-vv-as="away team"></v-text-field>
+                <v-text-field label="Away Team" placeholder="Away Team" v-model="pick.teamB" required v-validate="'required|min:3|max:20'" :error-messages="errors.collect('awayTeam')" name="awayTeam" data-vv-as="away team"></v-text-field>
             </v-col>
         </v-row>
         <v-row>
@@ -46,7 +46,7 @@
                 <v-select dense label="Prediction(Tip)" :items="tips" item-text="tip" item-value="abbrv" v-model="pick.tip" required v-validate="'required'" :error-messages="errors.collect('prediction')" name="prediction"></v-select>
             </v-col>
             <v-col cols="12" md="6">
-                <v-text-field dense label="Other(Not listed)" placeholder="Enter Code eg HWEH" v-model="pick.otherTip" v-validate="'min:3|max:8'" :error-messages="errors.collect('prediction')" name="prediction" data-vv-as="other prediction"></v-text-field>
+                <v-text-field dense label="Other(Not listed)" placeholder="Enter Code eg HWEH" v-model="pick.otherTip" v-validate="'min:3|max:15'" :error-messages="errors.collect('prediction')" name="prediction" data-vv-as="other prediction"></v-text-field>
             </v-col>
         </v-row>
         <v-row>

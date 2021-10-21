@@ -522,5 +522,10 @@ export const store = new Vuex.Store({
             let code = JSON.parse(localStorage.getItem('bkmkCode'))
             state.bkmkCode = code
         },
+        clearbkmkCode(state)
+        {
+            window.localSorage.removeItem('bkmkCode')
+            state.bkmkCode = []
+        }
     },
 })

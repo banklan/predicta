@@ -748,6 +748,7 @@ class AdminController extends Controller
                 $pred->away = $tip['away'];
                 $pred->tip = $tip['tip'];
                 $pred->odd = $tip['odd'];
+                $pred->is_featured = $tip['feature'];
                 $pred->event_date = $tip['date'];
                 $pred->event_time = $tip['time'];
                 $pred->status = 0;

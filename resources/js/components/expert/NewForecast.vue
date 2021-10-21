@@ -8,7 +8,8 @@
                     <v-card-text class="mt-5">
                         <v-select :items="odds" item-text="odd" item-value="odd" label="Odd Category" v-model="forecastOdd" persistent-hint required @change="setOdd"></v-select>
                         <v-alert type="info">
-                            Kindly note that the acca for 3 odds must not exceed 5 games, while 5 odds and 10 odds must not exceed 6 games.
+                            Kindly note that the acca for 3 odds must not exceed 5 games, while 5 odds and 10 odds must not exceed 6 games.<br>
+                            Also note that your total odds must not be exact. For example, for a 3-odds pick, you are allowed to end up with 3.2 odds acca.
                         </v-alert>
                         <table class="table table-condensed table-borderless" v-if="foreCastOdd">
                             <thead></thead>
@@ -24,7 +25,7 @@
                         <table class="table table-condensed table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th>Date / Time</th>
+                                    <th>Date/Time</th>
                                     <th>League</th>
                                     <th>Home</th>
                                     <th>Away</th>
@@ -257,6 +258,7 @@ export default {
                         this.$store.commit('clearForecast')
                         this.$router.push({name: 'MyForecasts'})
                         localStorage.removeItem('bkmkCode')
+                        this.$store.commit('clearbkmkCode')
                     }).catch((err) =>{
                         this.isBusy = false
                         if(err.response.status === 401){
@@ -310,5 +312,8 @@ export default {
     }
     .v-card.scroll .v-card__text{
         overflow-x: scroll;
+    }
+    .v-card table thead th, .v-card table tbody td{
+        white-space: nowrap !important;
     }
 </style>

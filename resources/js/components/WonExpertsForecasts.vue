@@ -3,11 +3,11 @@
         <tips-route />
         <v-row justify="center">
             <v-col cols="12" md="8">
-                <v-card light raised elevation="8" min-height="200">
+                <v-card light raised elevation="8" min-height="250">
                     <v-card-title class="subtitle-1 primary white--text justify-center">Expert Forecasts won within the last month</v-card-title>
                     <v-card-text>
                         <template v-if="fcs.length > 0">
-                            <v-simple-table light fixed-header height="400">
+                            <v-simple-table light fixed-header height="300">
                                 <template v-slot:default>
                                     <thead>
                                         <tr class="">
@@ -79,6 +79,12 @@ export default {
     }
     .v-container{
         background-color: #000 !important;
+    }
+    .v-card .v-card__text{
+        overflow-x: scroll !important;
+    }
+    .v-card tbody tr td{
+        white-space: nowrap !important;
     }
 </style>
 

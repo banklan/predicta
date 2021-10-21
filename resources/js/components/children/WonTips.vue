@@ -2,12 +2,12 @@
     <div class="won_tips">
         <v-progress-circular indeterminate color="primary" :width="5" :size="50" v-if="isLoading" justify="center" class="mx-auto"></v-progress-circular>
         <v-card v-else light raised elevation="8" min-height="200">
-            <v-card-title class="sub_title primary white--text justify-center">Won Tips </v-card-title>
+            <v-card-title class="sub_title primary white--text justify-center">Won Daily Tips </v-card-title>
             <v-card-text>
                 <template v-if="tips.length > 0">
                     <table class="table table-striped table-hover">
                         <thead>
-                            <tr class="">
+                            <tr>
                                 <th>Date</th>
                                 <th>League</th>
                                 <th>Event</th>
@@ -16,7 +16,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="" v-for="tip in tips" :key="tip.id">
+                            <tr v-for="tip in tips" :key="tip.id">
                                 <td>{{ tip.date }}</td>
                                 <td>{{ tip.league }}</td>
                                 <td>{{ tip.game }}</td>
@@ -68,7 +68,10 @@ export default {
 </script>
 
 <style lang="css" scoped>
-    .v-card{
+    .v-card .v-card__text{
         overflow-x: scroll !important;
+    }
+    .v-card table tbody td{
+        white-space: nowrap !important;
     }
 </style>

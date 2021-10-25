@@ -94,4 +94,10 @@ export default {
     table tbody tr{
         cursor: pointer;
     }
+    .v-card .v-card__text{
+        overflow-x: scroll !important;
+    }
+    table tbody tr td{
+        white-space: nowrap;
+    }
 </style>

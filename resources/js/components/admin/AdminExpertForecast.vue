@@ -18,7 +18,6 @@
                             <template v-for="(fc, index) in forecast">
                                 <admin-expert-forecast-single-card :fc="fc" :index="index" :key="fc.id" />
                             </template>
-
                         </template>
                         <template v-else>
                             <v-alert type="error" border="left" class="mt-5">

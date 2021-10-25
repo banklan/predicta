@@ -10,7 +10,7 @@
         </v-row>
         <v-row class="mt-4 ml-n10" justify="start">
             <v-col cols="12" md="5">
-                <v-card light raised elevation="8" min-height="200">
+                <v-card light raised elevation="8" min-height="200" class="scroll">
                     <v-card-title class="sub_title primary white--text justify-center">Create Daily Tip</v-card-title>
                     <v-card-text class="body-1 mt-5 px-8">
                         <v-select :items="eventTypes" item-text="type" return-object label="Select Game Type" v-model="event" required></v-select>
@@ -24,7 +24,7 @@
                 </v-card>
             </v-col>
             <v-col cols="12" md="7">
-                <v-card light raised elevation="8" min-height="200">
+                <v-card light raised elevation="8" min-height="200" class="scroll">
                     <v-card-title class="sub_title primary white--text justify-center mx-auto">Forecast <v-chip color="primary lighten-2" v-if="dailyTips.length > 0" class="ml-1">{{ dailyTips.length }}</v-chip></v-card-title>
                     <v-card-text class="caption">
                         <template v-if="dailyTips.length > 0">
@@ -51,7 +51,7 @@
                                 </tbody>
                             </table>
                             <div class="tip_date mt-8">
-                                <div class="text-center subtitle-1">Select Tip Date</div>
+                                <div class="px-2 mb-3 subtitle-1">Select Daily Tip Date</div>
                                 <v-menu ref="datePicker" v-model="datePicker" :close-on-content-click="false" :return-value.sync="tipDate" transition="scale-transition" offset-y min-width="290px">
                                     <template v-slot:activator="{ on }">
                                         <v-text-field v-model="tipDate" label="Event Date" prepend-icon="event" readonly v-on="on"></v-text-field>
@@ -71,8 +71,8 @@
                         </template>
                     </v-card-text>
                     <v-card-actions class="justify-center pb-7">
-                        <v-btn large width="30%" text color="red darken-2">Clear</v-btn>
-                        <v-btn large width="30%" color="primary darken-2" @click="submit" :loading="isBusy">Submit</v-btn>
+                        <v-btn large width="40%" text color="red darken-2" @click="clearSelects">Clear</v-btn>
+                        <v-btn large width="40%" color="primary darken-2" @click="submit" :loading="isBusy">Submit</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-col>
@@ -153,6 +153,7 @@ export default {
         },
         submit(){
             this.isBusy = true
+            console.log(this.dailyTips)
             axios.post(this.api + '/auth-admin/create_daily_tips', {
                 tips: this.dailyTips,
                 tipDate: this.tipDate
@@ -168,6 +169,9 @@ export default {
                 this.dailyTipCreateError = true
             })
         },
+        clearSelects(){
+            this.$store.commit('clearDailyTip')
+        },
         disablePastDates(val) {
             return val >= new Date().toISOString().substr(0, 10)
         },
@@ -176,7 +180,10 @@ export default {
 </script>
 
 <style lang="css" scoped>
-    .v-card{
+    .v-card.scroll .v-card__text{
         overflow-x: scroll !important;
+    }
+    table tbody tr td{
+        white-space: nowrap;
     }
 </style>

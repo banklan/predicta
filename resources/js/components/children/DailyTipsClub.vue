@@ -3,11 +3,9 @@
         <v-row justify="space-around" v-if="!leagueNotListed" class="py-1">
             <v-col cols="12" class="text-center">
                 <v-select label="Select Country" v-model="pickedCountry" :items="countries" item-text="country" return-object @change="getLeagues" required v-validate="'required'" :error-messages="errors.collect('country')" name="country"></v-select>
-                <!-- <v-btn text color="primary darken-2" @click="countryNotListed = true">Country Not Listed</v-btn> -->
             </v-col>
             <v-col cols="12">
                 <v-select label="Select League" v-model="pickedLeague" :items="leagues" item-text="league" return-object @change="getTeams" required v-validate="'required'" :error-messages="errors.collect('league')" name="league"></v-select>
-                <!-- <v-btn text color="primary darken-2" @click="competitionNotListed = true">Competition Not Listed</v-btn> -->
             </v-col>
             <v-col cols="12">
                 <v-select label="Home Team" v-model="select.home" :items="teams" item-text="team" item-value="abbrv" required v-validate="'required'" :error-messages="errors.collect('home')" name="home" data-vv-as="home team"></v-select>
@@ -202,6 +200,8 @@ export default {
         },
         clearSelects(){
             this.select = {}
+            this.select.feature = false
+            this.select.date = new Date().toISOString().substr(0, 10),
             this.$validator.pause()
             this.$validator.fields.items.forEach(field => field.reset())
             this.$validator.errors.clear()

@@ -7,10 +7,6 @@
                     <v-card-title class="justify-center primary white--text subtitle-1">New Forecast</v-card-title>
                     <v-card-text class="mt-5">
                         <v-select :items="odds" item-text="odd" item-value="odd" label="Odd Category" v-model="forecastOdd" persistent-hint required @change="setOdd"></v-select>
-                        <v-alert type="info">
-                            Kindly note that the acca for 3 odds must not exceed 5 games, while 5 odds and 10 odds must not exceed 6 games.<br>
-                            Also note that your total odds must not be exact. For example, for a 3-odds pick, you are allowed to end up with 3.2 odds acca.
-                        </v-alert>
                         <table class="table table-condensed table-borderless" v-if="foreCastOdd">
                             <thead></thead>
                             <tbody>
@@ -20,6 +16,10 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <v-alert type="info">
+                            Kindly note that the acca for 3 odds must not exceed 5 games, while 5 odds and 10 odds must not exceed 6 games.<br>
+                            Also note that your total odds must not be exact. For example, for a 3-odds pick, you are allowed to end up with 3.2 odds acca.
+                        </v-alert>
                     </v-card-text>
                     <v-card-text v-if="forecasts.length > 0">
                         <table class="table table-condensed table-striped table-hover">

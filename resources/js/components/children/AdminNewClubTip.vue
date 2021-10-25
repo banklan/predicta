@@ -111,6 +111,7 @@ export default {
                 away: '',
                 tip: '',
                 odd: '',
+                feature: false,
                 date: new Date().toISOString().substr(0, 10),
                 time: null,
             },

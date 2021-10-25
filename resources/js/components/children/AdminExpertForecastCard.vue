@@ -31,9 +31,9 @@
                         </tr>
                         <tr>
                             <th>Status</th>
-                            <td v-if="fc.status == 0"><div class="status nyd"></div></td>
-                            <td v-if="fc.status == 1"><div class="status lost"></div></td>
-                            <td v-if="fc.status == 2"><div class="status won"></div></td>
+                            <td v-if="newStat === 0"><div class="status nyd">Not Decided</div></td>
+                            <td v-if="newStat === 1"><div class="status lost">Lost</div></td>
+                            <td v-if="newStat === 2"><div class="status won">Won</div></td>
                         </tr>
                     </tbody>
                 </table>
@@ -58,6 +58,7 @@ export default {
             ],
             newStatus: null,
             isBusy: false,
+            newStat: this.fc.status
         }
     },
     computed: {
@@ -74,6 +75,14 @@ export default {
                 }
             }
             return headers
+        },
+        currentStatus:{
+            get(){
+                return this.fc
+            },
+            set(fc){
+                this.fc = fc
+            }
         }
     },
     methods: {
@@ -84,10 +93,25 @@ export default {
             }, this.adminHeaders)
             .then((res) => {
                 this.isBusy = false
-                fc.status = res.data.status
+                this.newStat = res.data.status
                 this.newStatus = null
             })
         },
     }
 }
 </script>
+
+<style lang="css" scoped>
+    .status{
+        font-weight: 400;
+    }
+    .nyd{
+        color: #ffa501;
+    }
+    .lost{
+        color: #f3420d;
+    }
+    .won{
+        color: #00b900;
+    }
+</style>

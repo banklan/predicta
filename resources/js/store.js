@@ -526,6 +526,6 @@ export const store = new Vuex.Store({
         {
             window.localSorage.removeItem('bkmkCode')
             state.bkmkCode = []
-        }
+        },
     },
 })
